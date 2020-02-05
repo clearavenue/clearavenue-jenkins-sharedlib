@@ -26,6 +26,9 @@ spec:
     - mountPath: "/var/run/docker.sock"
       name: "volume-0"
       readOnly: false
+    - mountPath: "/root/.m2"
+      name: "m2repo"
+      readOnly: false
   - name: docker
     image: docker
     command:
@@ -34,6 +37,9 @@ spec:
     volumeMounts:
     - mountPath: "/var/run/docker.sock"
       name: "volume-0"
+      readOnly: false
+    - mountPath: "/root/.m2"
+      name: "m2repo"
       readOnly: false
   - name: kubectl
     image: lachlanevenson/k8s-kubectl:latest
@@ -48,6 +54,10 @@ spec:
   - hostPath:
       path: "/var/run/docker.sock"
     name: "volume-0"
+  - hostPath:
+      path: "$HOME/.m2"
+    name: "m2repo"
+
 """
 			}
 		}
