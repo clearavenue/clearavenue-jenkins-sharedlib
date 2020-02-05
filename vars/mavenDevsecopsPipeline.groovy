@@ -57,9 +57,6 @@ spec:
   - name: "m2repo"
     hostPath:
       path: "/home/ec2-user/.m2"
-  - name: "mavenlocalrepo"
-    persistentVolumeClaim:
-      claimName: mavenlocalrepo
 """
 			}
 		}
