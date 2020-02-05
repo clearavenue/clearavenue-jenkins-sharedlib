@@ -6,7 +6,7 @@ def call(body) {
 
 	def dockerImage = "${pipelineParams.docker_user}/${pipelineParams.project_name}"
 	def builtImg = ''
-	def SERVER_URL="${pipelineParams.server_url}"
+	def clusterUrl="${pipelineParams.cluster_url}"
 
 	pipeline {
 		agent {
@@ -169,7 +169,7 @@ spec:
 				steps {
 					container('kubectl') {
 						script {
-							withKubeConfig([credentialsId: 'kube-admin', serverUrl: '${SERVER_URL}']) {
+							withKubeConfig([credentialsId: 'kube-admin', serverUrl: '${clusterUrl}']) {
 								sh "kubectl delete --force -f ${deployment_yaml}"
 								sh "sed -i 's/:latest/:${VERSION}/' ${deployment_yaml}"
 								sh "kubectl apply -f ${deployment_yaml}"
