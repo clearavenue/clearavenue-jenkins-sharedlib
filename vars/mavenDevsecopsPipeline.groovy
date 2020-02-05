@@ -38,7 +38,7 @@ spec:
     - name: "volume-0"
       mountPath: "/var/run/docker.sock"
       readOnly: false
-    - name: "mavenlocalrepo"
+    - name: "m2repo"
       mountPath: "/root/.m2"
       readOnly: false
   - name: kubectl
