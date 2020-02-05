@@ -55,7 +55,7 @@ spec:
       path: "/var/run/docker.sock"
     name: "volume-0"
   - hostPath:
-      path: "$HOME/.m2"
+      path: "/home/ec2-user/.m2"
     name: "m2repo"
 
 """
