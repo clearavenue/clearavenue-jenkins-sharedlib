@@ -55,8 +55,8 @@ spec:
     hostPath:
       path: "/var/run/docker.sock"
   - name: "m2repo"
-    persistentVolumeClaim:
-      claimName: "mavenlocalrepo"
+    hostPath:
+      path: "/home/ec2-user/.m2"
 """
 			}
 		}
