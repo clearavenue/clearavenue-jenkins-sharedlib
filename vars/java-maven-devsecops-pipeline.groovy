@@ -6,7 +6,7 @@ def call(body) {
 
 	def dockerImage = "${config.docker_user}/${config.project_name}"
 	def builtImg = ''
-	def SERVER_URL="http://a3fd36bd80a9747afb9405ff3ad944b2-354023137.us-east-1.elb.amazonaws.com"
+	def SERVER_URL="${config.server_url}"
 
 	pipeline {
 		agent {
@@ -153,9 +153,6 @@ spec:
 			}
 
 			stage('Push Docker') {
-				when {
-					expression { currentBuild.result == 'SUCCESS' }
-				}
 				steps {
 					container('docker') {
 						script {
@@ -169,13 +166,12 @@ spec:
 			}
 
 			stage('Deploy') {
-				when {
-					expression { currentBuild.result == 'SUCCESS' }
-				}
 				steps {
 					container('kubectl') {
 						script {
 							withKubeConfig([credentialsId: 'kube-admin', serverUrl: '${SERVER_URL}']) {
+								sh "kubectl delete -f ${deployment_yaml}"
+								sh "sed -i 's/:latest/:${VERSION}/' ${deployment_yaml}"
 								sh "kubectl apply -f ${deployment_yaml}"
 							}
 						}
