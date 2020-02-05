@@ -1,12 +1,12 @@
 def call(body) {
-	def config = [:]
+	def pipelineParams = [:]
 	body.resolveStrategy = Closure.DELEGATE_FIRST
-	body.delegate = config
+	body.delegate = pipelineParams
 	body()
 
-	def dockerImage = "${config.docker_user}/${config.project_name}"
+	def dockerImage = "${pipelineParams.docker_user}/${pipelineParams.project_name}"
 	def builtImg = ''
-	def SERVER_URL="${config.server_url}"
+	def SERVER_URL="${pipelineParams.server_url}"
 
 	pipeline {
 		agent {
