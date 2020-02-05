@@ -38,7 +38,7 @@ spec:
     - name: "volume-0"
       mountPath: "/var/run/docker.sock"
       readOnly: false
-    - name: "m2repo"
+    - name: "mavenlocalrepo"
       mountPath: "/root/.m2"
       readOnly: false
   - name: kubectl
@@ -57,6 +57,9 @@ spec:
   - name: "m2repo"
     hostPath:
       path: "/home/ec2-user/.m2"
+  - name: "mavenlocalrepo"
+    persistentVolumeClaim:
+      claimName: mavenlocalrepo
 """
 			}
 		}
