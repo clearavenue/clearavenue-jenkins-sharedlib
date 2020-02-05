@@ -1,12 +1,12 @@
+#!groovy
+
 def call(body) {
 	def pipelineParams = [:]
 	body.resolveStrategy = Closure.DELEGATE_FIRST
 	body.delegate = pipelineParams
 	body()
 
-	def dockerImage = "${pipelineParams.docker_user}/${pipelineParams.project_name}"
 	def builtImg = ''
-	def clusterUrl="${pipelineParams.cluster_url}"
 
 	pipeline {
 		agent {
@@ -65,7 +65,7 @@ spec:
 					stage('Build code') {
 						steps {
 							container('docker') {
-								sh "docker build -t ${dockerImage}:${VERSION} ."
+								sh "docker build -t ${pipelineParams.docker_user}/${pipelineParams.project_name}:${VERSION} ."
 							}
 						}
 					}
@@ -157,8 +157,8 @@ spec:
 					container('docker') {
 						script {
 							docker.withRegistry('', 'docker') {
-								sh "docker push ${dockerImage}:${VERSION}"
-								sh "docker rmi ${dockerImage}:${VERSION}"
+								sh "docker push ${pipelineParams.docker_user}/${pipelineParams.project_name}:${VERSION}"
+								sh "docker rmi ${pipelineParams.docker_user}/${pipelineParams.project_name}:${VERSION}"
 							}
 						}
 					}
@@ -169,10 +169,10 @@ spec:
 				steps {
 					container('kubectl') {
 						script {
-							withKubeConfig([credentialsId: 'kube-admin', serverUrl: '${clusterUrl}']) {
-								sh "kubectl delete --force -f ${deployment_yaml}"
-								sh "sed -i 's/:latest/:${VERSION}/' ${deployment_yaml}"
-								sh "kubectl apply -f ${deployment_yaml}"
+							withKubeConfig([credentialsId: 'kube-admin', serverUrl: pipelineParams.cluster_url]) {
+								sh "kubectl delete --force -f ${pipelineParams.deployment_yaml}"
+								sh "sed -i 's/:latest/:${VERSION}/' ${pipelineParams.deployment_yaml}"
+								sh "kubectl apply -f ${pipelineParams.deployment_yaml}"
 							}
 						}
 					}
