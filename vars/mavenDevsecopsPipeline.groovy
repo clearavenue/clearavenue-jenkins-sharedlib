@@ -4,6 +4,8 @@ def call(body) {
 	body.delegate = pipelineParams
 	body()
 
+	def builtImg = ''
+
 	pipeline {
 		agent {
 			kubernetes {
@@ -174,7 +176,7 @@ spec:
 				steps {
 					container('kubectl') {
 						script {
-							withKubeConfig([credentialsId: 'kube-admin', serverUrl: 'http://aa2e7b27c1cd44b91be7df2d25925337-1841660522.us-east-1.elb.amazonaws.com']) {
+							withKubeConfig([credentialsId: 'kube-admin', serverUrl: pipelineParams.cluster_url]) {
 								sh "kubectl delete --force -f ${pipelineParams.deployment_yaml}"
 								sh "sed -i 's/:latest/:${VERSION}/' ${pipelineParams.deployment_yaml}"
 								sh "kubectl apply -f ${pipelineParams.deployment_yaml}"
