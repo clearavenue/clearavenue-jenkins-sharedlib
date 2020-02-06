@@ -61,31 +61,15 @@ spec:
 
 		environment {
 			VERSION=readMavenPom().getVersion()
+			DOCKER_CREDS=credentials('docker')
 		}
 
 		stages {
 
 			stage('Build') {
-				parallel {
-					stage('Build code') {
-						steps {
-							container('docker') {
-								sh "docker build -t ${pipelineParams.docker_user}/${pipelineParams.project_name}:${VERSION} ."
-							}
-						}
-					}
-
-					stage('Checkstyle code') {
-						steps {
-							container('maven') {
-								sh "mvn -B -e -T 1C org.apache.maven.plugins:maven-checkstyle-plugin:3.1.0:checkstyle -Dcheckstyle.config.location=google_checks.xml"
-							}
-						}
-						post {
-							always {
-								recordIssues(enabledForFailure: false, tool: checkStyle(pattern: 'target/checkstyle-result.xml'))
-							}
-						}
+				steps {
+					container('maven') {
+						sh "mvn -B -e -T 1C clean compile -DskipTests"
 					}
 				}
 			}
@@ -101,6 +85,19 @@ spec:
 
 			stage('DevSecOps') {
 				parallel {
+					stage('Checkstyle code') {
+						steps {
+							container('maven') {
+								sh "mvn -B -e -T 1C org.apache.maven.plugins:maven-checkstyle-plugin:3.1.0:checkstyle -Dcheckstyle.config.location=google_checks.xml"
+							}
+						}
+						post {
+							always {
+								recordIssues(enabledForFailure: false, tool: checkStyle(pattern: 'target/checkstyle-result.xml'))
+							}
+						}
+					}
+					
 					stage('CodeCoverage') {
 						steps {
 							container('maven') {
@@ -159,13 +156,8 @@ spec:
 
 			stage('Push Docker') {
 				steps {
-					container('docker') {
-						script {
-							docker.withRegistry('', 'docker') {
-								sh "docker push ${pipelineParams.docker_user}/${pipelineParams.project_name}:${VERSION}"
-								sh "docker rmi ${pipelineParams.docker_user}/${pipelineParams.project_name}:${VERSION}"
-							}
-						}
+					container('maven') {
+						sh "mvn -B -e -T 1C com.google.cloud.tools:jib-maven-plugin:2.0.0:build -Dimage=${pipelineParams.docker_user}/${pipelineParams.project_name}:${VERSION} -DskipTests -Djib.to.auth.username=$DOCKER_CREDS_USR -Djib.to.auth.password=$DOCKER_CREDS_PSW -Djib.allowInsecureRegistries=true"
 					}
 				}
 			}
