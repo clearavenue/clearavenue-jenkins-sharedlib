@@ -48,9 +48,21 @@ spec:
 				steps {
 					container('maven') {
 						script {
-							AUTHOR_NAME = sh (script: "git show -s --format='%%an' HEAD", returnStdout: true).split('\r\n')[2].trim()
+							def author = ""
+							def changeSet = currentBuild.rawBuild.changeSets               
+							for (int i = 0; i < changeSet.size(); i++) 
+							{
+							   def entries = changeSet[i].items;
+							   for (int i = 0; i < changeSet.size(); i++) 
+							            {
+							                       def entries = changeSet[i].items;
+							                       def entry = entries[0]
+							                       author += "${entry.author}"
+							            } 
+							 }
+							 print author;
 						}
-						sh "echo AUTHOR_NAME : ${AUTHOR_NAME}"
+						sh "echo AUTHOR_NAME : ${author}"
 					}
 				}
 			}
