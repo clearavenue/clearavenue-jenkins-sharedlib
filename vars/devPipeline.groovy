@@ -45,18 +45,18 @@ spec:
 
 		stages {
 			
-			stage('Git Info') {
+			stage('Deploy') {
 				steps {
-					script {
-					  sh "echo $COMMITTER_EMAIL"
-					}
-				}
-			}
-
-			stage('Build') {
-				steps {
-					container('maven') {
-						sh "printenv"
+					container('kubectl') {
+						script {
+							withKubeConfig([credentialsId: 'kube-admin', serverUrl: 'http://aa2e7b27c1cd44b91be7df2d25925337-1841660522.us-east-1.elb.amazonaws.com']) {
+								def NS = sh(returnStdout: true, script: "echo $COMMITTER_EMAIL | sed 's/@.*//' | sed 's/\./-/g")
+								sh "sed -i 's/:latest/:${VERSION}/' deployment.yaml"
+								sh "sed -i 's/REPLACE_ME/$NS/' deployment.yaml"
+								sh "cat deployment.yaml"
+								//sh "kubectl apply -f deployment.yaml"
+							}
+						}
 					}
 				}
 			}
