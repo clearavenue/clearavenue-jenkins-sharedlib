@@ -47,7 +47,7 @@ spec:
 			stage('Git Info') {
 				steps {
 					script {
-					  def shortCommit = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
+					  def shortCommit = sh(returnStdout: true, script: "git show -s --format='%ae' $GIT_COMMIT").trim()
 					  sh "echo $shortCommit"
 					}
 				}
