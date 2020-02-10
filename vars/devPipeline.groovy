@@ -43,6 +43,22 @@ spec:
 		}
 
 		stages {
+			
+			stage('Git Info') {
+				steps {
+					script {
+						def commiterDetails = sh (script: 'git --no-pager show -s --format=%%ae', returnStdout: true)
+								def commiter = extractCommiterEmail(commiterDetails)
+								def extractCommiterEmail(details) {
+							def arr = details.tokenize('\n')
+									def email = arr[2].trim()
+									return email
+						}
+						
+						print commiter
+					}
+				}
+			}
 
 			stage('Build') {
 				steps {
