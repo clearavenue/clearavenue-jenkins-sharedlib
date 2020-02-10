@@ -51,6 +51,8 @@ spec:
 						script {
 							withKubeConfig([credentialsId: 'kube-admin', serverUrl: 'http://aa2e7b27c1cd44b91be7df2d25925337-1841660522.us-east-1.elb.amazonaws.com']) {
 								def NS = sh(returnStdout: true, script: "echo $COMMITTER_EMAIL | sed 's/@.*//' | sed 's/\\./-/g'")
+								NS=NS.trim()
+
 								sh "sed -i 's/:latest/:${VERSION}/' deployment.yaml"
 								sh "sed -i 's/NAMESPACE/$NS/g' deployment.yaml"
 								sh "cat deployment.yaml"
