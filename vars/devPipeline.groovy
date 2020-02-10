@@ -46,15 +46,14 @@ spec:
 			
 			stage('Git Info') {
 				steps {
-					sh 'printenv'
+					sh "echo $(git show -s $GIT_COMMIT --format='%%ae')"
 				}
 			}
 
 			stage('Build') {
 				steps {
 					container('maven') {
-						
-						sh "echo AUTHOR_NAME : ${author}"
+						sh "printenv"
 					}
 				}
 			}
