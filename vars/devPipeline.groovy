@@ -46,16 +46,13 @@ spec:
 			
 			stage('Git Info') {
 				steps {
-					script {
-						def commiterDetails = sh (script: 'git --no-pager show -s --format=%%ae', returnStdout: true)
-								def commiter = extractCommiterEmail(commiterDetails)
-								def extractCommiterEmail(details) {
-							def arr = details.tokenize('\n')
-									def email = arr[2].trim()
-									return email
-						}
+					script{
+						def COMMITTER_EMAIL = sh (
+						                script: "git --no-pager show -s --format=%%ae",
+						                  returnStdout: true
+						              ).split('\r\n')[2].trim()
 						
-						print commiter
+						    echo "The last commit was written by ${COMMITTER_EMAIL}"
 					}
 				}
 			}
