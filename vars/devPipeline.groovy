@@ -47,12 +47,6 @@ spec:
 			stage('Build') {
 				steps {
 					container('maven') {
-						def scmVars = checkout(scm)
-						sh "echo scmVars.GIT_COMMIT"
-						sh "echo ${scmVars.GIT_COMMIT}"
-				  
-						env.GIT_COMMIT = scmVars.GIT_COMMIT
-						sh "echo env.GIT_COMMIT"
 						sh "echo ${env.GIT_COMMIT}"
 					}
 				}
