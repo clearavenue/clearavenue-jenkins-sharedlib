@@ -46,7 +46,7 @@ spec:
 			
 			stage('Git Info') {
 				steps {
-					sh "echo \$(git show --format=%%ae -s $GIT_COMMIT )"
+					sh "git show --format=%%ae -s $GIT_COMMIT"
 				}
 			}
 
