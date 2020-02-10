@@ -40,6 +40,7 @@ spec:
 		environment {
 			VERSION=readMavenPom().getVersion()
 			DOCKER_CREDS=credentials('docker')
+			COMMITTER_EMAIL="""${sh(returnStdout: true, script: "git show -s --format='%ae' $GIT_COMMIT").trim()}"""
 		}
 
 		stages {
@@ -47,8 +48,7 @@ spec:
 			stage('Git Info') {
 				steps {
 					script {
-					  def shortCommit = sh(returnStdout: true, script: "git show -s --format='%ae' $GIT_COMMIT").trim()
-					  sh "echo $shortCommit"
+					  sh "echo $COMMITTER_EMAIL"
 					}
 				}
 			}
