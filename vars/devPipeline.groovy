@@ -48,19 +48,9 @@ spec:
 				steps {
 					container('maven') {
 						script {
-							def author = ""
-							def changeSet = currentBuild.rawBuild.changeSets               
-							for (int i = 0; i < changeSet.size(); i++) 
-							{
-							   def entries = changeSet[i].items;
-							   for (int i = 0; i < changeSet.size(); i++) 
-							            {
-							                       def entries = changeSet[i].items;
-							                       def entry = entries[0]
-							                       author += "${entry.author}"
-							            } 
-							 }
-							 print author;
+							def changeSet = currentBuild.rawBuild.changeSets
+							def author = changeSet[0].items[0].author;
+							print author;
 						}
 						sh "echo AUTHOR_NAME : ${author}"
 					}
