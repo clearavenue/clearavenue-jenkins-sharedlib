@@ -47,15 +47,8 @@ spec:
 			stage('Build') {
 				steps {
 					container('maven') {
-						sh "echo GIT_COMMIT %GIT_COMMIT%"
-						sh "echo GIT_BRANCH %GIT_BRANCH%"
-						sh "echo GIT_LOCAL_BRANCH %GIT_LOCAL_BRANCH%"
-						sh "echo GIT_PREVIOUS_COMMIT %GIT_PREVIOUS_COMMIT%"
-						sh "echo GIT_PREVIOUS_SUCCESSFUL_COMMIT %GIT_PREVIOUS_SUCCESSFUL_COMMIT%"
-						sh "echo GIT_URL %GIT_URL%"
-						sh "echo GIT_URL_N - %GIT_URL_N%"
-						sh "echo GIT_AUTHOR_NAME %GIT_AUTHOR_NAME%"
-						sh "echo GIT_COMMITTER_EMAIL %GIT_COMMITTER_EMAIL%"
+						commitId = sh(returnStdout: true, script: 'git rev-parse HEAD')
+						sh "echo $commitId"
 					}
 				}
 			}
