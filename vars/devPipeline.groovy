@@ -46,25 +46,14 @@ spec:
 			
 			stage('Git Info') {
 				steps {
-					script{
-						def COMMITTER_EMAIL = sh (
-						                script: "git --no-pager show -s --format=%%ae",
-						                  returnStdout: true
-						              )
-						
-						    echo "The last commit was written by ${COMMITTER_EMAIL}"
-					}
+					sh 'printenv'
 				}
 			}
 
 			stage('Build') {
 				steps {
 					container('maven') {
-						script {
-							def changeSet = currentBuild.rawBuild.changeSets
-							def author = changeSet[0].items[0].author;
-							print author;
-						}
+						
 						sh "echo AUTHOR_NAME : ${author}"
 					}
 				}
