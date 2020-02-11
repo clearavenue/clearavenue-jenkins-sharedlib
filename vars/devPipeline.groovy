@@ -69,7 +69,7 @@ spec:
 								sh "sed -i 's|NAMESPACE|$NS|g' deployment.yaml"
 								
 								sh "cat deployment.yaml"
-								//sh "kubectl apply -f deployment.yaml"
+								sh "kubectl apply -f deployment.yaml"
 							}
 						}
 					}
