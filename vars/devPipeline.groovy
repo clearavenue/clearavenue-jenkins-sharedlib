@@ -38,7 +38,7 @@ spec:
 		}
 
 		environment {
-			VERSION=readMavenPom().getVersion()
+			POM_VERSION=readMavenPom().getVersion()
 			DOCKER_CREDS=credentials('docker')
 			COMMITTER_EMAIL="""${sh(returnStdout: true, script: "git show -s --format='%ae' $GIT_COMMIT").trim()}"""
 		}
@@ -137,7 +137,7 @@ spec:
 					container('maven') {
 						script {
 							if (env.GIT_BRANCH != 'master') {
-								VERSION = "$VERSION-$GIT_BRANCH"
+								VERSION = "$POM_VERSION-$GIT_BRANCH"
 							}
 
 							sh "mvn -B -e -T 1C com.google.cloud.tools:jib-maven-plugin:2.0.0:build -Dimage=${pipelineParams.docker_user}/${pipelineParams.service_name}:${VERSION} -DskipTests -Djib.to.auth.username=$DOCKER_CREDS_USR -Djib.to.auth.password=$DOCKER_CREDS_PSW -Djib.allowInsecureRegistries=true"
@@ -153,7 +153,7 @@ spec:
 							withKubeConfig([credentialsId: 'kube-admin', serverUrl: 'http://aa2e7b27c1cd44b91be7df2d25925337-1841660522.us-east-1.elb.amazonaws.com']) {
 								
 								if (env.GIT_BRANCH != 'master') {
-									VERSION = "$VERSION-$GIT_BRANCH"
+									VERSION = "$POM_VERSION-$GIT_BRANCH"
 								}
 								
 								sh "sed -i 's|APP_NAME|${pipelineParams.app_name}|g' deployment2.yaml"
