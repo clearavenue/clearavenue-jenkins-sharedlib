@@ -41,6 +41,7 @@ spec:
 			VERSION=readMavenPom().getVersion()
 			DOCKER_CREDS=credentials('docker')
 			COMMITTER_EMAIL="""${sh(returnStdout: true, script: "git show -s --format='%ae' $GIT_COMMIT").trim()}"""
+			BRANCH=$GIT_BRANCH
 		}
 
 		stages {
@@ -136,8 +137,8 @@ spec:
 				steps {
 					container('maven') {
 						script {
-							if ($GIT_BRANCH != "master") {
-								VERSION = "$VERSION-$GIT_BRANCH"
+							if ($BRANCH != "master") {
+								VERSION = "$VERSION-$BRANCH"
 							}
 
 							sh "mvn -B -e -T 1C com.google.cloud.tools:jib-maven-plugin:2.0.0:build -Dimage=${pipelineParams.docker_user}/${pipelineParams.service_name}:${VERSION} -DskipTests -Djib.to.auth.username=$DOCKER_CREDS_USR -Djib.to.auth.password=$DOCKER_CREDS_PSW -Djib.allowInsecureRegistries=true"
@@ -153,7 +154,7 @@ spec:
 							withKubeConfig([credentialsId: 'kube-admin', serverUrl: 'http://aa2e7b27c1cd44b91be7df2d25925337-1841660522.us-east-1.elb.amazonaws.com']) {
 								
 								if ($GIT_BRANCH != "master") {
-									VERSION = "$VERSION-$GIT_BRANCH"
+									VERSION = "$VERSION-$BRANCH"
 								}
 								
 								sh "sed -i 's|APP_NAME|${pipelineParams.app_name}|g' deployment2.yaml"
@@ -163,7 +164,7 @@ spec:
 								sh "sed -i 's|LIVENESS_URL|${pipelineParams.liveness_url}|g' deployment2.yaml"
 								sh "sed -i 's|READINESS_URL|${pipelineParams.readiness_url}|g' deployment2.yaml"
 								sh "sed -i 's|:latest|:${VERSION}|' deployment2.yaml"
-								sh "sed -i 's|BRANCH_NAME|${GIT_BRANCH}|g' deployment2.yaml"
+								sh "sed -i 's|BRANCH_NAME|${BRANCH}|g' deployment2.yaml"
 								
 								sh "cat deployment2.yaml"
 								//sh "kubectl apply -f deployment.yaml"
