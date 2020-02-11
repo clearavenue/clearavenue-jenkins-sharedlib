@@ -41,7 +41,7 @@ spec:
 			VERSION=readMavenPom().getVersion()
 			DOCKER_CREDS=credentials('docker')
 			COMMITTER_EMAIL="""${sh(returnStdout: true, script: "git show -s --format='%ae' $GIT_COMMIT").trim()}"""
-			BRANCH=$GIT_BRANCH
+			BRANCH="$GIT_BRANCH"
 		}
 
 		stages {
