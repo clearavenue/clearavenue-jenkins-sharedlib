@@ -147,16 +147,16 @@ spec:
 							withKubeConfig([credentialsId: 'kube-admin', serverUrl: 'http://aa2e7b27c1cd44b91be7df2d25925337-1841660522.us-east-1.elb.amazonaws.com']) {
 								
 								VERSION = "$VERSION-$GIT_BRANCH"
-								sh "sed -i 's|APP_NAME|${pipelineParams.app_name}|g' deployment.yaml"
-								sh "sed -i 's|SERVICE_NAME|${pipelineParams.service_name}|g' deployment.yaml"
-								sh "sed -i 's|DOCKER_USER|${pipelineParams.docker_user}|' deployment.yaml"
-								sh "sed -i 's|SERVICE_PORT|${pipelineParams.service_port}|g' deployment.yaml"
-								sh "sed -i 's|LIVENESS_URL|${pipelineParams.liveness_url}|g' deployment.yaml"
-								sh "sed -i 's|READINESS_URL|${pipelineParams.readiness_url}|g' deployment.yaml"
-								sh "sed -i 's|:latest|:${VERSION}|' deployment.yaml"
-								sh "sed -i 's|BRANCH_NAME|${GIT_BRANCH}|g' deployment.yaml"
+								sh "sed -i 's|APP_NAME|${pipelineParams.app_name}|g' deployment2.yaml"
+								sh "sed -i 's|SERVICE_NAME|${pipelineParams.service_name}|g' deployment2.yaml"
+								sh "sed -i 's|DOCKER_USER|${pipelineParams.docker_user}|' deployment2.yaml"
+								sh "sed -i 's|SERVICE_PORT|${pipelineParams.service_port}|g' deployment2.yaml"
+								sh "sed -i 's|LIVENESS_URL|${pipelineParams.liveness_url}|g' deployment2.yaml"
+								sh "sed -i 's|READINESS_URL|${pipelineParams.readiness_url}|g' deployment2.yaml"
+								sh "sed -i 's|:latest|:${VERSION}|' deployment2.yaml"
+								sh "sed -i 's|BRANCH_NAME|${GIT_BRANCH}|g' deployment2.yaml"
 								
-								sh "cat deployment.yaml"
+								sh "cat deployment2.yaml"
 								//sh "kubectl apply -f deployment.yaml"
 							}
 						}
