@@ -135,6 +135,10 @@ spec:
 			stage('Push Docker') {
 				steps {
 					container('maven') {
+						if ($GIT_BRANCH != "master") {
+							VERSION = "$VERSION-$GIT_BRANCH"
+						}
+						
 						sh "mvn -B -e -T 1C com.google.cloud.tools:jib-maven-plugin:2.0.0:build -Dimage=${pipelineParams.docker_user}/${pipelineParams.service_name}:${VERSION} -DskipTests -Djib.to.auth.username=$DOCKER_CREDS_USR -Djib.to.auth.password=$DOCKER_CREDS_PSW -Djib.allowInsecureRegistries=true"
 					}
 				}
@@ -146,7 +150,10 @@ spec:
 						script {
 							withKubeConfig([credentialsId: 'kube-admin', serverUrl: 'http://aa2e7b27c1cd44b91be7df2d25925337-1841660522.us-east-1.elb.amazonaws.com']) {
 								
-								VERSION = "$VERSION-$GIT_BRANCH"
+								if ($GIT_BRANCH != "master") {
+									VERSION = "$VERSION-$GIT_BRANCH"
+								}
+								
 								sh "sed -i 's|APP_NAME|${pipelineParams.app_name}|g' deployment2.yaml"
 								sh "sed -i 's|SERVICE_NAME|${pipelineParams.service_name}|g' deployment2.yaml"
 								sh "sed -i 's|DOCKER_USER|${pipelineParams.docker_user}|' deployment2.yaml"
