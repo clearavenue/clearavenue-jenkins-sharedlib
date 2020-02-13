@@ -166,7 +166,7 @@ spec:
 								sh "sed -i 's|BRANCH_NAME|${GIT_BRANCH}|g' deployment2.yaml"
 								
 								sh "cat deployment2.yaml"
-								sh "kubectl version"
+								sh "kubectl version -v=8"
 								sh "kubectl apply -v=8 -f deployment2.yaml"
 							}
 						}
