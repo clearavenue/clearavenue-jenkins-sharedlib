@@ -167,7 +167,7 @@ spec:
 								
 								sh "cat deployment2.yaml"
 								sh "kubectl version"
-								sh "kubectl apply -f deployment2.yaml"
+								sh "kubectl apply -v=8 -f deployment2.yaml"
 							}
 						}
 					}
