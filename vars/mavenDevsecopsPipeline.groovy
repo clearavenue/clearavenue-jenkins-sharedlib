@@ -25,7 +25,7 @@ spec:
       name: "m2repo"
       readOnly: false
   - name: kubectl
-    image: lachlanevenson/k8s-kubectl:latest
+    image: lachlanevenson/k8s-kubectl:v1.15.9
     command:
     - cat
     tty: true
@@ -135,7 +135,13 @@ spec:
 			stage('Push Docker') {
 				steps {
 					container('maven') {
-						sh "mvn -B -e -T 1C com.google.cloud.tools:jib-maven-plugin:2.0.0:build -Dimage=${pipelineParams.docker_user}/${pipelineParams.project_name}:${VERSION} -DskipTests -Djib.to.auth.username=$DOCKER_CREDS_USR -Djib.to.auth.password=$DOCKER_CREDS_PSW -Djib.allowInsecureRegistries=true"
+						script {
+							if (env.GIT_BRANCH != 'master') {
+								VERSION = "$POM_VERSION-$GIT_BRANCH"
+							}
+    
+							sh "mvn -B -e -T 1C com.google.cloud.tools:jib-maven-plugin:2.0.0:build -Dimage=${pipelineParams.docker_user}/${pipelineParams.service_name}:${VERSION} -DskipTests -Djib.to.auth.username=$DOCKER_CREDS_USR -Djib.to.auth.password=$DOCKER_CREDS_PSW -Djib.allowInsecureRegistries=true"
+						}
 					}
 				}
 			}
@@ -144,10 +150,23 @@ spec:
 				steps {
 					container('kubectl') {
 						script {
-							withKubeConfig([credentialsId: 'kube-admin', serverUrl: 'http://aa2e7b27c1cd44b91be7df2d25925337-1841660522.us-east-1.elb.amazonaws.com']) {
-								sh "kubectl delete --force -f ${pipelineParams.deployment_yaml}"
-								sh "sed -i 's/:latest/:${VERSION}/' ${pipelineParams.deployment_yaml}"
-								sh "kubectl apply -f ${pipelineParams.deployment_yaml}"
+							withKubeConfig([credentialsId: 'kube-admin', serverUrl: 'https://api-clearavenue-k8s-local-jd8lg8-2035897217.us-east-1.elb.amazonaws.com']) {
+								
+								if (env.GIT_BRANCH != 'master') {
+									VERSION = "$POM_VERSION-$GIT_BRANCH"
+								}
+								
+								sh "sed -i 's|APP_NAME|${pipelineParams.app_name}|g' deployment.yaml"
+								sh "sed -i 's|SERVICE_NAME|${pipelineParams.service_name}|g' deployment.yaml"
+								sh "sed -i 's|DOCKER_USER|${pipelineParams.docker_user}|' deployment.yaml"
+								sh "sed -i 's|SERVICE_PORT|${pipelineParams.service_port}|g' deployment.yaml"
+								sh "sed -i 's|LIVENESS_URL|${pipelineParams.liveness_url}|g' deployment.yaml"
+								sh "sed -i 's|READINESS_URL|${pipelineParams.readiness_url}|g' deployment.yaml"
+								sh "sed -i 's|:latest|:${VERSION}|' deployment.yaml"
+								sh "sed -i 's|BRANCH_NAME|${GIT_BRANCH}|g' deployment.yaml"
+								
+								sh "cat deployment.yaml"
+								sh "kubectl apply -f deployment.yaml"
 							}
 						}
 					}
