@@ -136,12 +136,7 @@ spec:
 				steps {
 					container('maven') {
 						script {
-							if (env.GIT_BRANCH != 'master') {
-								VERSION = "$POM_VERSION-$GIT_BRANCH"
-							} else {
-								VERSION = "$POM_VERSION"
-							}
-    
+							VERSION = (env.GIT_BRANCH != 'master') ? "$POM_VERSION-$GIT_BRANCH" : "$POM_VERSION"    
 							sh "mvn -B -e -T 1C com.google.cloud.tools:jib-maven-plugin:2.0.0:build -Dimage=${pipelineParams.docker_user}/${pipelineParams.service_name}:${VERSION} -DskipTests -Djib.to.auth.username=$DOCKER_CREDS_USR -Djib.to.auth.password=$DOCKER_CREDS_PSW -Djib.allowInsecureRegistries=true"
 						}
 					}
@@ -154,23 +149,19 @@ spec:
 						script {
 							withKubeConfig([credentialsId: 'kube-admin', serverUrl: 'https://api-clearavenue-k8s-local-jd8lg8-2035897217.us-east-1.elb.amazonaws.com']) {
 								
-								if (env.GIT_BRANCH != 'master') {
-									VERSION = "$POM_VERSION-$GIT_BRANCH"
-								} else {
-								    VERSION = "$POM_VERSION"
-							    }
+								VERSION = (env.GIT_BRANCH != 'master') ? "$POM_VERSION-$GIT_BRANCH" : "$POM_VERSION"
 								
-								sh "sed -i 's|APP_NAME|${pipelineParams.app_name}|g' deployment.yaml"
-								sh "sed -i 's|SERVICE_NAME|${pipelineParams.service_name}|g' deployment.yaml"
-								sh "sed -i 's|DOCKER_USER|${pipelineParams.docker_user}|' deployment.yaml"
-								sh "sed -i 's|SERVICE_PORT|${pipelineParams.service_port}|g' deployment.yaml"
-								sh "sed -i 's|LIVENESS_URL|${pipelineParams.liveness_url}|g' deployment.yaml"
-								sh "sed -i 's|READINESS_URL|${pipelineParams.readiness_url}|g' deployment.yaml"
-								sh "sed -i 's|:latest|:${VERSION}|' deployment.yaml"
-								sh "sed -i 's|BRANCH_NAME|${GIT_BRANCH}|g' deployment.yaml"
+								sh "sed -i 's|APP_NAME|${pipelineParams.app_name}|g' ${pipelineParams.deploymentFile}"
+								sh "sed -i 's|SERVICE_NAME|${pipelineParams.service_name}|g' ${pipelineParams.deploymentFile}"
+								sh "sed -i 's|DOCKER_USER|${pipelineParams.docker_user}|' ${pipelineParams.deploymentFile}"
+								sh "sed -i 's|SERVICE_PORT|${pipelineParams.service_port}|g' ${pipelineParams.deploymentFile}"
+								sh "sed -i 's|LIVENESS_URL|${pipelineParams.liveness_url}|g' ${pipelineParams.deploymentFile}"
+								sh "sed -i 's|READINESS_URL|${pipelineParams.readiness_url}|g' ${pipelineParams.deploymentFile}"
+								sh "sed -i 's|:latest|:${VERSION}|' ${pipelineParams.deploymentFile}"
+								sh "sed -i 's|BRANCH_NAME|${GIT_BRANCH}|g' ${pipelineParams.deploymentFile}"
 								
-								sh "cat deployment.yaml"
-								sh "kubectl apply -f deployment.yaml"
+								sh "cat ${pipelineParams.deploymentFile}"
+								sh "kubectl apply -f ${pipelineParams.deploymentFile}"
 							}
 						}
 					}
