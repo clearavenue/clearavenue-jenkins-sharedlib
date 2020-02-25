@@ -12,7 +12,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   labels:
-    pipeline: mavenDevsecopsPipeline
+    pipeline: devPipeline
 spec:
   containers:
   - name: maven
@@ -38,12 +38,12 @@ spec:
 		}
 
 		environment {
-			VERSION=readMavenPom().getVersion()
+			POM_VERSION=readMavenPom().getVersion()
 			DOCKER_CREDS=credentials('docker')
+			COMMITTER_EMAIL="""${sh(returnStdout: true, script: "git show -s --format='%ae' $GIT_COMMIT").trim()}"""
 		}
 
 		stages {
-
 			stage('Build') {
 				steps {
 					container('maven') {
@@ -51,7 +51,7 @@ spec:
 					}
 				}
 			}
-
+    
 			stage('JUnit') {
 				steps {
 					container('maven') {
@@ -60,7 +60,7 @@ spec:
 					}
 				}
 			}
-
+    
 			stage('DevSecOps') {
 				parallel {
 					stage('Checkstyle code') {
@@ -90,7 +90,7 @@ spec:
 							}
 						}
 					}
-
+    
 					stage('SpotBugs') {
 						steps {
 							container('maven') {
@@ -99,11 +99,11 @@ spec:
 						}
 						post {
 							always {
-								recordIssues(enabledForFailure: true, tool: spotBugs())
+	    						recordIssues(enabledForFailure: true, tool: spotBugs())
 							}
 						}
 					}
-
+    
 					stage('PMD') {
 						steps {
 							container('maven') {
@@ -116,7 +116,7 @@ spec:
 							}
 						}
 					}
-
+    
 					stage('Vulnerabilities') {
 						steps {
 							container('maven') {
@@ -131,7 +131,7 @@ spec:
 					}
 				}
 			}
-
+    
 			stage('Push Docker') {
 				steps {
 					container('maven') {
@@ -145,7 +145,7 @@ spec:
 					}
 				}
 			}
-
+			
 			stage('Deploy') {
 				steps {
 					container('kubectl') {
@@ -156,24 +156,25 @@ spec:
 									VERSION = "$POM_VERSION-$GIT_BRANCH"
 								}
 								
-								sh "sed -i 's|APP_NAME|${pipelineParams.app_name}|g' deployment.yaml"
-								sh "sed -i 's|SERVICE_NAME|${pipelineParams.service_name}|g' deployment.yaml"
-								sh "sed -i 's|DOCKER_USER|${pipelineParams.docker_user}|' deployment.yaml"
-								sh "sed -i 's|SERVICE_PORT|${pipelineParams.service_port}|g' deployment.yaml"
-								sh "sed -i 's|LIVENESS_URL|${pipelineParams.liveness_url}|g' deployment.yaml"
-								sh "sed -i 's|READINESS_URL|${pipelineParams.readiness_url}|g' deployment.yaml"
-								sh "sed -i 's|:latest|:${VERSION}|' deployment.yaml"
-								sh "sed -i 's|BRANCH_NAME|${GIT_BRANCH}|g' deployment.yaml"
+								sh "sed -i 's|APP_NAME|${pipelineParams.app_name}|g' deployment2.yaml"
+								sh "sed -i 's|SERVICE_NAME|${pipelineParams.service_name}|g' deployment2.yaml"
+								sh "sed -i 's|DOCKER_USER|${pipelineParams.docker_user}|' deployment2.yaml"
+								sh "sed -i 's|SERVICE_PORT|${pipelineParams.service_port}|g' deployment2.yaml"
+								sh "sed -i 's|LIVENESS_URL|${pipelineParams.liveness_url}|g' deployment2.yaml"
+								sh "sed -i 's|READINESS_URL|${pipelineParams.readiness_url}|g' deployment2.yaml"
+								sh "sed -i 's|:latest|:${VERSION}|' deployment2.yaml"
+								sh "sed -i 's|BRANCH_NAME|${GIT_BRANCH}|g' deployment2.yaml"
 								
-								sh "cat deployment.yaml"
-								sh "kubectl apply -f deployment.yaml"
+								sh "cat deployment2.yaml"
+								sh "kubectl version -v=8"
+								sh "kubectl apply -v=8 -f deployment2.yaml"
 							}
 						}
 					}
 				}
 			}
 		}
-
+		
 		post {
 			always {
 				emailext attachLog: true, subject: '$DEFAULT_SUBJECT', body: '$DEFAULT_CONTENT', recipientProviders: [
