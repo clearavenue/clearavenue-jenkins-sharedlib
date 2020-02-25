@@ -38,7 +38,7 @@ spec:
 		}
 
 		environment {
-			VERSION=readMavenPom().getVersion()
+			POM_VERSION=readMavenPom().getVersion()
 			DOCKER_CREDS=credentials('docker')
 		}
 
