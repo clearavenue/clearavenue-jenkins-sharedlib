@@ -1,11 +1,16 @@
 Sample Jenkinsfile
 
 ```
-@Library('clearavenue/clearavenue-jenkins-sharedlib') _
-  mavenDevsecopsPipeline {
-  project_name = fdadi-frontend
-  docker_user = clearavenuedocker
-  deployment_yaml = fdadi-frontend-deployment.yaml
+Library('clearavenue/clearavenue-jenkins-sharedlib')_
+
+mavenDevsecopsPipeline {
+  app_name = 'fdadi'
+  docker_user = 'clearavenuedocker'
+  service_name = 'fdadi-user-service'
+  service_port = 8082
+  liveness_url = '/actuator/health'
+  readiness_url = '/actuator/health'
+  deploymentFile = 'internal-deployment.yaml'
 }
 ```
 
@@ -16,6 +21,12 @@ Note:  Don't forget the '_' at the end of the @Library line !!!
 
 Sample pod definitions for use in pipeline
 ```
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    pipeline: mavenDevsecopsPipeline
+spec:
   containers:
   - name: maven
     image: maven:3.6-jdk-11-slim
@@ -23,39 +34,16 @@ Sample pod definitions for use in pipeline
     - cat
     tty: true
     volumeMounts:
-    - mountPath: "/var/run/docker.sock"
-      name: "volume-0"
-      readOnly: false
     - mountPath: "/root/.m2"
       name: "m2repo"
       readOnly: false
-  - name: docker
-    image: docker
-    command:
-    - cat
-    tty: true
-    volumeMounts:
-    - name: "volume-0"
-      mountPath: "/var/run/docker.sock"
-      readOnly: false
-    - name: "m2repo"
-      mountPath: "/root/.m2"
-      readOnly: false
   - name: kubectl
-    image: lachlanevenson/k8s-kubectl:latest
+    image: lachlanevenson/k8s-kubectl:v1.15.9
     command:
     - cat
     tty: true
-    volumeMounts:
-    - name: "volume-0"
-      mountPath: "/var/run/docker.sock"
-      readOnly: false
   volumes:
-  - name: "volume-0"
-    hostPath:
-      path: "/var/run/docker.sock"
   - name: "m2repo"
     hostPath:
       path: "/home/ec2-user/.m2"
-
 ```
