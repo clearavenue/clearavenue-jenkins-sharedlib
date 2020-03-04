@@ -61,7 +61,7 @@ spec:
 				}
 			}
 
-			stage('DevSecOps') {
+			stage('SecurityChecks') {
 				parallel {
 					stage('Checkstyle code') {
 						steps {
