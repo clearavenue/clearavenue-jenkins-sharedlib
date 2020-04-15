@@ -157,6 +157,7 @@ spec:
 								sh "sed -i 's|SERVICE_PORT|${pipelineParams.service_port}|g' ${pipelineParams.deploymentFile}"
 								sh "sed -i 's|LIVENESS_URL|${pipelineParams.liveness_url}|g' ${pipelineParams.deploymentFile}"
 								sh "sed -i 's|READINESS_URL|${pipelineParams.readiness_url}|g' ${pipelineParams.deploymentFile}"
+								sh "sed -i 's|HOST_NAME|${pipelineParams.host_name}|g' ${pipelineParams.deploymentFile}"
 								sh "sed -i 's|:latest|:${VERSION}|' ${pipelineParams.deploymentFile}"
 								sh "sed -i 's|BRANCH_NAME|${GIT_BRANCH}|g' ${pipelineParams.deploymentFile}"
 								
