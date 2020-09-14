@@ -149,7 +149,7 @@ spec:
 						script {
 							withKubeConfig([credentialsId: 'kube-admin', serverUrl: 'https://api-clearavenue-k8s-local-jd8lg8-2035897217.us-east-1.elb.amazonaws.com']) {
 								
-								VERSION = (env.GIT_BRANCH != 'master') ? "$POM_VERSION-$GIT_BRANCH" : "$POM_VERSION"
+								VERSION = (env.GIT_BRANCH != 'master') ? "$POM_VERSION.$BUILD_NUMBER-$GIT_BRANCH" : "$POM_VERSION.$BUILD_NUMBER"
 								
 								sh "sed -i 's|APP_NAME|${pipelineParams.app_name}|g' ${pipelineParams.deploymentFile}"
 								sh "sed -i 's|SERVICE_NAME|${pipelineParams.service_name}|g' ${pipelineParams.deploymentFile}"
