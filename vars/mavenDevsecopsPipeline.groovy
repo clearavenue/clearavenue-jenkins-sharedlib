@@ -40,9 +40,7 @@ spec:
 		environment {
 			POM_VERSION=readMavenPom().getVersion()
 			DOCKER_CREDS=credentials('docker')
-			script {
-				BRANCH = ${GIT_BRANCH}.toLowerCase()
-			}
+			BRANCH = ${GIT_BRANCH}.toLowerCase()
 		}
 
 		stages {
