@@ -40,6 +40,7 @@ spec:
 		environment {
 			POM_VERSION=readMavenPom().getVersion()
 			DOCKER_CREDS=credentials('docker')
+			BRANCH = ${GIT_BRANCH}.toLowerCase()
 		}
 
 		stages {
@@ -136,7 +137,7 @@ spec:
 				steps {
 					container('maven') {
 						script {
-							VERSION = (env.GIT_BRANCH != 'master') ? "$POM_VERSION.$BUILD_NUMBER-$GIT_BRANCH" : "$POM_VERSION.$BUILD_NUMBER"    
+							VERSION = ((env.GIT_BRANCH != 'master') ? "$POM_VERSION.$BUILD_NUMBER-$GIT_BRANCH" : "$POM_VERSION.$BUILD_NUMBER").toLowerCase()
 							sh "mvn -B -e -T 1C com.google.cloud.tools:jib-maven-plugin:2.0.0:build -Dimage=${pipelineParams.docker_user}/${pipelineParams.service_name}:${VERSION} -DskipTests -Djib.to.auth.username=$DOCKER_CREDS_USR -Djib.to.auth.password=$DOCKER_CREDS_PSW -Djib.allowInsecureRegistries=true"
 						}
 					}
@@ -149,8 +150,8 @@ spec:
 						script {
 							withKubeConfig([credentialsId: 'kube-admin', serverUrl: 'https://api-clearavenue-k8s-local-jd8lg8-2035897217.us-east-1.elb.amazonaws.com']) {
 								
-								VERSION = (env.GIT_BRANCH != 'master') ? "$POM_VERSION.$BUILD_NUMBER-$GIT_BRANCH" : "$POM_VERSION.$BUILD_NUMBER"
-								
+								VERSION = ((env.GIT_BRANCH != 'master') ? "$POM_VERSION.$BUILD_NUMBER-$GIT_BRANCH" : "$POM_VERSION.$BUILD_NUMBER").toLowerCase()
+
 								sh "sed -i 's|APP_NAME|${pipelineParams.app_name}|g' ${pipelineParams.deploymentFile}"
 								sh "sed -i 's|SERVICE_NAME|${pipelineParams.service_name}|g' ${pipelineParams.deploymentFile}"
 								sh "sed -i 's|DOCKER_USER|${pipelineParams.docker_user}|' ${pipelineParams.deploymentFile}"
@@ -159,7 +160,7 @@ spec:
 								sh "sed -i 's|READINESS_URL|${pipelineParams.readiness_url}|g' ${pipelineParams.deploymentFile}"
 								sh "sed -i 's|HOST_NAME|${pipelineParams.host_name}|g' ${pipelineParams.deploymentFile}"
 								sh "sed -i 's|:latest|:${VERSION}|' ${pipelineParams.deploymentFile}"
-								sh "export LOWER=`echo ${GIT_BRANCH} | tr '[:upper:]' '[:lower:]'`; sed -i \"s|BRANCH_NAME|${LOWER}|g\" ${pipelineParams.deploymentFile}\""
+								sh "sed -i 's|BRANCH_NAME|${BRANCH}|g' ${pipelineParams.deploymentFile}"
 								
 								sh "cat ${pipelineParams.deploymentFile}"
 								sh "kubectl apply -f ${pipelineParams.deploymentFile}"
