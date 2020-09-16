@@ -40,7 +40,7 @@ spec:
 		environment {
 			POM_VERSION=readMavenPom().getVersion()
 			DOCKER_CREDS=credentials('docker')
-			BRANCH = ${GIT_BRANCH}.toLowerCase()
+			BRANCH = env.GIT_BRANCH.toLowerCase()
 		}
 
 		stages {
@@ -137,7 +137,7 @@ spec:
 				steps {
 					container('maven') {
 						script {
-							VERSION = ((env.GIT_BRANCH != 'master') ? "$POM_VERSION.$BUILD_NUMBER-$GIT_BRANCH" : "$POM_VERSION.$BUILD_NUMBER").toLowerCase()
+							VERSION = ((env.GIT_BRANCH != 'master') ? "$POM_VERSION.$BUILD_NUMBER-$BRANCH" : "$POM_VERSION.$BUILD_NUMBER")
 							sh "mvn -B -e -T 1C com.google.cloud.tools:jib-maven-plugin:2.0.0:build -Dimage=${pipelineParams.docker_user}/${pipelineParams.service_name}:${VERSION} -DskipTests -Djib.to.auth.username=$DOCKER_CREDS_USR -Djib.to.auth.password=$DOCKER_CREDS_PSW -Djib.allowInsecureRegistries=true"
 						}
 					}
@@ -150,7 +150,7 @@ spec:
 						script {
 							withKubeConfig([credentialsId: 'kube-admin', serverUrl: 'https://api-clearavenue-k8s-local-jd8lg8-2035897217.us-east-1.elb.amazonaws.com']) {
 								
-								VERSION = ((env.GIT_BRANCH != 'master') ? "$POM_VERSION.$BUILD_NUMBER-$GIT_BRANCH" : "$POM_VERSION.$BUILD_NUMBER").toLowerCase()
+								VERSION = ((env.GIT_BRANCH != 'master') ? "$POM_VERSION.$BUILD_NUMBER-$BRANCH" : "$POM_VERSION.$BUILD_NUMBER")
 
 								sh "sed -i 's|APP_NAME|${pipelineParams.app_name}|g' ${pipelineParams.deploymentFile}"
 								sh "sed -i 's|SERVICE_NAME|${pipelineParams.service_name}|g' ${pipelineParams.deploymentFile}"
