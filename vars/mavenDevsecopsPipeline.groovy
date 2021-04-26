@@ -15,8 +15,8 @@ metadata:
     pipeline: mavenDevsecopsPipeline
 spec:
   securityContext:
-    runAsUser:0
-	runAsGroup:0
+    runAsUser: 0
+    runAsGroup: 0
     fsGroup: 0
   containers:
   - name: maven
