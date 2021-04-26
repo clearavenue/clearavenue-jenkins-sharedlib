@@ -14,25 +14,27 @@ metadata:
   labels:
     pipeline: mavenDevsecopsPipeline
 spec:
+  securityContext:
+    fsGroup: 1000
   containers:
   - name: maven
     image: maven:3.6-jdk-11-slim
     command:
     - cat
     tty: true
-    #volumeMounts:
-    #- mountPath: "/root/.m2"
-    #  name: "m2repo"
-    #  readOnly: false
+    volumeMounts:
+    - mountPath: "/root/.m2"
+      name: "m2repo"
+      readOnly: false
   - name: kubectl
     image: lachlanevenson/k8s-kubectl:v1.15.9
     command:
     - cat
     tty: true
-  #volumes:
-  #- name: "m2repo"
-  #  hostPath:
-  #    path: "/home/ec2-user/.m2"
+  volumes:
+  - name: "m2repo"
+    hostPath:
+      path: "/home/ec2-user/.m2"
 """
 			}
 		}
