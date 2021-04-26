@@ -20,21 +20,11 @@ spec:
     command:
     - cat
     tty: true
-    privileged: true
-    volumeMounts:
-    - mountPath: "/root/.m2"
-      name: "m2repo"
-      readOnly: false
   - name: kubectl
     image: lachlanevenson/k8s-kubectl:v1.15.9
     command:
     - cat
     tty: true
-    privileged: true
-  volumes:
-  - name: "m2repo"
-    hostPath:
-      path: "/home/ec2-user/.m2"
 """
 			}
 		}
