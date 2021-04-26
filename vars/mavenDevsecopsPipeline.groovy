@@ -14,16 +14,17 @@ metadata:
   labels:
     pipeline: mavenDevsecopsPipeline
 spec:
-  securityContext:
-    runAsUser: 0
-    runAsGroup: 0
-    fsGroup: 0
   containers:
   - name: maven
     image: maven:3.6-jdk-11-slim
     command:
     - cat
     tty: true
+	privileged:true
+	securityContext:
+      runAsUser: 0
+      runAsGroup: 0
+      fsGroup: 0
     volumeMounts:
     - mountPath: "/root/.m2"
       name: "m2repo"
@@ -33,6 +34,11 @@ spec:
     command:
     - cat
     tty: true
+	privileged:true
+    securityContext:
+      runAsUser: 0
+      runAsGroup: 0
+      fsGroup: 0
   volumes:
   - name: "m2repo"
     hostPath:
