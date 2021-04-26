@@ -21,7 +21,7 @@ spec:
     - cat
     tty: true
   - name: kubectl
-    image: lachlanevenson/k8s-kubectl:v1.15.9
+    image: lachlanevenson/k8s-kubectl:v1.20.5
     command:
     - cat
     tty: true
