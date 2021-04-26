@@ -20,7 +20,7 @@ spec:
     command:
     - cat
     tty: true
-    privileged:true
+    privileged: true
     volumeMounts:
     - mountPath: "/root/.m2"
       name: "m2repo"
@@ -30,7 +30,7 @@ spec:
     command:
     - cat
     tty: true
-    privileged:true
+    privileged: true
   volumes:
   - name: "m2repo"
     hostPath:
