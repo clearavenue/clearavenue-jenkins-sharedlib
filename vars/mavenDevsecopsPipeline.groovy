@@ -15,7 +15,9 @@ metadata:
     pipeline: mavenDevsecopsPipeline
 spec:
   securityContext:
-    fsGroup: 1000
+    runAsUser:0
+	runAsGroup:0
+    fsGroup: 0
   containers:
   - name: maven
     image: maven:3.6-jdk-11-slim
