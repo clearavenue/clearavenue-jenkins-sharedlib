@@ -21,7 +21,7 @@ spec:
     - cat
     tty: true
   - name: kubectl
-    image: lachlanevenson/k8s-kubectl:v1.20.5
+    image: lachlanevenson/k8s-kubectl:v1.19.9
     command:
     - cat
     tty: true
@@ -155,6 +155,7 @@ spec:
 								sh "sed -i 's|BRANCH_NAME|${BRANCH}|g' ${pipelineParams.deploymentFile}"
 								
 								sh "cat ${pipelineParams.deploymentFile}"
+								sh "kubectl version"
 								sh "kubectl apply -f ${pipelineParams.deploymentFile}"
 							}
 						}
