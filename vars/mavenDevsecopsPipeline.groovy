@@ -20,11 +20,7 @@ spec:
     command:
     - cat
     tty: true
-	privileged:true
-	securityContext:
-      runAsUser: 0
-      runAsGroup: 0
-      fsGroup: 0
+    privileged:true
     volumeMounts:
     - mountPath: "/root/.m2"
       name: "m2repo"
@@ -34,11 +30,7 @@ spec:
     command:
     - cat
     tty: true
-	privileged:true
-    securityContext:
-      runAsUser: 0
-      runAsGroup: 0
-      fsGroup: 0
+    privileged:true
   volumes:
   - name: "m2repo"
     hostPath:
