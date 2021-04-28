@@ -26,7 +26,7 @@ spec:
       limits:
         ephemeral-storage: 1Gi
   - name: kubectl
-    image: lachlanevenson/k8s-kubectl:v1.15.9
+    image: lachlanevenson/k8s-kubectl:v1.19.9
     command:
     - cat
     tty: true
@@ -144,7 +144,7 @@ spec:
 				steps {
 					container('kubectl') {
 						script {
-							withKubeConfig([credentialsId: 'kube-admin', serverUrl: 'ae0b8f2667fac4bf994a8c84471f7944-159761853.us-east-1.elb.amazonaws.com']) {
+							withKubeConfig([credentialsId: 'kube-admin', serverUrl: 'https://10.43.0.1']) {
 								
 								VERSION = (env.GIT_BRANCH != 'master') ? "$POM_VERSION-$GIT_BRANCH" : "$POM_VERSION"
 								
