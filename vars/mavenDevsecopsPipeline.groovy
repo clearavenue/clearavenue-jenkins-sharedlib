@@ -20,8 +20,9 @@ spec:
     command:
     - cat
     tty: true
-    requests:
-      ephemeral: 1Gi
+    resources:
+      requests:
+        ephemeral: 1Gi
   - name: kubectl
     image: lachlanevenson/k8s-kubectl:v1.19.9
     command:
