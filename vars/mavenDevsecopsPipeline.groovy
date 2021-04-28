@@ -21,7 +21,7 @@ spec:
     - cat
     tty: true
     resource:
-	  requests:
+      requests:
         ephemeral-storage: 100Mi
       limits:
         ephemeral-storage: 1Gi
