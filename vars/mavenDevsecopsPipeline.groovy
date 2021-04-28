@@ -22,7 +22,9 @@ spec:
     tty: true
     resources:
       requests:
-        ephemeral: 1Gi
+        ephemeral-storage: 500mb
+      limits:
+        ephemeral-storage: 1Gi
   - name: kubectl
     image: lachlanevenson/k8s-kubectl:v1.19.9
     command:
