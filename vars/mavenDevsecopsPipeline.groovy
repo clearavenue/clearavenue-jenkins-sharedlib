@@ -20,9 +20,9 @@ spec:
     command:
     - cat
     tty: true
-    resource:
+    resources:
       requests:
-        ephemeral-storage: 100Mi
+        ephemeral-storage: 500mb
       limits:
         ephemeral-storage: 1Gi
   - name: kubectl
@@ -37,6 +37,7 @@ spec:
 		environment {
 			POM_VERSION=readMavenPom().getVersion()
 			DOCKER_CREDS=credentials('docker')
+			BRANCH = env.GIT_BRANCH.toLowerCase()
 		}
 
 		stages {
@@ -133,7 +134,7 @@ spec:
 				steps {
 					container('maven') {
 						script {
-							VERSION = (env.GIT_BRANCH != 'master') ? "$POM_VERSION-$GIT_BRANCH" : "$POM_VERSION"    
+							VERSION = ((env.GIT_BRANCH != 'master') ? "$POM_VERSION.$BUILD_NUMBER-$BRANCH" : "$POM_VERSION.$BUILD_NUMBER")
 							sh "mvn -B -e -T 1C com.google.cloud.tools:jib-maven-plugin:2.0.0:build -Dimage=${pipelineParams.docker_user}/${pipelineParams.service_name}:${VERSION} -DskipTests -Djib.to.auth.username=$DOCKER_CREDS_USR -Djib.to.auth.password=$DOCKER_CREDS_PSW -Djib.allowInsecureRegistries=true"
 						}
 					}
@@ -146,18 +147,20 @@ spec:
 						script {
 							withKubeConfig([credentialsId: 'kube-admin', serverUrl: 'https://10.43.0.1']) {
 								
-								VERSION = (env.GIT_BRANCH != 'master') ? "$POM_VERSION-$GIT_BRANCH" : "$POM_VERSION"
-								
+								VERSION = ((env.GIT_BRANCH != 'master') ? "$POM_VERSION.$BUILD_NUMBER-$BRANCH" : "$POM_VERSION.$BUILD_NUMBER")
+
 								sh "sed -i 's|APP_NAME|${pipelineParams.app_name}|g' ${pipelineParams.deploymentFile}"
 								sh "sed -i 's|SERVICE_NAME|${pipelineParams.service_name}|g' ${pipelineParams.deploymentFile}"
 								sh "sed -i 's|DOCKER_USER|${pipelineParams.docker_user}|' ${pipelineParams.deploymentFile}"
 								sh "sed -i 's|SERVICE_PORT|${pipelineParams.service_port}|g' ${pipelineParams.deploymentFile}"
 								sh "sed -i 's|LIVENESS_URL|${pipelineParams.liveness_url}|g' ${pipelineParams.deploymentFile}"
 								sh "sed -i 's|READINESS_URL|${pipelineParams.readiness_url}|g' ${pipelineParams.deploymentFile}"
-								sh "sed -i 's|:latest|:${VERSION}|' ${pipelineParams.deploymentFile}"
-								sh "sed -i 's|BRANCH_NAME|${GIT_BRANCH}|g' ${pipelineParams.deploymentFile}"
 								sh "sed -i 's|HOST_NAME|${pipelineParams.host_name}|g' ${pipelineParams.deploymentFile}"
+								sh "sed -i 's|:latest|:${VERSION}|' ${pipelineParams.deploymentFile}"
+								sh "sed -i 's|BRANCH_NAME|${BRANCH}|g' ${pipelineParams.deploymentFile}"
+								
 								sh "cat ${pipelineParams.deploymentFile}"
+								sh "kubectl version"
 								sh "kubectl apply -f ${pipelineParams.deploymentFile}"
 							}
 						}
