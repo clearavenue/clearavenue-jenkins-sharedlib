@@ -115,7 +115,7 @@ spec:
 						}
 					}
 
-					stage('Vulnerabilities') {
+					/*stage('Vulnerabilities') {
 						steps {
 							container('maven') {
 								sh "mvn -B -e -T 1C org.owasp:dependency-check-maven:5.3.0:aggregate -Dformat=xml"
@@ -126,7 +126,7 @@ spec:
 								dependencyCheckPublisher(failedTotalCritical : 100, unstableTotalCritical : 100)
 							}
 						}
-					}
+					}*/
 				}
 			}
 
