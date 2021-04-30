@@ -24,7 +24,7 @@ spec:
       requests:
         ephemeral-storage: 500Mi
       limits:
-        ephemeral-storage: 1Gi
+        ephemeral-storage: 5Gi
   - name: kubectl
     image: lachlanevenson/k8s-kubectl:v1.19.9
     command:
