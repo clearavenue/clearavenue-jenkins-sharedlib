@@ -22,14 +22,20 @@ spec:
     tty: true
     resources:
       requests:
-        ephemeral-storage: 500Mi
-      limits:
         ephemeral-storage: 1Gi
+      limits:
+        ephemeral-storage: 5Gi
   - name: kubectl
     image: lachlanevenson/k8s-kubectl:v1.19.9
     command:
     - cat
     tty: true
+  - name: jnlp
+    resources:
+      requests:
+        ephemeral-storage: 1Gi
+      limits:
+        ephemeral-storage: 5Gi
 """
 			}
 		}
@@ -115,7 +121,7 @@ spec:
 						}
 					}
 
-					/*stage('Vulnerabilities') {
+					stage('Vulnerabilities') {
 						steps {
 							container('maven') {
 								sh "mvn -B -e -T 1C org.owasp:dependency-check-maven:5.3.0:aggregate -Dformat=xml"
@@ -126,7 +132,7 @@ spec:
 								dependencyCheckPublisher(failedTotalCritical : 100, unstableTotalCritical : 100)
 							}
 						}
-					}*/
+					}
 				}
 			}
 
