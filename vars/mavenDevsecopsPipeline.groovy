@@ -32,7 +32,7 @@ spec:
     tty: true
   - name: jnlp
     resources:
-	  requests:
+      requests:
         ephemeral-storage: 1Gi
       limits:
         ephemeral-storage: 5Gi
