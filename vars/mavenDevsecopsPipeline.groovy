@@ -22,7 +22,7 @@ spec:
     tty: true
     resources:
       requests:
-        ephemeral-storage: 500Mi
+        ephemeral-storage: 1Gi
       limits:
         ephemeral-storage: 5Gi
   - name: kubectl
