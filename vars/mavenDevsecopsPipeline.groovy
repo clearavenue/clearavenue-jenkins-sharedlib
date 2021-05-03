@@ -70,7 +70,7 @@ spec:
 					stage('Checkstyle code') {
 						steps {
 							container('maven') {
-								sh "mvn -B -e -T 1C org.apache.maven.plugins:maven-checkstyle-plugin:3.1.0:checkstyle -Dcheckstyle.config.location=google_checks.xml"
+								sh "mvn -B -e -T 1C org.apache.maven.plugins:maven-checkstyle-plugin:3.1.2:checkstyle -Dcheckstyle.config.location=google_checks.xml"
 							}
 						}
 						post {
@@ -83,7 +83,7 @@ spec:
 					stage('CodeCoverage') {
 						steps {
 							container('maven') {
-								sh "mvn -B -e -T 1C org.jacoco:jacoco-maven-plugin:0.8.4:prepare-agent verify org.jacoco:jacoco-maven-plugin:0.8.4:report"
+								sh "mvn -B -e -T 1C org.jacoco:jacoco-maven-plugin:0.8.6:prepare-agent verify org.jacoco:jacoco-maven-plugin:0.8.6:report"
 								jacoco(execPattern: 'target/jacoco.exec', classPattern: 'target/classes', sourcePattern: 'src/main/java', exclusionPattern: 'src/test*', changeBuildStatus: true,
 								minimumInstructionCoverage : '30', maximumInstructionCoverage : '31',
 								minimumBranchCoverage : '30', maximumBranchCoverage : '31',
@@ -98,7 +98,7 @@ spec:
 					stage('SpotBugs') {
 						steps {
 							container('maven') {
-								sh "mvn -B -e -T 1C com.github.spotbugs:spotbugs-maven-plugin:3.1.12.2:check -Dspotbugs.effort=Max -Dspotbugs.threshold=Low"
+								sh "mvn -B -e -T 1C com.github.spotbugs:spotbugs-maven-plugin:4.2.2:check -Dspotbugs.effort=Max -Dspotbugs.threshold=Low"
 							}
 						}
 						post {
@@ -111,7 +111,7 @@ spec:
 					stage('PMD') {
 						steps {
 							container('maven') {
-								sh "mvn -B -e org.apache.maven.plugins:maven-jxr-plugin:3.0.0:jxr org.apache.maven.plugins:maven-pmd-plugin:3.12.0:pmd"
+								sh "mvn -B -e org.apache.maven.plugins:maven-jxr-plugin:3.0.0:jxr org.apache.maven.plugins:maven-pmd-plugin:3.14.0:pmd"
 							}
 						}
 						post {
@@ -124,7 +124,7 @@ spec:
 					stage('Vulnerabilities') {
 						steps {
 							container('maven') {
-								sh "mvn -B -e -T 1C org.owasp:dependency-check-maven:5.3.0:aggregate -Dformat=xml -DfailBuildOnCVSS=7"
+								sh "mvn -B -e -T 1C org.owasp:dependency-check-maven:6.1.5:aggregate -Dformat=xml -DfailBuildOnCVSS=7"
 							}
 						}
 						post {
