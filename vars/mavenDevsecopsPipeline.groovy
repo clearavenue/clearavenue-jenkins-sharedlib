@@ -151,7 +151,7 @@ spec:
 				steps {
 					container('kubectl') {
 						script {
-							withKubeConfig([credentialsId: 'kube-admin', serverUrl: 'https://1966655B40A28691C23D4070AE936AD7.gr7.us-east-1.eks.amazonaws.com']) {
+							withKubeConfig([credentialsId: 'kube-admin', serverUrl: 'https://4D229BB39985AC258C8EDAFE7CA6E9CD.yl4.us-east-1.eks.amazonaws.com']) {
 								
 								VERSION = ((env.GIT_BRANCH != 'master') ? "$POM_VERSION.$BUILD_NUMBER-$BRANCH" : "$POM_VERSION.$BUILD_NUMBER")
 
