@@ -83,7 +83,7 @@ spec:
 					stage('CodeCoverage') {
 						steps {
 							container('maven') {
-								sh "mvn -B -e -T 1C org.jacoco:jacoco-maven-plugin:0.8.6:prepare-agent verify org.jacoco:jacoco-maven-plugin:0.8.6:report"
+								sh "mvn -B -e -T 1C org.jacoco:jacoco-maven-plugin:0.8.7:prepare-agent verify org.jacoco:jacoco-maven-plugin:0.8.7:report"
 								jacoco(execPattern: 'target/jacoco.exec', classPattern: 'target/classes', sourcePattern: 'src/main/java', exclusionPattern: 'src/test*', changeBuildStatus: true,
 								minimumInstructionCoverage : '30', maximumInstructionCoverage : '31',
 								minimumBranchCoverage : '30', maximumBranchCoverage : '31',
