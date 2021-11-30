@@ -111,7 +111,7 @@ spec:
 					stage('PMD') {
 						steps {
 							container('maven') {
-								sh "mvn -B -e org.apache.maven.plugins:maven-jxr-plugin:3.0.0:jxr org.apache.maven.plugins:maven-pmd-plugin:3.14.0:pmd"
+								sh "mvn -B -e org.apache.maven.plugins:maven-jxr-plugin:3.1.1:jxr org.apache.maven.plugins:maven-pmd-plugin:3.14.0:pmd"
 							}
 						}
 						post {
@@ -124,7 +124,7 @@ spec:
 					stage('Vulnerabilities') {
 						steps {
 							container('maven') {
-								sh "mvn -B -e -T 1C org.owasp:dependency-check-maven:6.1.5:aggregate -Dformat=xml -DfailBuildOnCVSS=7"
+								sh "mvn -B -e -T 1C org.owasp:dependency-check-maven:6.5.0:aggregate -Dformat=xml -DfailBuildOnCVSS=7"
 							}
 						}
 						post {
@@ -141,7 +141,7 @@ spec:
 					container('maven') {
 						script {
 							VERSION = ((env.GIT_BRANCH != 'master') ? "$POM_VERSION.$BUILD_NUMBER-$BRANCH" : "$POM_VERSION.$BUILD_NUMBER")
-							sh "mvn -B -e -T 1C com.google.cloud.tools:jib-maven-plugin:2.0.0:build -Dimage=${pipelineParams.docker_user}/${pipelineParams.service_name}:${VERSION} -DskipTests -Djib.to.auth.username=$DOCKER_CREDS_USR -Djib.to.auth.password=$DOCKER_CREDS_PSW -Djib.allowInsecureRegistries=true"
+							sh "mvn -B -e -T 1C com.google.cloud.tools:jib-maven-plugin:3.1.4:build -Dimage=${pipelineParams.docker_user}/${pipelineParams.service_name}:${VERSION} -DskipTests -Djib.to.auth.username=$DOCKER_CREDS_USR -Djib.to.auth.password=$DOCKER_CREDS_PSW -Djib.allowInsecureRegistries=true"
 						}
 					}
 				}
