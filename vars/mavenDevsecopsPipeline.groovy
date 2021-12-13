@@ -22,14 +22,20 @@ spec:
     tty: true
     resources:
       requests:
-        ephemeral-storage: 500mb
-      limits:
         ephemeral-storage: 1Gi
+      limits:
+        ephemeral-storage: 5Gi
   - name: kubectl
     image: lachlanevenson/k8s-kubectl:v1.19.9
     command:
     - cat
     tty: true
+  - name: jnlp
+    resources:
+      requests:
+        ephemeral-storage: 1Gi
+      limits:
+        ephemeral-storage: 5Gi
 """
 			}
 		}
@@ -64,7 +70,7 @@ spec:
 					stage('Checkstyle code') {
 						steps {
 							container('maven') {
-								sh "mvn -B -e -T 1C org.apache.maven.plugins:maven-checkstyle-plugin:3.1.0:checkstyle -Dcheckstyle.config.location=google_checks.xml"
+								sh "mvn -B -e -T 1C org.apache.maven.plugins:maven-checkstyle-plugin:3.1.2:checkstyle -Dcheckstyle.config.location=google_checks.xml"
 							}
 						}
 						post {
@@ -77,7 +83,7 @@ spec:
 					stage('CodeCoverage') {
 						steps {
 							container('maven') {
-								sh "mvn -B -e -T 1C org.jacoco:jacoco-maven-plugin:0.8.4:prepare-agent verify org.jacoco:jacoco-maven-plugin:0.8.4:report"
+								sh "mvn -B -e -T 1C org.jacoco:jacoco-maven-plugin:0.8.7:prepare-agent verify org.jacoco:jacoco-maven-plugin:0.8.7:report"
 								jacoco(execPattern: 'target/jacoco.exec', classPattern: 'target/classes', sourcePattern: 'src/main/java', exclusionPattern: 'src/test*', changeBuildStatus: true,
 								minimumInstructionCoverage : '30', maximumInstructionCoverage : '31',
 								minimumBranchCoverage : '30', maximumBranchCoverage : '31',
@@ -92,7 +98,7 @@ spec:
 					stage('SpotBugs') {
 						steps {
 							container('maven') {
-								sh "mvn -B -e -T 1C com.github.spotbugs:spotbugs-maven-plugin:3.1.12.2:check -Dspotbugs.effort=Max -Dspotbugs.threshold=Low"
+								sh "mvn -B -e -T 1C com.github.spotbugs:spotbugs-maven-plugin:4.5.0.0:check -Dspotbugs.effort=Max -Dspotbugs.threshold=Low"
 							}
 						}
 						post {
@@ -105,7 +111,7 @@ spec:
 					stage('PMD') {
 						steps {
 							container('maven') {
-								sh "mvn -B -e org.apache.maven.plugins:maven-jxr-plugin:3.0.0:jxr org.apache.maven.plugins:maven-pmd-plugin:3.12.0:pmd"
+								sh "mvn -B -e org.apache.maven.plugins:maven-jxr-plugin:3.1.1:jxr org.apache.maven.plugins:maven-pmd-plugin:3.14.0:pmd"
 							}
 						}
 						post {
@@ -115,10 +121,10 @@ spec:
 						}
 					}
 
-					/*stage('Vulnerabilities') {
+					stage('Vulnerabilities') {
 						steps {
 							container('maven') {
-								sh "mvn -B -e -T 1C org.owasp:dependency-check-maven:5.3.0:aggregate -Dformat=xml"
+								sh "mvn -B -e -T 1C org.owasp:dependency-check-maven:6.5.0:aggregate -Dformat=xml -DfailBuildOnCVSS=7"
 							}
 						}
 						post {
@@ -126,7 +132,7 @@ spec:
 								dependencyCheckPublisher(failedTotalCritical : 100, unstableTotalCritical : 100)
 							}
 						}
-					}*/
+					}
 				}
 			}
 
@@ -135,7 +141,7 @@ spec:
 					container('maven') {
 						script {
 							VERSION = ((env.GIT_BRANCH != 'master') ? "$POM_VERSION.$BUILD_NUMBER-$BRANCH" : "$POM_VERSION.$BUILD_NUMBER")
-							sh "mvn -B -e -T 1C com.google.cloud.tools:jib-maven-plugin:2.0.0:build -Dimage=${pipelineParams.docker_user}/${pipelineParams.service_name}:${VERSION} -DskipTests -Djib.to.auth.username=$DOCKER_CREDS_USR -Djib.to.auth.password=$DOCKER_CREDS_PSW -Djib.allowInsecureRegistries=true"
+							sh "mvn -B -e -T 1C com.google.cloud.tools:jib-maven-plugin:3.1.4:build -Dimage=${pipelineParams.docker_user}/${pipelineParams.service_name}:${VERSION} -DskipTests -Djib.to.auth.username=$DOCKER_CREDS_USR -Djib.to.auth.password=$DOCKER_CREDS_PSW -Djib.allowInsecureRegistries=true"
 						}
 					}
 				}
@@ -145,7 +151,7 @@ spec:
 				steps {
 					container('kubectl') {
 						script {
-							withKubeConfig([credentialsId: 'kube-admin', serverUrl: 'https://10.43.0.1']) {
+							withKubeConfig([credentialsId: 'jenkins-serviceaccount', serverUrl: '${CLUSTER_URL}']) {
 								
 								VERSION = ((env.GIT_BRANCH != 'master') ? "$POM_VERSION.$BUILD_NUMBER-$BRANCH" : "$POM_VERSION.$BUILD_NUMBER")
 
