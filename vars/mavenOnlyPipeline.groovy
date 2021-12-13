@@ -12,7 +12,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   labels:
-    pipeline: mavenOnlyPipeline
+    pipeline: mavenDevsecopsPipeline
 spec:
   containers:
   - name: maven
@@ -22,14 +22,20 @@ spec:
     tty: true
     resources:
       requests:
-        ephemeral-storage: 500mb
-      limits:
         ephemeral-storage: 1Gi
+      limits:
+        ephemeral-storage: 5Gi
   - name: kubectl
     image: lachlanevenson/k8s-kubectl:v1.19.9
     command:
     - cat
     tty: true
+  - name: jnlp
+    resources:
+      requests:
+        ephemeral-storage: 1Gi
+      limits:
+        ephemeral-storage: 5Gi
 """
 			}
 		}
@@ -58,5 +64,16 @@ spec:
 				}
 			}
 
+		}
+
+		post {
+			always {
+				emailext attachLog: true, subject: '$DEFAULT_SUBJECT', body: '$DEFAULT_CONTENT', recipientProviders: [
+					[$class: 'CulpritsRecipientProvider'],
+					[$class: 'DevelopersRecipientProvider'],
+					[$class: 'RequesterRecipientProvider']
+				]
+			}
+		}
 	}
 }
