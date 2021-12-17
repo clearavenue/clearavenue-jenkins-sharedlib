@@ -63,6 +63,38 @@ spec:
 					}
 				}
 			}
+                        
+                        stage('SecurityChecks') {
+                                parallel {
+                                        stage('Checkstyle code') {
+                                                steps {
+                                                        container('maven') {
+                                                                sh "mvn -B -e -T 1C org.apache.maven.plugins:maven-checkstyle-plugin:3.1.2:checkstyle -Dcheckstyle.config.location=google_checks.xml"
+                                                        }
+                                                }
+                                                post {
+                                                        always {
+                                                                recordIssues(enabledForFailure: false, tool: checkStyle(pattern: 'target/checkstyle-result.xml'))
+                                                        }
+                                                }
+                                        }
+
+                                        stage('CodeCoverage') {
+                                                steps {
+                                                        container('maven') {
+                                                                sh "mvn -B -e -T 1C org.jacoco:jacoco-maven-plugin:0.8.7:prepare-agent verify org.jacoco:jacoco-maven-plugin:0.8.7:report"
+                                                                jacoco(execPattern: 'target/jacoco.exec', classPattern: 'target/classes', sourcePattern: 'src/main/java', exclusionPattern: 'src/test*', changeBuildStatus: true,
+                                                                minimumInstructionCoverage : '30', maximumInstructionCoverage : '31',
+                                                                minimumBranchCoverage : '30', maximumBranchCoverage : '31',
+                                                                minimumComplexityCoverage : '30', maximumComplexityCoverage : '31',
+                                                                minimumLineCoverage : '30', maximumLineCoverage : '31',
+                                                                minimumMethodCoverage : '30', maximumMethodCoverage : '31',
+                                                                minimumClassCoverage : '30', maximumClassCoverage : '31')
+                                                        }
+                                                }
+                                        }
+                               }
+                        }
 
 		}
 
