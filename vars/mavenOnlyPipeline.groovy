@@ -93,6 +93,45 @@ spec:
                                                         }
                                                 }
                                         }
+
+                                        stage('SpotBugs') {
+                                                steps {
+                                                        container('maven') {
+                                                                sh "mvn -B -e -T 1C com.github.spotbugs:spotbugs-maven-plugin:4.5.0.0:check -Dspotbugs.effort=Max -Dspotbugs.threshold=Low"
+                                                        }
+                                                }
+                                                post {
+                                                        always {
+                                                                recordIssues(enabledForFailure: true, tool: spotBugs())
+                                                        }
+                                                }
+                                        }
+                                        
+                                        stage('PMD') {
+                                                steps {
+                                                        container('maven') {
+                                                                sh "mvn -B -e org.apache.maven.plugins:maven-jxr-plugin:3.1.1:jxr org.apache.maven.plugins:maven-pmd-plugin:3.14.0:pmd"
+                                                        }
+                                                }
+                                                post {
+                                                        always {
+                                                                recordIssues(enabledForFailure: true, tool: pmdParser(pattern: 'target/pmd.xml'))
+                                                        }
+                                                }
+                                        }
+
+                                        stage('Vulnerabilities') {
+                                                steps {
+                                                        container('maven') {
+                                                                sh "mvn -B -e -T 1C org.owasp:dependency-check-maven:6.5.0:aggregate -Dformat=xml -DfailBuildOnCVSS=7"
+                                                        }
+                                                }
+                                                post {
+                                                        always {
+                                                                dependencyCheckPublisher(failedTotalCritical : 100, unstableTotalCritical : 100)
+                                                        }
+                                                }
+                                        }
                                }
                         }
 
