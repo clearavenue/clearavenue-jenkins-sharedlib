@@ -155,6 +155,30 @@ spec:
                                 }
                         }
 
+                        stage('Deploy') {
+                                steps {
+                                        container('kubectl') {
+                                                script {
+                                                        withKubeConfig() {
+                                                           APP_NAME=pipelineParams.app_name
+                                                           BRANCH="-"+BRANCH
+
+                                                           if (BRANCH_NAME == '-main' || BRANCH == '-master') {
+                                                              IMAGE_NAME = APP_NAME
+                                                           }  else {
+                                                              IMAGE_NAME = APP_NAME+BRANCH
+                                                           }
+
+                                                           sh "kubectl version"
+                                                           sh "kubectl cluster-info"
+                                                           sh "istioctl version"
+
+                                                        }
+                                                }
+                                        }
+                                }
+                        }
+
 		}
 
 		post {
