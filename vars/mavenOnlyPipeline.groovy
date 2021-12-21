@@ -149,8 +149,7 @@ spec:
                                                       IMAGE_NAME = APP_NAME+BRANCH
                                                    }
 
-                                                   sh "echo ${pipelineParams}"
-                                                   sh "echo ${pipelineParams.docker_user}/${APP_NAME}${BRANCH}:${POM_VERSION}"
+                                                   sh "echo ${DOCKER_CREDS_USR}/${APP_NAME}${BRANCH}:${POM_VERSION}"
                                                    //sh "mvn -B -e -T 1C com.google.cloud.tools:jib-maven-plugin:3.1.4:build -Dimage=${pipelineParams.docker_user}/${IMAGE_NAME}:${POM_VERSION} -DskipTests -Djib.to.auth.username=$DOCKER_CREDS_USR -Djib.to.auth.password=$DOCKER_CREDS_PSW -Djib.allowInsecureRegistries=true"
                                                 }
                                         }
