@@ -42,6 +42,7 @@ spec:
 
 		environment {
 			POM_VERSION=readMavenPom().getVersion()
+                        DOCKER_CREDS=credentials('docker')
 			BRANCH = env.GIT_BRANCH.toLowerCase()
 		}
 
@@ -139,16 +140,17 @@ spec:
                                 steps {
                                         container('maven') {
                                                 script {
-                                                   APP_NAME=${pipelineParams.app_name}
-                                                   BRANCH="-$BRANCH"
+                                                   APP_NAME=pipelineParams.app_name
+                                                   BRANCH="-"+BRANCH
 
-                                                   if ($BRANCH_NAME == '-main' || $BRANCH == '-master') {
-                                                      IMAGE_NAME = $APP_NAME
+                                                   if (BRANCH_NAME == '-main' || BRANCH == '-master') {
+                                                      IMAGE_NAME = APP_NAME
                                                    }  else {
-                                                      IMAGE_NAME = "$APP_NAME$BRANCH"
+                                                      IMAGE_NAME = APP_NAME+BRANCH
                                                    }
 
-                                                   sh "mvn -B -e -T 1C com.google.cloud.tools:jib-maven-plugin:3.1.4:build -Dimage=${pipelineParams.docker_user}/${IMAGE_NAME}:${POM_VERSION} -DskipTests -Djib.to.auth.username=$DOCKER_CREDS_USR -Djib.to.auth.password=$DOCKER_CREDS_PSW -Djib.allowInsecureRegistries=true"
+                                                   sh "echo ${pipelineParams.docker_user}/${APP_NAME}${BRANCH}:${POM_VERSION}"
+                                                   #sh "mvn -B -e -T 1C com.google.cloud.tools:jib-maven-plugin:3.1.4:build -Dimage=${pipelineParams.docker_user}/${IMAGE_NAME}:${POM_VERSION} -DskipTests -Djib.to.auth.username=$DOCKER_CREDS_USR -Djib.to.auth.password=$DOCKER_CREDS_PSW -Djib.allowInsecureRegistries=true"
                                                 }
                                         }
                                 }
