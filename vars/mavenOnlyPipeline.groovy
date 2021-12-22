@@ -61,12 +61,10 @@ spec:
                                                            }  else {
                                                               IMAGE_NAME = APP_NAME+BRANCH
                                                            }
-                                                           sh "ls /usr/local/sbin > usr.local.sbin.txt; cat usr.local.sbin.txt"
-                                                           sh "ls /usr/local/bin > usr.local.bin.txt; cat usr.local.bin.txt"
-                                                           sh "ls /usr/sbin > usr.sbin.txt; cat usr.sbin.txt"
-                                                           sh "ls /usr/bin > usr.bin.txt; cat usr.bin.txt"
-                                                           sh "ls /sbin > sbin.txt; cat sbin.txt"
-                                                           sh "ls /bin > bin.txt; cat bin.txt"
+                                                           sh "ls /usr/local"
+                                                           sh "ls /usr/local/bin"
+                                                           sh "ls /bin"
+                                                           sh "ls /"
 
                                                            //sh "apt install curl -y"
 
