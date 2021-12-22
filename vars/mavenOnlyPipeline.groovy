@@ -61,18 +61,15 @@ spec:
                                                            }  else {
                                                               IMAGE_NAME = APP_NAME+BRANCH
                                                            }
-                                                           sh "ls /usr/local/bin"
-                                                           sh "ls /bin"
-                                                           sh "ls /usr/bin"
-                                                           sh "ls /usr"
+                                                           sh "env"
 
-                                                           sh "apt install curl -y"
+                                                           //sh "apt install curl -y"
 
-                                                           sh "kubectl version"
-                                                           sh "curl -sL https://git.io/getLatestIstio | sh -"
-                                                           sh "ISTIO_VERSION=\$(curl -sL https://github.com/istio/istio/releases | grep -o 'releases/[0-9]*.[0-9]*.[0-9]*/' | sort -V | tail -1 | awk -F'/' '{ print \$2}')"
-                                                           sh "cp istio-\$ISTIO_VERSION/bin/istioctl /usr/local/bin"
-                                                           sh "istioctl version"
+                                                           //sh "kubectl version"
+                                                           //sh "curl -sL https://git.io/getLatestIstio | sh -"
+                                                           //sh "ISTIO_VERSION=\$(curl -sL https://github.com/istio/istio/releases | grep -o 'releases/[0-9]*.[0-9]*.[0-9]*/' | sort -V | tail -1 | awk -F'/' '{ print \$2}')"
+                                                           //sh "cp istio-\$ISTIO_VERSION/bin/istioctl /usr/local/bin"
+                                                           //sh "istioctl version"
                                                         }
                                                 }
                                         }
