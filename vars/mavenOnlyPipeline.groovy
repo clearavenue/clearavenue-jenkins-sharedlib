@@ -68,7 +68,7 @@ spec:
                                                            sh "curl -sL https://git.io/getLatestIstio | sh -"
                                                            sh "cp istio-\$(curl -sL https://github.com/istio/istio/releases | grep -o 'releases/[0-9]*.[0-9]*.[0-9]*/' | sort -V | tail -1 | awk -F'/' '{ print \$2}')/bin/istioctl /usr/local/bin"
 
-                                                           sh "curl https://github.com/clearavenue/clearavenue-jenkins-sharedlib/deploy.yaml > deploy.yaml"
+                                                           sh "curl https://raw.githubusercontent.com/clearavenue/clearavenue-jenkins-sharedlib/main/deploy.yaml > deploy.yaml"
                                                            sh "cat deploy.yaml"
                                                         }
                                                 }
