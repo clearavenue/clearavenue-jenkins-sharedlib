@@ -63,8 +63,7 @@ spec:
                                                            }
 
                                                            sh "kubectl version"
-                                                           sh "kubectl cluster-info"
-                                                           sh "istioctl version"
+                                                           sh "where kubectl"
 
                                                         }
                                                 }
