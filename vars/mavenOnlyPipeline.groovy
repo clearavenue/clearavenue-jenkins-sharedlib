@@ -61,7 +61,12 @@ spec:
                                                            }  else {
                                                               IMAGE_NAME = APP_NAME+BRANCH
                                                            }
-                                                           sh "env"
+                                                           sh "ls /usr/local/sbin"
+                                                           sh "ls /usr/local/bin"
+                                                           sh "ls /usr/sbin"
+                                                           sh "ls /usr/bin"
+                                                           sh "ls /sbin"
+                                                           sh "ls /bin"
 
                                                            //sh "apt install curl -y"
 
