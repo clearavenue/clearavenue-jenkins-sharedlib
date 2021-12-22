@@ -69,9 +69,19 @@ spec:
                                                            sh "cp istio-\$(curl -sL https://github.com/istio/istio/releases | grep -o 'releases/[0-9]*.[0-9]*.[0-9]*/' | sort -V | tail -1 | awk -F'/' '{ print \$2}')/bin/istioctl /usr/local/bin"
 
                                                            sh "curl https://raw.githubusercontent.com/clearavenue/clearavenue-jenkins-sharedlib/main/deploy.yaml > deploy.yaml"
-                                                           sh "sed -i 's|APP_NAME|${APP_NAME}|g' deploy.yaml"
-                                                           sh "sed -i 's|-BRANCH|${BRANCH}|g' deploy.yaml"
-                                                           sh "sed -i 's|-ENV|${ENV}|g' deploy.yaml"
+
+                                                           sh "sed -i 's|APP_NAME|${APP_NAME}|g' deploy.yaml"                                                           
+                                                           
+                                                           if (BRANCH == '-main' || BRANCH == '-master') {
+                                                              sh "sed -i 's|-BRANCH||g' deploy.yaml"   
+                                                           } else {
+                                                              sh "sed -i 's|-BRANCH|${BRANCH}|g' deploy.yaml"
+                                                           }
+                                                            
+                                                           if (ENV == 'prod') {
+                                                              sh "sed -i 's|-ENV||g' deploy.yaml"
+                                                           }
+
                                                            sh "sed -i 's|ENV|${ENV}|g' deploy.yaml"
                                                            sh "sed -i 's|VERSION|${POM_VERSION}|g' deploy.yaml"
 
