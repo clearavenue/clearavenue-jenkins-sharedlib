@@ -52,7 +52,7 @@ spec:
                                 steps {
                                         container('kubectl') {
                                                 script {
-                                                        //withKubeConfig() {
+                                                        withKubeConfig([credentialsId: 'jenkins-serviceaccount']) {
                                                            APP_NAME=pipelineParams.app_name
                                                            BRANCH="-"+BRANCH
 
@@ -66,7 +66,7 @@ spec:
                                                            sh "kubectl cluster-info"
                                                            sh "istioctl version"
 
-                                                        //}
+                                                        }
                                                 }
                                         }
                                 }
