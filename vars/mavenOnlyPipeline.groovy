@@ -56,7 +56,7 @@ spec:
                                                            APP_NAME=pipelineParams.app_name
                                                            BRANCH="-"+BRANCH
 
-                                                           if (BRANCH_NAME == '-main' || BRANCH == '-master') {
+                                                           if (BRANCH == '-main' || BRANCH == '-master') {
                                                               IMAGE_NAME = APP_NAME
                                                            }  else {
                                                               IMAGE_NAME = APP_NAME+BRANCH
@@ -71,9 +71,9 @@ apiVersion: v1
 kind: Namespace
 metadata:
   labels:
-    clearavenue.com/app: ${IMAGE_NAME}
+    clearavenue.com/app: $IMAGE_NAME
     clearavenue.com/env: prod
-    kubernetes.io/metadata.name: ${IMAGE_NAME}
+    kubernetes.io/metadata.name: IMAGE_NAME
   name: ${IMAGE_NAME}
 ---
 apiVersion: v1
@@ -127,7 +127,7 @@ spec:
     spec:
       serviceAccountName: ${IMAGE_NAME}-service-account
       containers:
-      - image: ${DOCKER_CRED_USR}/${IMAGE_NAME}:${POM_VERSION}
+      - image: ${DOCKER_CREDS_USR}/${IMAGE_NAME}:${POM_VERSION}
         imagePullPolicy: Always
         livenessProbe:
           failureThreshold: 3
