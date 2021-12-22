@@ -61,8 +61,7 @@ spec:
                                                            }  else {
                                                               IMAGE_NAME = APP_NAME+BRANCH
                                                            }
-                                                           sh "cat /etc/os-release"
-                                                           //sh "apt install curl -y"
+                                                           sh "apk add curl"
 
                                                            //sh "kubectl version"
                                                            //sh "curl -sL https://git.io/getLatestIstio | sh -"
