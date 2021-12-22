@@ -61,11 +61,7 @@ spec:
                                                            }  else {
                                                               IMAGE_NAME = APP_NAME+BRANCH
                                                            }
-                                                           sh "ls /usr/local"
-                                                           sh "ls /usr/local/bin"
-                                                           sh "ls /bin"
-                                                           sh "ls /"
-
+                                                           sh "cat /etc/os-release"
                                                            //sh "apt install curl -y"
 
                                                            //sh "kubectl version"
