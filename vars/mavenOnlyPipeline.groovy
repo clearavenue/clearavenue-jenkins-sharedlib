@@ -63,7 +63,7 @@ spec:
                                                            }
 
                                                            sh "kubectl version"
-                                                           sh "kubectl cluster-info"
+                                                           sh "kubectl cluster-info dump"
                                                            sh "istioctl version"
 
                                                         }
