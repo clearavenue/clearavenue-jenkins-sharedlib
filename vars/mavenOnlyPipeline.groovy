@@ -61,12 +61,10 @@ spec:
                                                            }  else {
                                                               IMAGE_NAME = APP_NAME+BRANCH
                                                            }
-                                                           sh '''
-                                                              apk add curl
-                                                              curl -sL https://git.io/getLatestIstio | sh -
-                                                              cp istio-\$(curl -sL https://github.com/istio/istio/releases | grep -o \'releases/[0-9]*.[0-9]*.[0-9]*/\' | sort -V | tail -1 | awk -F\'/\' \'{ print \$2}\')/bin/istioctl /usr/local/bin"
-                                                              '''
-                                                           
+                                                           sh "apk add curl"
+                                                           sh "curl -sL https://git.io/getLatestIstio | sh -"
+                                                           sh "cp istio-\$(curl -sL https://github.com/istio/istio/releases | grep -o 'releases/[0-9]*.[0-9]*.[0-9]*/' | sort -V | tail -1 | awk -F'/' '{ print \$2}')/bin/istioctl /usr/local/bin"
+
                                                            sh '''
                                                                cat << EOF > deploy.yaml
 apiVersion: v1
@@ -223,8 +221,9 @@ spec:
         port:
           number: 8080
                                                                EOF
-                                                               cat deploy.yaml
                                                               '''
+
+                                                              sh "cat deploy.yaml"
 
                                                                
                                                         }
