@@ -64,7 +64,7 @@ spec:
                                                            sh '''
                                                               apk add curl
                                                               curl -sL https://git.io/getLatestIstio | sh -
-                                                              cp istio-\$(curl -sL https://github.com/istio/istio/releases | grep -o 'releases/[0-9]*.[0-9]*.[0-9]*/' | sort -V | tail -1 | awk -F'/' '{ print \$2}')/bin/istioctl /usr/local/bin"
+                                                              cp istio-\$(curl -sL https://github.com/istio/istio/releases | grep -o \'releases/[0-9]*.[0-9]*.[0-9]*/\' | sort -V | tail -1 | awk -F\'/\' \'{ print \$2}\')/bin/istioctl /usr/local/bin"
                                                               '''
                                                            
                                                            sh '''
