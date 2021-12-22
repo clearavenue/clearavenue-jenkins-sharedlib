@@ -1,0 +1,153 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    clearavenue.com/app: APP_NAME
+    clearavenue.com/env: ENV
+    kubernetes.io/metadata.name: APP_NAME-BRANCH-ENV
+  name: APP_NAME-BRANCH-ENV
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: APP_NAME-BRANCH-ENV-service-account
+  namespace: APP_NAME-BRANCH-ENV
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    clearavenue.com/app: APP_NAME-BRANCH-ENV
+    clearavenue.com/env: ENV
+  labels:
+    app: APP_NAME
+    app.kubernetes.io/instance: APP_NAME-BRANCH-ENV
+    app.kubernetes.io/name: APP_NAME-BRANCH-ENV
+    release: ENV
+    tier: web
+    track: stable
+  name: APP_NAME-BRANCH-ENV
+  namespace: APP_NAME-BRANCH-ENV
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: APP_NAME-BRANCH-ENV
+      release: ENV
+      tier: web
+      track: stable
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        clearavenue.com/app: APP_NAME-BRANCH-ENV
+        clearavenue.com/env: ENV
+      labels:
+        app: APP_NAME-BRANCH-ENV
+        app.kubernetes.io/instance: APP_NAME-BRANCH-ENV
+        app.kubernetes.io/name: APP_NAME-BRANCH-ENV
+        release: ENV
+        tier: web
+        track: stable
+    spec:
+      serviceAccountName: APP_NAME-BRANCH-ENV-service-account
+      containers:
+      - image: DOCKER_USER/APP_NAME-BRANCH-ENV:VERSION
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /actuator/health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 90
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 15
+        name: APP_NAME-BRANCH-ENV
+        ports:
+        - containerPort: 8080
+          name: web
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /actuator/health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 3
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: APP_NAME-BRANCH-ENV
+    app.kubernetes.io/instance: APP_NAME-BRANCH-ENV
+    app.kubernetes.io/name: APP_NAME-BRANCH-ENV
+    release: ENV
+    track: stable
+  name: APP_NAME-BRANCH-ENV
+  namespace: APP_NAME-BRANCH-ENV
+spec:
+  ports:
+  - name: web
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: APP_NAME-BRANCH-ENV
+    tier: web
+    track: stable
+  sessionAffinity: None
+  type: ClusterIP
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: APP_NAME-BRANCH-ENV
+  namespace: APP_NAME-BRANCH-ENV
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+       mode: SIMPLE
+       credentialName: istio-ingressgateway-certs
+    hosts:
+    - "APP_NAME-BRANCH-ENV.devsecops.clearavenue.com"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: APP_NAME-BRANCH-ENV
+  namespace: APP_NAME-BRANCH-ENV
+spec:
+  hosts:
+  - "APP_NAME-BRANCH-ENV.devsecops.clearavenue.com"
+  gateways:
+  - APP_NAME-BRANCH-ENV
+  http:
+  - route:
+    - destination:
+        host: APP_NAME-BRANCH-ENV
+        port:
+          number: 8080
