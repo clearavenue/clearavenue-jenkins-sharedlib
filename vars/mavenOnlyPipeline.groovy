@@ -84,8 +84,9 @@ spec:
 
                                                            sh "sed -i 's|ENV|${ENV}|g' deploy.yaml"
                                                            sh "sed -i 's|VERSION|${POM_VERSION}|g' deploy.yaml"
+                                                           sh "sed -i 's|DOCKER_USER|${DOCKER_CREDS_USR}|g' deploy.yaml"
 
-                                                           sh "cat deploy.yaml"
+                                                           sh "kubectl apply -f <(istioctl kube-inject -f deploy.yaml)"
                                                         }
                                                 }
                                         }
