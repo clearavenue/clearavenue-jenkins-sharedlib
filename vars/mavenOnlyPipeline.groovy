@@ -70,10 +70,10 @@ spec:
 
                                                            sh "curl https://raw.githubusercontent.com/clearavenue/clearavenue-jenkins-sharedlib/main/deploy.yaml > deploy.yaml"
                                                            sh "sed -i 's|APP_NAME|${APP_NAME}|g' deploy.yaml"
-                                                           sh "sed -i 's|-BRANCH|${BRANCH}|g' deploy.yaml
-                                                           sh "sed -i 's|-ENV|${ENV}|g' deploy.yaml
-                                                           sh "sed -i 's|ENV|${ENV}|g' deploy.yaml
-                                                           sh "sed -i 's|VERSION|${POM_VERSION}|g' deploy.yaml
+                                                           sh "sed -i 's|-BRANCH|${BRANCH}|g' deploy.yaml"
+                                                           sh "sed -i 's|-ENV|${ENV}|g' deploy.yaml"
+                                                           sh "sed -i 's|ENV|${ENV}|g' deploy.yaml"
+                                                           sh "sed -i 's|VERSION|${POM_VERSION}|g' deploy.yaml"
 
                                                            sh "cat deploy.yaml"
                                                         }
