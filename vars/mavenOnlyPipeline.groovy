@@ -44,6 +44,7 @@ spec:
 			POM_VERSION=readMavenPom().getVersion()
                         DOCKER_CREDS=credentials('docker')
 			BRANCH = env.GIT_BRANCH.toLowerCase()
+                        IMAGE_NAME = "dummy"
 		}
 
 		stages {
@@ -61,6 +62,8 @@ spec:
                                                            }  else {
                                                               IMAGE_NAME = APP_NAME+BRANCH
                                                            }
+                                                           
+                                                           sh "echo [$APP_NAME] [$BRANCH] [$IMAGE_NAME] [$POM_VERSION]"
                                                            sh "apk add curl"
                                                            sh "curl -sL https://git.io/getLatestIstio | sh -"
                                                            sh "cp istio-\$(curl -sL https://github.com/istio/istio/releases | grep -o 'releases/[0-9]*.[0-9]*.[0-9]*/' | sort -V | tail -1 | awk -F'/' '{ print \$2}')/bin/istioctl /usr/local/bin"
@@ -71,9 +74,9 @@ apiVersion: v1
 kind: Namespace
 metadata:
   labels:
-    clearavenue.com/app: $IMAGE_NAME
+    clearavenue.com/app: ${IMAGE_NAME}
     clearavenue.com/env: prod
-    kubernetes.io/metadata.name: IMAGE_NAME
+    kubernetes.io/metadata.name: ${IMAGE_NAME}
   name: ${IMAGE_NAME}
 ---
 apiVersion: v1
