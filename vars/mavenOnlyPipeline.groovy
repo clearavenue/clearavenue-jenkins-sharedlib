@@ -64,8 +64,8 @@ spec:
 
                                                            sh "kubectl version"
                                                            sh "curl -sL https://git.io/getLatestIstio | sh -"
-                                                           sh "ISTIO_VERSION=$(curl -sL https://github.com/istio/istio/releases | grep -o 'releases/[0-9]*.[0-9]*.[0-9]*/' | sort -V | tail -1 | awk -F'/' '{ print $2}')"
-                                                           sh "cp istio-$ISTIO_VERSION/bin/istioctl /usr/local/bin"
+                                                           sh "ISTIO_VERSION=\$(curl -sL https://github.com/istio/istio/releases | grep -o 'releases/[0-9]*.[0-9]*.[0-9]*/' | sort -V | tail -1 | awk -F'/' '{ print \$2}')"
+                                                           sh "cp istio-\$ISTIO_VERSION/bin/istioctl /usr/local/bin"
                                                            sh "istioctl version"
                                                         }
                                                 }
