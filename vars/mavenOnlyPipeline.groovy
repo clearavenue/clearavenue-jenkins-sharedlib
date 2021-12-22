@@ -63,7 +63,11 @@ spec:
                                                            }
 
                                                            sh "kubectl version"
-                                                           sh "ls /"
+                                                           sh "echo $PATH"
+                                                           sh "ls /bin"
+                                                           sh "ls /usr"
+                                                           sh "ls /usr/bin"
+                                                           sh "ls /usr/local/bin"
 
                                                         }
                                                 }
