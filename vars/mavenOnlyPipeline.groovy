@@ -63,7 +63,7 @@ spec:
                                                            }
 
                                                            sh "kubectl version"
-                                                           sh "where kubectl"
+                                                           sh "ls /"
 
                                                         }
                                                 }
