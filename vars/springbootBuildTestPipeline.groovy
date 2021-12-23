@@ -58,6 +58,12 @@ spec:
                                 }
                         }
 
+                        stage('Sanity check') {
+                               steps {
+                                      input "Do you want to run SecurityChecks?"
+                               }
+                        }
+
                         stage('SecurityChecks') {
                                 parallel {
                                         stage('Checkstyle code') {
