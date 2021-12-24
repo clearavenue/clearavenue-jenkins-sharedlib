@@ -202,6 +202,33 @@ spec:
                                 }
                         }
 
+                        stage('Delete Deployment') {
+                                steps { 
+                                    script { 
+                                          def proceed = true 
+                                          try { 
+                                              timeout(time: 100, unit: 'SECONDS') { 
+                                                     input('Delete Deploys?') 
+                                               } 
+                                          } 
+                                          catch (err) { 
+                                               proceed = false 
+                                          } 
+                                     }
+                                }
+                        }
+
+                        stage('Delete prod deployment') {
+                                steps {
+                                        container('kubectl') {
+                                                script {
+                                                        withKubeConfig([credentialsId: 'jenkins-serviceaccount', serverUrl: 'https://2176A80F2DE9138595ADC878309B7CEC.gr7.us-east-1.eks.amazonaws.com']) {
+                                                           sh "kubectl delete -f deploy.yaml"
+                                                        }
+                                                }
+                                        }
+                                }
+
 		}
 
 		post {
