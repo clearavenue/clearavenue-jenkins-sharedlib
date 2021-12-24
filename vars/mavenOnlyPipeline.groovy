@@ -45,6 +45,7 @@ spec:
                         DOCKER_CREDS=credentials('docker')
 			BRANCH = env.GIT_BRANCH.toLowerCase()
                         ENV = "prod"
+                        IMAGE_NAME="dummy"
 		}
 
 		stages {
@@ -149,7 +150,7 @@ spec:
                                                       IMAGE_NAME = APP_NAME+BRANCH_NAME
                                                    }
 
-                                                   sh 'mvn -B -e -T 1C com.google.cloud.tools:jib-maven-plugin:3.1.4:build -Dimage=$DOCKER_CREDS_USR/$IMAGE_NAME:$POM_VERSION -DskipTests -Djib.to.auth.username=$DOCKER_CREDS_USR -Djib.to.auth.password=$DOCKER_CREDS_PSW -Djib.allowInsecureRegistries=true'
+                                                   sh "mvn -B -e -T 1C com.google.cloud.tools:jib-maven-plugin:3.1.4:build -Dimage=${DOCKER_CREDS_USR}/${IMAGE_NAME}:${POM_VERSION} -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
                                                 }
                                         }
                                 }
