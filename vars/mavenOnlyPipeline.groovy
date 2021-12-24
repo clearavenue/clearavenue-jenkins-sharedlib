@@ -141,12 +141,12 @@ spec:
                                         container('maven') {
                                                 script {
                                                    APP_NAME=pipelineParams.app_name
-                                                   BRANCH="-"+BRANCH
+                                                   BRANCH_NAME="-"+BRANCH
 
-                                                   if (BRANCH_NAME == '-main' || BRANCH == '-master') {
+                                                   if (BRANCH_NAME == '-main' || BRANCH_NAME == '-master') {
                                                       IMAGE_NAME = APP_NAME
                                                    }  else {
-                                                      IMAGE_NAME = APP_NAME+BRANCH
+                                                      IMAGE_NAME = APP_NAME+BRANCH_NAME
                                                    }
 
                                                    sh "mvn -B -e -T 1C com.google.cloud.tools:jib-maven-plugin:3.1.4:build -Dimage=${DOCKER_CREDS_USR}/${IMAGE_NAME}:${POM_VERSION} -DskipTests -Djib.to.auth.username=$DOCKER_CREDS_USR -Djib.to.auth.password=$DOCKER_CREDS_PSW -Djib.allowInsecureRegistries=true"
@@ -161,15 +161,15 @@ spec:
                                                 script {
                                                         withKubeConfig([credentialsId: 'jenkins-serviceaccount', serverUrl: 'https://2176A80F2DE9138595ADC878309B7CEC.gr7.us-east-1.eks.amazonaws.com']) {
                                                            APP_NAME=pipelineParams.app_name
-                                                           BRANCH="-"+BRANCH
+                                                           BRANCH_NAME="-"+BRANCH
 
-                                                           if (BRANCH == '-main' || BRANCH == '-master') {
+                                                           if (BRANCH_NAME == '-main' || BRANCH_NAME == '-master') {
                                                               IMAGE_NAME = APP_NAME
                                                            }  else {
-                                                              IMAGE_NAME = APP_NAME+BRANCH
+                                                              IMAGE_NAME = APP_NAME+BRANCH_NAME
                                                            }
                                                            
-                                                           sh "echo [$APP_NAME] [$BRANCH] [$IMAGE_NAME] [$POM_VERSION]"
+                                                           sh "echo [$APP_NAME] [$BRANCH_NAME] [$IMAGE_NAME] [$POM_VERSION]"
                                                            sh "apk add curl"
                                                            sh "curl -sL https://git.io/getLatestIstio | sh -"
                                                            sh "cp istio-\$(curl -sL https://github.com/istio/istio/releases | grep -o 'releases/[0-9]*.[0-9]*.[0-9]*/' | sort -V | tail -1 | awk -F'/' '{ print \$2}')/bin/istioctl /usr/local/bin"
@@ -178,10 +178,10 @@ spec:
 
                                                            sh "sed -i 's|APP_NAME|${APP_NAME}|g' deploy.yaml"                                                           
                                                            
-                                                           if (BRANCH == '-main' || BRANCH == '-master') {
+                                                           if (BRANCH_NAME == '-main' || BRANCH_NAME == '-master') {
                                                               sh "sed -i 's|-BRANCH||g' deploy.yaml"   
                                                            } else {
-                                                              sh "sed -i 's|-BRANCH|${BRANCH}|g' deploy.yaml"
+                                                              sh "sed -i 's|-BRANCH|${BRANCH_NAME}|g' deploy.yaml"
                                                            }
                                                             
                                                            if (ENV == 'prod') {
