@@ -25,6 +25,9 @@ spec:
         ephemeral-storage: 1Gi
       limits:
         ephemeral-storage: 5Gi
+    volumeMounts:
+        - name: m2
+          mountPath: /root/.m2
   - name: kubectl
     image: lachlanevenson/k8s-kubectl:v1.19.9
     command:
@@ -36,6 +39,10 @@ spec:
         ephemeral-storage: 1Gi
       limits:
         ephemeral-storage: 5Gi
+volumes:
+    - name: m2
+      hostPath:
+        path: /root/.m2
 """
 			}
 		}
