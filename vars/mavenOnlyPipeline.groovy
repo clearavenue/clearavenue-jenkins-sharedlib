@@ -218,7 +218,7 @@ spec:
                                              } 
 
                                              if(proceed) { 
-                                                  bat 'mvn deploy -DmuleDeploy' 
+                                                  sh 'mvn deploy -DmuleDeploy' 
                                              }
                                           }
                                     }
