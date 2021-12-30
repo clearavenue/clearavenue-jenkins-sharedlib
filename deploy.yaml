@@ -158,3 +158,15 @@ spec:
         host: APP_NAME-BRANCH-ENV
         port:
           number: 8080
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: APP_NAME-BRANCH-ENV-service-monitor
+spec:
+  selector:
+    matchLabels:
+      app: APP_NAME-BRANCH-ENV
+  endpoints:
+  - port: web
+    path: "/actuator/prometheus"
