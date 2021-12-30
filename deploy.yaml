@@ -23,7 +23,7 @@ metadata:
     prometheus.io/port: "8080"
     prometheus.io/path: "/actuator/prometheus"
   labels:
-    app: APP_NAME
+    app: APP_NAME-BRANCH-ENV
     app.kubernetes.io/instance: APP_NAME-BRANCH-ENV
     app.kubernetes.io/name: APP_NAME-BRANCH-ENV
     release: ENV
