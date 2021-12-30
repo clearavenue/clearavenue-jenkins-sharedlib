@@ -19,6 +19,9 @@ metadata:
   annotations:
     clearavenue.com/app: APP_NAME-BRANCH-ENV
     clearavenue.com/env: ENV
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"
+    prometheus.io/path: "/actuator/prometheus"
   labels:
     app: APP_NAME
     app.kubernetes.io/instance: APP_NAME-BRANCH-ENV
