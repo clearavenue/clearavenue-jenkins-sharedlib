@@ -180,7 +180,7 @@ spec:
 													  cat $APP_BRANCH-application.yaml
 													  mkdir $APP_BRANCH
 													  cd $APP_BRANCH
-													  cp -R templates/app/* .
+													  cp -R ../templates/app/* .
 													  sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" deployment.yaml
 													  sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
 													  sed -i \"s|VERSION|$POM_VERSION-$BUILD_NUM|g\" deployment.yaml
