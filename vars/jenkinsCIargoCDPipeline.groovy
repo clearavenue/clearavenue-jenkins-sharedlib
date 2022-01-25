@@ -172,7 +172,7 @@ spec:
                                                    gitCredentials = "bill.hunt-github"
                                                    argoRepoUrl = "https://github.com/clearavenue/argocd-apps.git"
 												   dir('build') {
-                                                      git branch: branchName, credentialsId: gitCredentials, url: repoUrl
+                                                      git branch: argoBranchName, credentialsId: gitCredentials, url: argoRepoUrl
                                                    }
 												   
 												   sh "echo git clone https://github.com/clearavenue/argocd-apps.git"
