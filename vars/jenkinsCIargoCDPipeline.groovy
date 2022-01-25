@@ -42,6 +42,7 @@ spec:
 			BRANCH = env.GIT_BRANCH.toLowerCase()
                         ENV = "prod"
                         IMAGE_NAME="dummy"
+						APP_BRANCH="dummy"
 		}
 
 		stages {
@@ -160,12 +161,12 @@ spec:
                                                    BRANCH_NAME="-"+BRANCH
 
                                                    if (BRANCH_NAME == '-main' || BRANCH_NAME == '-master') {
-                                                      IMAGE_NAME = APP_NAME
+                                                      APP_BRANCH = APP_NAME
                                                    }  else {
-                                                      IMAGE_NAME = APP_NAME+BRANCH_NAME
+                                                      APP_BRANCH = APP_NAME+BRANCH_NAME
                                                    }
 												   
-                                                   sh "echo [$APP_NAME] [$BRANCH_NAME] [$IMAGE_NAME] [$POM_VERSION]-[$BUILD_NUM]"
+                                                   sh "echo [$APP_NAME] [$BRANCH_NAME] [$APP_BRANCH] [$POM_VERSION]-[$BUILD_NUM]"
 												   												   
 												   argoBranchName = "main"
                                                    gitCredentials = "bill.hunt-github"
@@ -174,10 +175,12 @@ spec:
                                                       git branch: argoBranchName, credentialsId: gitCredentials, url: argoRepoUrl
                                                    }
 
-                                                   sh """
+                                                   sh '''
 												      cd argocd
-													  ls
-												   """
+													  cp templates/template-application.yaml $APP_BRANCH-application.yaml
+													  sed -i "s|APP_BRANCH|$APP_BRANCH|g" $APP_BRANCH-application.yaml
+													  cat $APP_BRANCH-application.yaml
+												   '''
                                                 }
                                         }
                                 }
