@@ -175,7 +175,7 @@ spec:
                                                       git branch: argoBranchName, credentialsId: gitCredentials, url: argoRepoUrl
                                                    }
 
-												   sh "pwd"
+												   sh "cd argocd"
 												   sh "ls"
                                                 }
                                         }
