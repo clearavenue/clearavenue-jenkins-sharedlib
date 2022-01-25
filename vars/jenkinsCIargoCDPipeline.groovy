@@ -171,12 +171,10 @@ spec:
 												   argoBranchName = "main"
                                                    gitCredentials = "bill.hunt-github"
                                                    argoRepoUrl = "https://github.com/clearavenue/argocd-apps.git"
-												   dir('/tmp') {
+												   dir('argocd') {
                                                       git branch: argoBranchName, credentialsId: gitCredentials, url: argoRepoUrl
                                                    }
-												   
-												   sh "echo git clone https://github.com/clearavenue/argocd-apps.git"
-												   sh "cd /tmp/argocd-apps"
+
 												   sh "pwd"
 												   sh "ls"
                                                 }
