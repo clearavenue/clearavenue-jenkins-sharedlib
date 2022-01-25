@@ -172,7 +172,7 @@ spec:
                                                      git branch: "main", url: "https://github.com/clearavenue/argocd-apps.git"
                                                    }
 												   
-												   #sh "git clone https://github.com/clearavenue/argocd-apps.git"
+												   sh "echo git clone https://github.com/clearavenue/argocd-apps.git"
 												   sh "cd /tmp/argocd-apps.git"
 												   sh "ls /tmp/argocd-apps"
                                                 }
