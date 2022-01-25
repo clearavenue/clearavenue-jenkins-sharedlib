@@ -203,7 +203,7 @@ spec:
 													  
 													  cd ..
 													  git config --global user.email bill.hunt@clearavenue.com
-													  git config --global user.name ${GIT_CREDS_USR}
+													  git config --global user.name clearavenue
 													  git add .
 													  git commit -am \"added $APP_BRANCH application to argoCD"
 													  git push https://${GIT_CREDS_USR}:${GIT_CREDS_PSW}@github.com/clearavenue/argocd-apps.git main
