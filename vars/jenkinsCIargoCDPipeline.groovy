@@ -31,6 +31,16 @@ spec:
         ephemeral-storage: 1Gi
       limits:
         ephemeral-storage: 5Gi
+  - name: git
+    image: bitnami/git:latest
+    command:
+    - cat
+    tty: true
+    resources:
+      requests:
+        ephemeral-storage: 1Gi
+      limits:
+        ephemeral-storage: 5Gi
 """
 			}
 		}
