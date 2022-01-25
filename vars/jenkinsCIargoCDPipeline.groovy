@@ -17,7 +17,7 @@ spec:
   containers:
   - name: git
     image: bitnami/git:latest
-	command:
+    command:
     - cat
     tty: true
     resources:
