@@ -47,12 +47,13 @@ spec:
 
 		environment {
 			POM_VERSION=readMavenPom().getVersion()
-                        BUILD_NUM=currentBuild.getNumber()
-                        DOCKER_CREDS=credentials('docker')
+            BUILD_NUM=currentBuild.getNumber()
+            DOCKER_CREDS=credentials('docker')
+			GIT_CREDS=credentials('bill.hunt-github')
 			BRANCH = env.GIT_BRANCH.toLowerCase()
-                        ENV = "prod"
-                        IMAGE_NAME="dummy"
-						APP_BRANCH="dummy"
+            ENV = "prod"
+            IMAGE_NAME="dummy"
+			APP_BRANCH="dummy"
 		}
 
 		stages {
@@ -202,10 +203,10 @@ spec:
 													  
 													  cd ..
 													  git config --global user.email bill.hunt@clearavenue.com
-													  git config --global user.name bill.hunt-github
+													  git config --global user.name ${GIT_CREDS_USR}
 													  git add .
 													  git commit -am \"added $APP_BRANCH application to argoCD"
-													  git push --set-upstream origin $argoBranchName
+													  git push https://${GIT_CREDS_USR}:${GIT_CREDS_PSW}@github.com/clearavenue/argocd-apps.git
 												   """
                                                 }
                                         }
