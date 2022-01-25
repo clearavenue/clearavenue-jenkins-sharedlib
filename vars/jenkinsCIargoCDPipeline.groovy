@@ -205,7 +205,7 @@ spec:
 													  git config --global user.name bill.hunt-github
 													  git add .
 													  git commit -am \"added $APP_BRANCH application to argoCD"
-													  git push
+													  git push --set-upstream origin $BRANCH
 												   """
                                                 }
                                         }
