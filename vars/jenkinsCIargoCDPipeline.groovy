@@ -174,10 +174,10 @@ spec:
                                                       git branch: argoBranchName, credentialsId: gitCredentials, url: argoRepoUrl
                                                    }
 
-                                                   sh "ls"
-												   sh "ls argocd"
-												   sh "cd argocd"
-												   sh "ls"
+                                                   sh """
+												      cd argocd
+													  ls
+												   """
                                                 }
                                         }
                                 }
