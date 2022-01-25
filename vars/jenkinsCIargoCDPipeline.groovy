@@ -189,6 +189,9 @@ spec:
 													  cat deployment.yaml
 													  cat service.yaml
 													  cat serviceaccount.yaml
+													  
+													  cd ..
+													  git status
 												   """
                                                 }
                                         }
