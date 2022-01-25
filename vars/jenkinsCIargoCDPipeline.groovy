@@ -201,7 +201,9 @@ spec:
 													  cat serviceaccount.yaml
 													  
 													  cd ..
-													  git status
+													  git add .
+													  git commit -am \"added $APP_BRANCH application to argoCD"
+													  git push
 												   """
                                                 }
                                         }
