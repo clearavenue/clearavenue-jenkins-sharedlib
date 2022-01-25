@@ -201,6 +201,8 @@ spec:
 													  cat serviceaccount.yaml
 													  
 													  cd ..
+													  git config --global user.email bill.hunt@clearavenue.com
+													  git config --global user.name bill.hunt-github
 													  git add .
 													  git commit -am \"added $APP_BRANCH application to argoCD"
 													  git push
