@@ -189,7 +189,7 @@ spec:
 													  cp templates/template-application.yaml $APP_BRANCH-application.yaml
 													  sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" $APP_BRANCH-application.yaml
 													  cat $APP_BRANCH-application.yaml
-													  [ ! –d $APP_BRANCH ] && mkdir $APP_BRANCH
+													  mkdir -p $APP_BRANCH
 													  cd $APP_BRANCH
 													  cp -R ../templates/app/* .
 													  sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" deployment.yaml
