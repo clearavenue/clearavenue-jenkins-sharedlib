@@ -166,6 +166,10 @@ spec:
                                                    }
 												   
                                                    sh "echo [$APP_NAME] [$BRANCH_NAME] [$IMAGE_NAME] [$POM_VERSION]-[$BUILD_NUM]"
+												   sh "cd /tmp"
+												   sh "git clone https://github.com/clearavenue/argocd-apps.git"
+												   sh "cd /tmp/argocd-apps.git"
+												   sh "ls /tmp/argocd-apps"
                                                 }
                                         }
                                 }
