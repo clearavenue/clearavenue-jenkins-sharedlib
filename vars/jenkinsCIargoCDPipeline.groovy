@@ -168,8 +168,11 @@ spec:
                                                    sh "echo [$APP_NAME] [$BRANCH_NAME] [$IMAGE_NAME] [$POM_VERSION]-[$BUILD_NUM]"
 												   sh "cd /tmp"
 												   
-												   dir('/tmp') {
-                                                     git branch: "main", credentialsId: "bill.hunt-github" url: "https://github.com/clearavenue/argocd-apps.git"
+												   argoBranchName = "main"
+                                                   gitCredentials = "bill.hunt-github"
+                                                   argoRepoUrl = "https://github.com/clearavenue/argocd-apps.git"
+												   dir('build') {
+                                                      git branch: branchName, credentialsId: gitCredentials, url: repoUrl
                                                    }
 												   
 												   sh "echo git clone https://github.com/clearavenue/argocd-apps.git"
