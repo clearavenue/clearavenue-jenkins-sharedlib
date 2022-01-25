@@ -206,7 +206,7 @@ spec:
 													  git config --global user.name ${GIT_CREDS_USR}
 													  git add .
 													  git commit -am \"added $APP_BRANCH application to argoCD"
-													  git push https://${GIT_CREDS_USR}:${GIT_CREDS_PSW}@github.com/clearavenue/argocd-apps.git
+													  git push https://${GIT_CREDS_USR}:${GIT_CREDS_PSW}@github.com/clearavenue/argocd-apps.git main
 												   """
                                                 }
                                         }
