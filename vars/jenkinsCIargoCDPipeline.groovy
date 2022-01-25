@@ -166,20 +166,18 @@ spec:
 												   
 												   APP_NAME=pipelineParams.app_name
                                                    BRANCH_NAME="-"+BRANCH
-												   APP_B="app_b"
 
                                                    if (BRANCH_NAME == '-main' || BRANCH_NAME == '-master') {
-                                                      APP_B = APP_NAME
+                                                      APP_BRANCH = APP_NAME
                                                    }  else {
-                                                      APP_B = APP_NAME+BRANCH_NAME
+                                                      APP_BRANCH = APP_NAME+BRANCH_NAME
                                                    }
 												   
-                                                   sh "echo [$APP_NAME] [$BRANCH_NAME] [$APP_B] [$POM_VERSION]-[$BUILD_NUM]"
                                                    sh """
 												      cd argocd
-													  cp templates/template-application.yaml $APP_B-application.yaml
-													  sed -i \"s|APP_BRANCH|$APP_B|g\" $APP_B-application.yaml
-													  cat $APP_B-application.yaml
+													  cp templates/template-application.yaml $APP_BRANCH-application.yaml
+													  sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" $APP_BRANCH-application.yaml
+													  cat $APP_BRANCH-application.yaml
 												   """
                                                 }
                                         }
