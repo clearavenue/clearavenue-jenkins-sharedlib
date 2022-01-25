@@ -157,26 +157,25 @@ spec:
                                 steps {
                                         container('maven') {
                                                 script {
-												   APP_NAME=pipelineParams.app_name
-                                                   BRANCH_NAME="-"+BRANCH
-
-                                                   if (BRANCH_NAME == '-main' || BRANCH_NAME == '-master') {
-                                                      APP_BRANCH = APP_NAME
-                                                   }  else {
-                                                      APP_BRANCH = APP_NAME+BRANCH_NAME
-                                                   }
-												   
-                                                   sh "echo [$APP_NAME] [$BRANCH_NAME] [$APP_BRANCH] [$POM_VERSION]-[$BUILD_NUM]"
-												   												   
 												   argoBranchName = "main"
                                                    gitCredentials = "bill.hunt-github"
                                                    argoRepoUrl = "https://github.com/clearavenue/argocd-apps.git"
 												   dir('argocd') {
                                                       git branch: argoBranchName, credentialsId: gitCredentials, url: argoRepoUrl
                                                    }
+												   
+												   APP_NAME=pipelineParams.app_name
+                                                   BRANCH_NAME="-"+BRANCH
+												   APP_B="app_b"
 
+                                                   if (BRANCH_NAME == '-main' || BRANCH_NAME == '-master') {
+                                                      APP_B = APP_NAME
+                                                   }  else {
+                                                      APP_B = APP_NAME+BRANCH_NAME
+                                                   }
+												   
+                                                   sh "echo [$APP_NAME] [$BRANCH_NAME] [$APP_B] [$POM_VERSION]-[$BUILD_NUM]"
                                                    sh '''
-												      echo ${APP_BRANCH}
 												      cd argocd
 													  cp templates/template-application.yaml $APP_BRANCH-application.yaml
 													  sed -i "s|APP_BRANCH|$APP_BRANCH|g" $APP_BRANCH-application.yaml
