@@ -46,13 +46,13 @@ spec:
 		}
 
 		stages {
-                        stage('Build') {
-                                steps {
-                                        container('maven') {
-                                                sh "mvn -B -e -T 1C clean compile -DskipTests"
-                                        }
-                                }
-                        }
+                        //stage('Build') {
+                        //        steps {
+                        //                container('maven') {
+                        //                        sh "mvn -B -e -T 1C clean compile -DskipTests"
+                        //                }
+                        //        }
+                        //}
 
                         //stage('JUnit') {
                         //        steps {
@@ -175,12 +175,12 @@ spec:
                                                    }
 												   
                                                    sh "echo [$APP_NAME] [$BRANCH_NAME] [$APP_B] [$POM_VERSION]-[$BUILD_NUM]"
-                                                   sh '''
+                                                   sh """
 												      cd argocd
 													  cp templates/template-application.yaml $APP_BRANCH-application.yaml
-													  sed -i "s|APP_BRANCH|$APP_BRANCH|g" $APP_BRANCH-application.yaml
+													  sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" $APP_BRANCH-application.yaml
 													  cat $APP_BRANCH-application.yaml
-												   '''
+												   """
                                                 }
                                         }
                                 }
