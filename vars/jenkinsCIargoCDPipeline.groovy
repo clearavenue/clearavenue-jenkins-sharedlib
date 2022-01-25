@@ -169,7 +169,7 @@ spec:
 												   sh "cd /tmp"
 												   
 												   dir('/tmp') {
-                                                     git branch: "main", credentialsId: bill.hunt-github url: "https://github.com/clearavenue/argocd-apps.git"
+                                                     git branch: "main", credentialsId: "bill.hunt-github" url: "https://github.com/clearavenue/argocd-apps.git"
                                                    }
 												   
 												   sh "echo git clone https://github.com/clearavenue/argocd-apps.git"
