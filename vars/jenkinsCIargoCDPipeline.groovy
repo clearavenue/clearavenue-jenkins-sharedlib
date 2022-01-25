@@ -15,16 +15,6 @@ metadata:
     pipeline: mavenDevsecopsPipeline
 spec:
   containers:
-  - name: git
-    image: bitnami/git:latest
-    command:
-    - cat
-    tty: true
-    resources:
-      requests:
-        ephemeral-storage: 1Gi
-      limits:
-        ephemeral-storage: 5Gi
   - name: maven
     image: maven:3.6-jdk-11-slim
     command:
