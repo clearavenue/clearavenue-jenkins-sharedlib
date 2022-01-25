@@ -176,6 +176,7 @@ spec:
                                                    }
 
                                                    sh '''
+												      echo ${APP_BRANCH}
 												      cd argocd
 													  cp templates/template-application.yaml $APP_BRANCH-application.yaml
 													  sed -i "s|APP_BRANCH|$APP_BRANCH|g" $APP_BRANCH-application.yaml
