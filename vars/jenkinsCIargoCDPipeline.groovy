@@ -166,8 +166,7 @@ spec:
                                                    }
 												   
                                                    sh "echo [$APP_NAME] [$BRANCH_NAME] [$IMAGE_NAME] [$POM_VERSION]-[$BUILD_NUM]"
-												   sh "cd /tmp"
-												   
+												   												   
 												   argoBranchName = "main"
                                                    gitCredentials = "bill.hunt-github"
                                                    argoRepoUrl = "https://github.com/clearavenue/argocd-apps.git"
@@ -175,6 +174,8 @@ spec:
                                                       git branch: argoBranchName, credentialsId: gitCredentials, url: argoRepoUrl
                                                    }
 
+                                                   sh "ls"
+												   sh "ls argocd"
 												   sh "cd argocd"
 												   sh "ls"
                                                 }
