@@ -184,13 +184,14 @@ spec:
 
                             sh """
                                 cd argocd
-                                cp templates/template-application.yaml $APP_BRANCH-application.yaml
-                                sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" $APP_BRANCH-application.yaml
-                                cat $APP_BRANCH-application.yaml
+                                cp templates/template-application.yaml apps/$APP_BRANCH-application.yaml
+                                sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" apps/$APP_BRANCH-application.yaml
+                                cat apps/$APP_BRANCH-application.yaml
                                 
+                                cd apps
                                 mkdir -p $APP_BRANCH
                                 cd $APP_BRANCH
-                                cp -R ../templates/app/* .
+                                cp -R ../../templates/app/* .
                                 sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" deployment.yaml
                                 sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
                                 sed -i \"s|VERSION|$POM_VERSION-$BUILD_NUM|g\" deployment.yaml
@@ -200,11 +201,11 @@ spec:
                                 cat service.yaml
                                 cat serviceaccount.yaml
 
-                                cd ..
+                                cd ../..
                                 git config --global user.email bill.hunt@clearavenue.com
                                 git config --global user.name clearavenue
                                 git add .
-                                git commit -am \"added $APP_BRANCH application to argoCD"
+                                git commit -am \"added $APP_BRANCH:$POM_VERSION-$BUILD_NUM to argoCD for deployment"
                                 git push https://${GIT_CREDS_USR}:${GIT_CREDS_PSW}@github.com/clearavenue/argocd-apps.git main
                             """
                         }
