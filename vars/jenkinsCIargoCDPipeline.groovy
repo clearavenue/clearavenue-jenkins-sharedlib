@@ -167,7 +167,7 @@ spec:
                     container('git') {
 
                        script {
-                            argoRepoUrl = "https://${GIT_CREDS_USR}:${GIT_CREDS_PSW}@github.com/clearavenue/argocd-apps.git"
+                            argoRepoUrl = "https://clearavenue:${GIT_CREDS_PSW}@github.com/clearavenue/argocd-apps.git"
 
                             APP_NAME=pipelineParams.app_name
                             BRANCH_NAME="-"+BRANCH
