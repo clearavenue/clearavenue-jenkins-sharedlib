@@ -62,17 +62,17 @@ spec:
                     }
                 }
             }
-/*
-            stage('JUnit') {
-                steps {
-                    container('maven') {
-                        sh "mvn -B -e -T 1C test"
-                        junit 'target/surefire-reports/**/*.xml'
-                    }
-                }
-            }
 
-            stage('SecurityChecks') {
+//            stage('JUnit') {
+//                steps {
+//                    container('maven') {
+//                        sh "mvn -B -e -T 1C test"
+//                        junit 'target/surefire-reports/**/*.xml'
+//                    }
+//                }
+//            }
+
+/*            stage('SecurityChecks') {
                 parallel {
                     stage('Checkstyle code') {
                         steps {
