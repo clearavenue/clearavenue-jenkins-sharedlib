@@ -166,10 +166,8 @@ spec:
                 steps {
                     container('git') {
 
-                    withCredentials([usernamePassword(credentialsId: GIT_CREDS, usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    withCredentials([usernamePassword(credentialsId: 'bill.hunt-github', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
                        script {
-                            argoBranchName = "main"
-                            gitCredentials = "bill.hunt-github"
                             argoRepoUrl = "https://github.com/clearavenue/argocd-apps.git"
 
                             APP_NAME=pipelineParams.app_name
@@ -182,7 +180,7 @@ spec:
                             }
 
                             sh """
-                                git clone https://$USER:$PASS@$argoRepoUrl argocd
+                                git clone $argoRepoUrl argocd
                                 cd argocd
                                 cp templates/template-application.yaml apps/$APP_BRANCH-application.yaml
                                 sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" apps/$APP_BRANCH-application.yaml
