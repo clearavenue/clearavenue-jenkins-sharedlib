@@ -62,7 +62,7 @@ spec:
                     }
                 }
             }
-
+/*
             stage('JUnit') {
                 steps {
                     container('maven') {
@@ -142,7 +142,7 @@ spec:
                     }
                 }
             }
-
+*/
             stage('Push Docker') {
                 steps {
                     container('maven') {
