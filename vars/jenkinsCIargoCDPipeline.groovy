@@ -131,7 +131,7 @@ spec:
                     stage('Vulnerabilities') {
                         steps {
                             container('maven') {
-                                sh "mvn -B -e -T 1C org.owasp:dependency-check-maven:6.5.1:aggregate -Dformat=xml -DfailBuildOnCVSS=10"
+                                sh "mvn -B -e -T 1C org.owasp:dependency-check-maven:6.5.3:aggregate -Dformat=xml -DfailBuildOnCVSS=10"
                             }
                         }
                         post {
@@ -179,7 +179,7 @@ spec:
                             }
 
                             sh """
-                                git clone https://$argoRepoUrl argocd
+                                git clone $argoRepoUrl argocd
                                 cd argocd
                                 cp templates/template-application.yaml apps/$APP_BRANCH-application.yaml
                                 sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" apps/$APP_BRANCH-application.yaml
