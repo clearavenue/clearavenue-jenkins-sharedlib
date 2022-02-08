@@ -63,16 +63,16 @@ spec:
                 }
             }
 
-//            stage('JUnit') {
-//                steps {
-//                    container('maven') {
-//                        sh "mvn -B -e -T 1C test"
-//                        junit 'target/surefire-reports/**/*.xml'
-//                    }
-//                }
-//            }
+            stage('JUnit') {
+                steps {
+                    container('maven') {
+                        sh "mvn -B -e -T 1C test"
+                        junit 'target/surefire-reports/**/*.xml'
+                    }
+                }
+            }
 
-/*            stage('SecurityChecks') {
+            stage('SecurityChecks') {
                 parallel {
                     stage('Checkstyle code') {
                         steps {
@@ -142,7 +142,7 @@ spec:
                     }
                 }
             }
-*/
+
             stage('Push Docker') {
                 steps {
                     container('maven') {
