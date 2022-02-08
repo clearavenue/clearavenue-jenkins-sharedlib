@@ -165,13 +165,12 @@ spec:
             stage('argoCD') {
                 steps {
                     container('git') {
-                        script {
+
+                    withCredentials([usernamePassword(credentialsId: GIT_CREDS, usernameVariable: 'USER', passwordVariable: 'PASS')]) {
+                    script {
                             argoBranchName = "main"
                             gitCredentials = "bill.hunt-github"
                             argoRepoUrl = "https://github.com/clearavenue/argocd-apps.git"
-                            dir('argocd') {
-                                git branch: argoBranchName, credentialsId: gitCredentials, url: argoRepoUrl
-                            }
 
                             APP_NAME=pipelineParams.app_name
                             BRANCH_NAME="-"+BRANCH
@@ -183,6 +182,7 @@ spec:
                             }
 
                             sh """
+                                git clone https://$USER:$PASS@$argoRepoUrl argocd
                                 cd argocd
                                 cp templates/template-application.yaml apps/$APP_BRANCH-application.yaml
                                 sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" apps/$APP_BRANCH-application.yaml
@@ -210,7 +210,7 @@ spec:
                                 git config --global user.name clearavenue
                                 git add .
                                 git commit -am \"added $APP_BRANCH:$POM_VERSION-$BUILD_NUM to argoCD for deployment"
-                                git push https://${GIT_CREDS_USR}:${GIT_CREDS_PSW}@github.com/clearavenue/argocd-apps.git main
+                                git push
                             """
                         }
                     }
