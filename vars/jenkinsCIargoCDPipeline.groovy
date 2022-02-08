@@ -167,7 +167,7 @@ spec:
                     container('git') {
 
                     withCredentials([usernamePassword(credentialsId: GIT_CREDS, usernameVariable: 'USER', passwordVariable: 'PASS')]) {
-                    script {
+                       script {
                             argoBranchName = "main"
                             gitCredentials = "bill.hunt-github"
                             argoRepoUrl = "https://github.com/clearavenue/argocd-apps.git"
@@ -214,6 +214,7 @@ spec:
                             """
                         }
                     }
+                  }
                 }
             }
         }
