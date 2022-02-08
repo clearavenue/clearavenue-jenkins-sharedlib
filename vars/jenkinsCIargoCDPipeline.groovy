@@ -166,9 +166,8 @@ spec:
                 steps {
                     container('git') {
 
-                    withCredentials([usernamePassword(credentialsId: 'bill.hunt-github', usernameVariable: 'USER', passwordVariable: 'PASS')]) {
                        script {
-                            argoRepoUrl = "https://github.com/clearavenue/argocd-apps.git"
+                            argoRepoUrl = "https://${GIT_CREDS_USR}:${GIT_CREDS_PSW}@github.com/clearavenue/argocd-apps.git"
 
                             APP_NAME=pipelineParams.app_name
                             BRANCH_NAME="-"+BRANCH
@@ -180,7 +179,7 @@ spec:
                             }
 
                             sh """
-                                git clone $argoRepoUrl argocd
+                                git clone https://$argoRepoUrl argocd
                                 cd argocd
                                 cp templates/template-application.yaml apps/$APP_BRANCH-application.yaml
                                 sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" apps/$APP_BRANCH-application.yaml
@@ -212,7 +211,6 @@ spec:
                             """
                         }
                     }
-                  }
                 }
             }
         }
