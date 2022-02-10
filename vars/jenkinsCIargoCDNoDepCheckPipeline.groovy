@@ -23,7 +23,7 @@ spec:
     - cat
     tty: true
   - name: maven
-    image: maven:3.6-jdk-11-slim
+    image: maven:3.6.1-jdk-11-slim
     command:
     - cat
     tty: true
@@ -142,7 +142,7 @@ spec:
 
             stage('Push Docker') {
                 steps {
-                    container('docker') {
+                    container('maven') {
                         script {
                             APP_NAME=pipelineParams.app_name
                             BRANCH_NAME="-"+BRANCH
