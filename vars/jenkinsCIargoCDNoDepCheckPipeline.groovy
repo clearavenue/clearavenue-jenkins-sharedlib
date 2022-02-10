@@ -153,7 +153,7 @@ spec:
                                 APP_BRANCH = APP_NAME+BRANCH_NAME
                             }
 
-                            sh "apt install curl -y"
+                            sh "apt-get install curl -y"
                             sh "curl -sSL https://get.docker.com/ | sh"
                             sh "docker version"
                             
