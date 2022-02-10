@@ -153,7 +153,7 @@ spec:
 //                            sh "dockerd &"
 //                            sh "docker version"
                             
-                            sh "mvn -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${APP_BRANCH}:${POM_VERSION}-${BUILD_NUM} -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -jib.container.ports=8080 -Djib.allowInsecureRegistries=true"
+                            sh "mvn -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${APP_BRANCH}:${POM_VERSION}-${BUILD_NUM} -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.container.ports=8080 -Djib.allowInsecureRegistries=true"
                         }
                     }
                 }
