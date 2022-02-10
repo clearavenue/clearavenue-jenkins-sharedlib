@@ -52,14 +52,16 @@ spec:
             GIT_CREDS=credentials('bill.hunt-github')
             BRANCH = env.GIT_BRANCH.toLowerCase()
             APP_BRANCH="dummy"
-            BUILD_PROFILE=pipelineParams.buildProfile
         }
 
         stages {
             stage('Build') {
                 steps {
                     container('maven') {
-                        sh "mvn -B -e -T 1C clean package ${BUILD_PROFILE} -DskipTests"
+                        script {
+                             BUILD_PROFILE=pipelineParams.buildProfile
+                             sh "mvn -B -e -T 1C clean package ${BUILD_PROFILE} -DskipTests"
+                        }
                     }
                 }
             }
