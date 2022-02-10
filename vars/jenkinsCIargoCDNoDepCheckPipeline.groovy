@@ -156,7 +156,7 @@ spec:
                             sh "apt-get install curl -y"
                             sh "curl -sSL https://get.docker.com/ | sh"
                             sh "sudo groupadd docker"
-                            sh "sudo usermod -aG docker $(whoami)"
+                            sh "sudo usermod -aG docker \$(whoami)"
                             sh "sudo service docker start"
                             sh "docker version"
                             
