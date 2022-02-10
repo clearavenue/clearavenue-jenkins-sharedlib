@@ -61,7 +61,7 @@ spec:
             APP_BRANCH="dummy"
         }
 
-//        stages {
+        stages {
 //            stage('Build') {
 //                steps {
 //                    container('maven') {
