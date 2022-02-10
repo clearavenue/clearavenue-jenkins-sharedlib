@@ -61,17 +61,17 @@ spec:
             APP_BRANCH="dummy"
         }
 
-        stages {
-            stage('Build') {
-                steps {
-                    container('maven') {
-                        script {
-                             BUILD_PROFILE=pipelineParams.buildProfile
-                             sh "mvn -B -e -T 1C clean package ${BUILD_PROFILE} -DskipTests"
-                        }
-                    }
-                }
-            }
+//        stages {
+//            stage('Build') {
+//                steps {
+//                    container('maven') {
+//                        script {
+//                             BUILD_PROFILE=pipelineParams.buildProfile
+//                             sh "mvn -B -e -T 1C clean package ${BUILD_PROFILE} -DskipTests"
+//                        }
+//                    }
+//                }
+//            }
 
 //            stage('JUnit') {
 //                steps {
@@ -153,6 +153,7 @@ spec:
                                 APP_BRANCH = APP_NAME+BRANCH_NAME
                             }
 
+                            sh "apt install curl -y"
                             sh "curl -sSL https://get.docker.com/ | sh"
                             sh "docker version"
                             
