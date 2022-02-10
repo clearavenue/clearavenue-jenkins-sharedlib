@@ -15,6 +15,13 @@ metadata:
     pipeline: mavenDevsecopsPipeline
 spec:
   containers:
+  - name: docker
+    image: docker:dind
+    securityContext:
+      privileged: true
+    command:
+    - cat
+    tty: true
   - name: maven
     image: maven:3.6-jdk-11-slim
     command:
@@ -135,7 +142,7 @@ spec:
 
             stage('Push Docker') {
                 steps {
-                    container('maven') {
+                    container('docker') {
                         script {
                             APP_NAME=pipelineParams.app_name
                             BRANCH_NAME="-"+BRANCH
