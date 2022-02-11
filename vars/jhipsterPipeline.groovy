@@ -136,7 +136,7 @@ spec:
 				  stage('Vulnerabilities') {
 					  steps {
 						  container('maven') {
-							  sh "mvn -B -e -T 1C org.owasp:dependency-check-maven:6.5.3:aggregate -Dformat=xml -DfailBuildOnCVSS=10"
+							  sh "mvn -B -e -T 1C org.owasp:dependency-check-maven:6.5.3:aggregate -Dformat=xml" // -DfailBuildOnCVSS=10"
 						  }
 					  }
 					  post {
