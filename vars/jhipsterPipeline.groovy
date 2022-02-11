@@ -68,14 +68,14 @@ spec:
                 }
             }
 
-//            stage('JUnit') {
-//                steps {
-//                    container('maven') {
-//                        sh "mvn -B -e -T 1C test"
-//                        junit 'target/surefire-reports/**/*.xml'
-//                    }
-//                }
-//            }
+            stage('JUnit') {
+                steps {
+                    container('maven') {
+                        sh "mvn -B -e -T 1C test"
+                        junit 'target/test-results/test/**/*.xml'
+                    }
+                }
+            }
 
 //            stage('SecurityChecks') {
 //                parallel {
@@ -135,81 +135,81 @@ spec:
 //                }
 //            }
 
-            stage('Push Docker') {
-                steps {
-                    container('maven') {
-                        script {
-                            APP_NAME=pipelineParams.app_name
-                            BRANCH_NAME="-"+BRANCH
-
-                            if (BRANCH_NAME == '-main' || BRANCH_NAME == '-master') {
-                                APP_BRANCH = APP_NAME
-                            }  else {
-                                APP_BRANCH = APP_NAME+BRANCH_NAME
-                            }
-                            
-                            sh "mvn -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${APP_BRANCH}:${POM_VERSION}-${BUILD_NUM} -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.container.ports=8080 -Djib.allowInsecureRegistries=true"
-                            
-                            sh "mvn -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${APP_BRANCH}:latest -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.container.ports=8080 -Djib.allowInsecureRegistries=true"
-                        }
-                    }
-                }
-            }
-
-            stage('argoCD') {
-                steps {
-                    container('git') {
-
-                    script {
-                         argoRepoUrl = "https://clearavenue:${GIT_CREDS_PSW}@github.com/clearavenue/argocd-apps.git"
-
-                         APP_NAME=pipelineParams.app_name
-                         BRANCH_NAME="-"+BRANCH
-
-                         if (BRANCH_NAME == '-main' || BRANCH_NAME == '-master') {
-                             APP_BRANCH = APP_NAME
-                         }  else {
-                             APP_BRANCH = APP_NAME+BRANCH_NAME
-                         }
-
-                         sh """
-                             git clone $argoRepoUrl argocd
-                             cd argocd
-                             cp templates/template-application.yaml apps/$APP_BRANCH-application.yaml
-                             sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" apps/$APP_BRANCH-application.yaml
-                             cat apps/$APP_BRANCH-application.yaml
-                             
-                             cd apps
-                             mkdir -p $APP_BRANCH
-                             cd $APP_BRANCH
-                             cp -R ../../templates/app/* .
-
-                             rm deployment.yaml
-                             mv jhipster-deployment.yaml deployment.yaml
-
-                             sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" deployment.yaml
-                             sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
-                             sed -i \"s|VERSION|$POM_VERSION-$BUILD_NUM|g\" deployment.yaml
-                             sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" service.yaml
-                             sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" serviceaccount.yaml
-                             sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" namespace.yaml
-                             sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" virtualservice.yaml
-
-                             cat namespace.yaml
-                             cat deployment.yaml
-                             cat service.yaml
-                             cat serviceaccount.yaml
-                             cat virtualservice.yaml
-
-                             cd ../..
-                             git config --global user.email bill.hunt@clearavenue.com
-                             git config --global user.name clearavenue
-                             git add .
-                             git commit -am \"added $APP_BRANCH:$POM_VERSION-$BUILD_NUM to argoCD for deployment"
-                             git push
-                         """
-                     }
-                 }
+ //          stage('Push Docker') {
+ //              steps {
+ //                  container('maven') {
+ //                      script {
+ //                          APP_NAME=pipelineParams.app_name
+ //                          BRANCH_NAME="-"+BRANCH
+ //
+ //                          if (BRANCH_NAME == '-main' || BRANCH_NAME == '-master') {
+ //                              APP_BRANCH = APP_NAME
+ //                          }  else {
+ //                              APP_BRANCH = APP_NAME+BRANCH_NAME
+ //                          }
+ //                          
+ //                          sh "mvn -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${APP_BRANCH}:${POM_VERSION}-${BUILD_NUM} -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.container.ports=8080 -Djib.allowInsecureRegistries=true"
+ //                          
+ //                          sh "mvn -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${APP_BRANCH}:latest -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.container.ports=8080 -Djib.allowInsecureRegistries=true"
+ //                      }
+ //                  }
+ //              }
+ //          }
+ //
+ //          stage('argoCD') {
+ //              steps {
+ //                  container('git') {
+ //
+ //                  script {
+ //                       argoRepoUrl = "https://clearavenue:${GIT_CREDS_PSW}@github.com/clearavenue/argocd-apps.git"
+ //
+ //                       APP_NAME=pipelineParams.app_name
+ //                       BRANCH_NAME="-"+BRANCH
+ //
+ //                       if (BRANCH_NAME == '-main' || BRANCH_NAME == '-master') {
+ //                           APP_BRANCH = APP_NAME
+ //                       }  else {
+ //                           APP_BRANCH = APP_NAME+BRANCH_NAME
+ //                       }
+ //
+ //                       sh """
+ //                           git clone $argoRepoUrl argocd
+ //                           cd argocd
+ //                           cp templates/template-application.yaml apps/$APP_BRANCH-application.yaml
+ //                           sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" apps/$APP_BRANCH-application.yaml
+ //                           cat apps/$APP_BRANCH-application.yaml
+ //                           
+ //                           cd apps
+ //                           mkdir -p $APP_BRANCH
+ //                           cd $APP_BRANCH
+ //                           cp -R ../../templates/app/* .
+ //
+ //                           rm deployment.yaml
+ //                           mv jhipster-deployment.yaml deployment.yaml
+ //
+ //                           sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" deployment.yaml
+ //                           sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
+ //                           sed -i \"s|VERSION|$POM_VERSION-$BUILD_NUM|g\" deployment.yaml
+ //                           sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" service.yaml
+ //                           sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" serviceaccount.yaml
+ //                           sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" namespace.yaml
+ //                           sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" virtualservice.yaml
+ //
+ //                           cat namespace.yaml
+ //                           cat deployment.yaml
+ //                           cat service.yaml
+ //                           cat serviceaccount.yaml
+ //                           cat virtualservice.yaml
+ //
+ //                           cd ../..
+ //                           git config --global user.email bill.hunt@clearavenue.com
+ //                           git config --global user.name clearavenue
+ //                           git add .
+ //                           git commit -am \"added $APP_BRANCH:$POM_VERSION-$BUILD_NUM to argoCD for deployment"
+ //                           git push
+ //                       """
+ //                   }
+ //               }
              }
          }
         }
