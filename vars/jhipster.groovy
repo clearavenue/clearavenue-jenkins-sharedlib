@@ -156,57 +156,152 @@ spec:
                 }
             }
 
-//            stage('argoCD') {
-//                steps {
-//                    container('git') {
+            stage('argoCD') {
+                steps {
+                    container('git') {
 
-//                    script {
-//                         argoRepoUrl = "https://clearavenue:${GIT_CREDS_PSW}@github.com/clearavenue/argocd-apps.git"
-//
-//                         APP_NAME=pipelineParams.app_name
-//                         BRANCH_NAME="-"+BRANCH
-//
-//                         if (BRANCH_NAME == '-main' || BRANCH_NAME == '-master') {
-//                             APP_BRANCH = APP_NAME
-//                         }  else {
-//                             APP_BRANCH = APP_NAME+BRANCH_NAME
-//                         }
-//
-//                         sh """
-//                             git clone $argoRepoUrl argocd
-//                             cd argocd
-//                             cp templates/template-application.yaml apps/$APP_BRANCH-application.yaml
-//                             sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" apps/$APP_BRANCH-application.yaml
-//                             cat apps/$APP_BRANCH-application.yaml
-//                             
-//                             cd apps
-//                             mkdir -p $APP_BRANCH
-//                             cd $APP_BRANCH
-//                             cp -R ../../templates/app/* .
-//                             sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" deployment.yaml
-//                             sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
-//                             sed -i \"s|VERSION|$POM_VERSION-$BUILD_NUM|g\" deployment.yaml
-//                             sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" service.yaml
-//                             sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" serviceaccount.yaml
-//                             sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" namespace.yaml
-//                             sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" virtualservice.yaml
-//                             cat namespace.yaml
-//                             cat deployment.yaml
-//                             cat service.yaml
-//                             cat serviceaccount.yaml
-//                             cat virtualservice.yaml
-//
-//                             cd ../..
-//                             git config --global user.email bill.hunt@clearavenue.com
-//                             git config --global user.name clearavenue
-//                             git add .
-//                             git commit -am \"added $APP_BRANCH:$POM_VERSION-$BUILD_NUM to argoCD for deployment"
-//                             git push
-//                         """
-//                     }
-//                 }
-//             }
-//         }
+                    script {
+                         argoRepoUrl = "https://clearavenue:${GIT_CREDS_PSW}@github.com/clearavenue/argocd-apps.git"
+
+                         APP_NAME=pipelineParams.app_name
+                         BRANCH_NAME="-"+BRANCH
+
+                         if (BRANCH_NAME == '-main' || BRANCH_NAME == '-master') {
+                             APP_BRANCH = APP_NAME
+                         }  else {
+                             APP_BRANCH = APP_NAME+BRANCH_NAME
+                         }
+
+                         sh """
+                             git clone $argoRepoUrl argocd
+                             cd argocd
+                             cp templates/template-application.yaml apps/$APP_BRANCH-application.yaml
+                             sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" apps/$APP_BRANCH-application.yaml
+                             cat apps/$APP_BRANCH-application.yaml
+                             
+                             cd apps
+                             mkdir -p $APP_BRANCH
+                             cd $APP_BRANCH
+                             cp -R ../../templates/app/* .
+
+                             cat > deployment.yaml << EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "8080"
+    prometheus.io/path: "/actuator/prometheus"
+  labels:
+    app: APP_BRANCH
+  name: APP_BRANCH
+  namespace: APP_BRANCH
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: APP_BRANCH
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: APP_BRANCH
+    spec:
+      serviceAccountName: APP_BRANCH-service-account
+      containers:
+      - image: DOCKERUSER/APP_BRANCH:VERSION
+        env:
+        - name: EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE
+          value: http://admin:admin@jhipster-registry.jhipster-registry.svc.cluster.local:8761/eureka
+        - name: JHIPSTER_SLEEP
+          value: "30"
+        - name: MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED
+          value: "true"
+        - name: SPRING_CLOUD_CONFIG_URI
+          value: http://admin:admin@jhipster-registry.jhipster-registry.svc.cluster.local:8761/config
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:postgresql://postgresql.postgresql.svc.cluster.local:5432/app
+        - name: SPRING_DATASOURCE_USERNAME
+          value: app
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: app
+        - name: SPRING_DATA_JEST_URI
+          value: http://elasticsearch.elasticsearch.svc.cluster.local:9200
+        - name: SPRING_ELASTICSEARCH_REST_URIS
+          value: http://elasticsearch.elasticsearch.svc.cluster.local:9200
+        - name: SPRING_PROFILES_ACTIVE
+          value: dev,swagger
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI
+          value: https://keycloak.devsecops.clearavenue.com/auth/realms/jhipster
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID
+          value: web_app
+        - name: SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET
+          value: web_app
+        imagePullPolicy: Always
+        name: APP_BRANCH
+        ports:
+        - containerPort: 8080
+          name: web
+          protocol: TCP
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 20
+          failureThreshold: 300
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 300
+          periodSeconds: 5
+          failureThreshold: 3
+        volumeMounts:
+        - mountPath: /tmp
+          name: temp-dir
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      volumes:
+      - emptyDir: {}
+        name: temp-dir
+      terminationGracePeriodSeconds: 30
+                             EOF
+
+                             sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" deployment.yaml
+                             sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
+                             sed -i \"s|VERSION|$POM_VERSION-$BUILD_NUM|g\" deployment.yaml
+                             sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" service.yaml
+                             sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" serviceaccount.yaml
+                             sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" namespace.yaml
+                             sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" virtualservice.yaml
+
+                             cat namespace.yaml
+                             cat deployment.yaml
+                             cat service.yaml
+                             cat serviceaccount.yaml
+                             cat virtualservice.yaml
+
+                             cd ../..
+                             git config --global user.email bill.hunt@clearavenue.com
+                             git config --global user.name clearavenue
+                             git add .
+                             git commit -am \"added $APP_BRANCH:$POM_VERSION-$BUILD_NUM to argoCD for deployment"
+                             git push
+                         """
+                     }
+                 }
+             }
+         }
         }
 
         post {
