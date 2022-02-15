@@ -71,7 +71,7 @@ spec:
             stage('JUnit') {
                 steps {
                     container('maven') {
-                        sh "mvn -B -e -T 1C test ${BUILD_PROFILE}"
+                        sh "mvn -B -e -T 1C test"
                         junit 'target/surefire-reports/**/*.xml'
                     }
                 }
