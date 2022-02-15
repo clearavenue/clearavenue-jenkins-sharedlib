@@ -12,7 +12,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   labels:
-    pipeline: mavenDevsecopsPipeline
+    pipeline: jhipsterWebAppPipeline
 spec:
   containers:
   - name: maven
@@ -198,7 +198,7 @@ spec:
                           cp -R ../../templates/app/* .
 
                           rm deployment.yaml
-                          mv jhipster-deployment.yaml deployment.yaml
+                          mv jhipster-webapp-deployment.yaml deployment.yaml
 
                           sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" deployment.yaml
                           sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
