@@ -195,10 +195,11 @@ spec:
                           cd apps
                           mkdir -p $APP_BRANCH
                           cd $APP_BRANCH
-                          cp -R ../../templates/app/* .
-
-                          rm deployment.yaml
-                          mv jhipster-webapp-deployment.yaml deployment.yaml
+                          cp ../../templates/app/jhipster-webapp-deployment.yaml deployment.yaml
+                          cp ../../templates/app/service.yaml .
+                          cp ../../templates/app/serviceaccount.yaml .
+                          cp ../../templates/app/namespace.yaml .
+                          cp ../../templates/app/virtualservice.yaml .
 
                           sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" deployment.yaml
                           sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
