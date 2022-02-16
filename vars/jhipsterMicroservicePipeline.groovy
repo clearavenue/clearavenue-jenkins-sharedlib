@@ -196,7 +196,7 @@ spec:
                           mkdir -p $APP_BRANCH
                           cd $APP_BRANCH
                           cp ../../templates/app/jhipster-ms-deployment.yaml deployment.yaml
-                          cp ../../templates/app/service.yaml .
+                          cp ../../templates/app/jhipster-ms-service.yaml service.yaml
                           cp ../../templates/app/serviceaccount.yaml .
                           cp ../../templates/app/namespace.yaml .
                           cp ../../templates/app/virtualservice.yaml .
