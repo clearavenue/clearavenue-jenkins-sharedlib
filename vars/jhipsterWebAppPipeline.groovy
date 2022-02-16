@@ -93,33 +93,33 @@ spec:
                         }
                     }
 
-                    stage('CodeCoverage') {
-                        steps {
-                            container('jhipster') {
-                                sh "./mvnw -B -e -T 1C org.jacoco:jacoco-maven-plugin:0.8.7:prepare-agent verify org.jacoco:jacoco-maven-plugin:0.8.7:report"
-                                jacoco(execPattern: 'target/jacoco.exec', classPattern: 'target/classes', sourcePattern: 'src/main/java', exclusionPattern: 'src/test*', changeBuildStatus: false,
-                                       minimumInstructionCoverage : '30', maximumInstructionCoverage : '31',
-                                       minimumBranchCoverage : '30', maximumBranchCoverage : '31',
-                                       minimumComplexityCoverage : '30', maximumComplexityCoverage : '31',
-                                       minimumLineCoverage : '30', maximumLineCoverage : '31',
-                                       minimumMethodCoverage : '30', maximumMethodCoverage : '31',
-                                       minimumClassCoverage : '30', maximumClassCoverage : '31')
-                            }
-                        }
-                    }
+                    //stage('CodeCoverage') {
+                    //    steps {
+                    //        container('jhipster') {
+                    //            sh "./mvnw -B -e -T 1C org.jacoco:jacoco-maven-plugin:0.8.7:prepare-agent verify org.jacoco:jacoco-maven-plugin:0.8.7:report"
+                    //            jacoco(execPattern: 'target/jacoco.exec', classPattern: 'target/classes', sourcePattern: 'src/main/java', exclusionPattern: 'src/test*', changeBuildStatus: false,
+                    //                   minimumInstructionCoverage : '30', maximumInstructionCoverage : '31',
+                    //                   minimumBranchCoverage : '30', maximumBranchCoverage : '31',
+                    //                   minimumComplexityCoverage : '30', maximumComplexityCoverage : '31',
+                    //                   minimumLineCoverage : '30', maximumLineCoverage : '31',
+                    //                   minimumMethodCoverage : '30', maximumMethodCoverage : '31',
+                    //                   minimumClassCoverage : '30', maximumClassCoverage : '31')
+                    //        }
+                    //    }
+                    //}
 
-                    stage('SpotBugs') {
-                        steps {
-                           container('jhipster') {
-                                sh "./mvnw -B -e -T 1C com.github.spotbugs:spotbugs-maven-plugin:4.5.3.0:check -Dspotbugs.effort=Max -Dspotbugs.threshold=Low -Dspotbugs.failOnError=false"
-                            }
-                        }
-                        post {
-                            always {
-                                recordIssues(enabledForFailure: true, tool: spotBugs())
-                            }
-                        }
-                    }
+                    //stage('SpotBugs') {
+                    //    steps {
+                    //       container('jhipster') {
+                    //            sh "./mvnw -B -e -T 1C com.github.spotbugs:spotbugs-maven-plugin:4.5.3.0:check -Dspotbugs.effort=Max -Dspotbugs.threshold=Low -Dspotbugs.failOnError=false"
+                    //        }
+                    //    }
+                    //    post {
+                    //        always {
+                    //            recordIssues(enabledForFailure: true, tool: spotBugs())
+                    //        }
+                    //    }
+                    //}
 
                     stage('PMD') {
                         steps {
