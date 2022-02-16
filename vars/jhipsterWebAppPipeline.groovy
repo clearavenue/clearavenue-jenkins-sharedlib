@@ -22,7 +22,6 @@ spec:
       value: /home/jenkins/.cache/Cypress
     securityContext:
       privileged: true
-      runAsUser: 1000
     command:
     - cat
     tty: true
@@ -65,6 +64,7 @@ spec:
                 steps {
                     container('maven') {
                         script {
+                             sh "sudo mkdir -p /home/jenkins/.cache"
                              BUILD_PROFILE=pipelineParams.buildProfile
                              sh "mvn -B -e -T 1C clean package ${BUILD_PROFILE} -DskipTests"
                         }
