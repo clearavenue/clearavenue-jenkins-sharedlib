@@ -17,9 +17,6 @@ spec:
   containers:
   - name: maven
     image: maven:3.6.1-jdk-11-slim
-    imagePullPolicy: Always
-    securityContext:
-      privileged: true
     command:
     - cat
     tty: true
