@@ -74,7 +74,6 @@ spec:
                     container('jhipster') {
                         script {
                              BUILD_PROFILE=pipelineParams.buildProfile
-                             sh "ls -la"
                              sh "chmod +x mvnw"
                              sh "./mvnw -B -e -T 1C clean package ${BUILD_PROFILE} -DskipTests"
                         }
@@ -82,15 +81,15 @@ spec:
                 }
             }  // build
 
-//          stage('JUnit') {
-//              steps {
-//                  container('maven') {
-//                      sh "mvn -B -e -T 1C test"
-//                      junit 'target/test-results/test/**/*.xml'
-//                  }
-//              }
-//          }  // junit
-//
+          stage('JUnit') {
+              steps {
+                  container('jhipster') {
+                      sh "./mvnw -B -e -T 1C test"
+                      junit 'target/surefire-reports/**/*.xml'
+                  }
+              }
+          }  // junit
+
 //        stage('SecurityChecks') {
 //            parallel {
 //                stage('Checkstyle code') {
