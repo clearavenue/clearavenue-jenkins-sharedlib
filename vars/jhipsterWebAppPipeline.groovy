@@ -64,7 +64,7 @@ spec:
                 steps {
                     container('maven') {
                         script {
-                             mkdir -p /home/jenkins/.cache/Cypress
+                             sh "mkdir -p /home/jenkins/.cache/Cypress"
                              BUILD_PROFILE=pipelineParams.buildProfile
                              sh "mvn -B -e -T 1C clean package ${BUILD_PROFILE} -DskipTests"
                         }
