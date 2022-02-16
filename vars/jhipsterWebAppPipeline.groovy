@@ -19,7 +19,7 @@ spec:
     image: maven:3.6.1-jdk-11-slim
     env:
     - name: CYPRESS_CACHE_FOLDER
-      value: ~/.cache/Cypress
+      value: /home/jenkins/.cache/Cypress
     securityContext:
       privileged: true
     command:
