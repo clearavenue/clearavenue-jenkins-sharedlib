@@ -74,7 +74,7 @@ spec:
                     container('jhipster') {
                         script {
                              BUILD_PROFILE=pipelineParams.buildProfile
-                             sh "mvn -B -e -T 1C clean package ${BUILD_PROFILE} -DskipTests"
+                             sh "./mvnw -B -e -T 1C clean package ${BUILD_PROFILE} -DskipTests"
                         }
                     }
                 }
