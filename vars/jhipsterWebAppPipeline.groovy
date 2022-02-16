@@ -74,6 +74,8 @@ spec:
                     container('jhipster') {
                         script {
                              BUILD_PROFILE=pipelineParams.buildProfile
+                             sh "ls -la"
+                             sh "chmod +x mvnw"
                              sh "./mvnw -B -e -T 1C clean package ${BUILD_PROFILE} -DskipTests"
                         }
                     }
