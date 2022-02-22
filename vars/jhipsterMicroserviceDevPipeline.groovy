@@ -203,11 +203,11 @@ spec:
 
                           sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" deployment.yaml
                           sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
-                          sed -i \"s|:VERSION|-dev:$POM_VERSION-$BUILD_NUM|g\" deployment.yaml
+                          sed -i \"s|VERSION|$POM_VERSION-$BUILD_NUM|g\" deployment.yaml
                           sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" service.yaml
                           sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" serviceaccount.yaml
                           sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" namespace.yaml
-                          sed -i \"s|APP_BRANCH|$APP_BRANCH-dev|g\" virtualservice.yaml
+                          sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" virtualservice.yaml
 
                           cat namespace.yaml
                           cat deployment.yaml
