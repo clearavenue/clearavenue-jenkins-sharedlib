@@ -199,7 +199,7 @@ spec:
                           cp ../../templates/app/jhipster-ms-service.yaml service.yaml
                           cp ../../templates/app/serviceaccount.yaml .
                           cp ../../templates/app/namespace.yaml .
-                          cp ../../templates/app/virtualservice.yaml .
+                          cp ../../templates/app/virtualservice-ms.yaml virtualservice.yaml
 
                           sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" deployment.yaml
                           sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
