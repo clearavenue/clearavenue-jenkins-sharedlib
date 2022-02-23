@@ -62,8 +62,8 @@ spec:
                     container('jhipster') {
                         script {
                              BUILD_PROFILE=pipelineParams.buildProfile
-                             sh "chmod +x mvnw"
-                             sh "./mvnw -B -e -T 1C clean package ${BUILD_PROFILE} -DskipTests"
+                             //sh "chmod +x mvnw"
+                             sh "mvn -B -e -T 1C clean package ${BUILD_PROFILE} -DskipTests"
                         }
                     }
                 }
@@ -72,7 +72,7 @@ spec:
             stage('JUnit') {
                 steps {
                     container('jhipster') {
-                        sh "./mvnw -B -e -T 1C test"
+                        sh "mvn -B -e -T 1C test"
                         junit 'target/surefire-reports/**/*.xml'
                     }
                 }
@@ -83,7 +83,7 @@ spec:
                     stage('Checkstyle code') {
                         steps {
                             container('jhipster') {
-                                sh "./mvnw -B -e -T 1C org.apache.maven.plugins:maven-checkstyle-plugin:3.1.2:checkstyle -Dcheckstyle.config.location=google_checks.xml"
+                                sh "mvn -B -e -T 1C org.apache.maven.plugins:maven-checkstyle-plugin:3.1.2:checkstyle -Dcheckstyle.config.location=google_checks.xml"
                             }
                         }
                         post {
@@ -124,7 +124,7 @@ spec:
                     stage('PMD') {
                         steps {
                             container('jhipster') {
-                                sh "./mvnw -B -e org.apache.maven.plugins:maven-jxr-plugin:3.1.1:jxr org.apache.maven.plugins:maven-pmd-plugin:3.14.0:pmd"
+                                sh "mvn -B -e org.apache.maven.plugins:maven-jxr-plugin:3.1.1:jxr org.apache.maven.plugins:maven-pmd-plugin:3.14.0:pmd"
                             }
                         }
                         post {
@@ -137,7 +137,7 @@ spec:
                     stage('Vulnerabilities') {
                         steps {
                             container('jhipster') {
-                                sh "./mvnw -B -e -T 1C org.owasp:dependency-check-maven:6.5.3:aggregate -Dformat=xml" // -DfailBuildOnCVSS=10"
+                                sh "mvn -B -e -T 1C org.owasp:dependency-check-maven:6.5.3:aggregate -Dformat=xml" // -DfailBuildOnCVSS=10"
                             }
                         }
                         post {
