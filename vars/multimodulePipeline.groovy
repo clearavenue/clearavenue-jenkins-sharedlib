@@ -73,7 +73,7 @@ spec:
                 steps {
                     container('jhipster') {
                         sh "./mvnw -B -e -T 1C test"
-                        junit 'target/surefire-reports/**/*.xml'
+                        //junit 'target/surefire-reports/**/*.xml'
                     }
                 }
             }  // junit
