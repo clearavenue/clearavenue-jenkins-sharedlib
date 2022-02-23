@@ -15,6 +15,16 @@ metadata:
     pipeline: jhipsterWebAppPipeline
 spec:
   containers:
+  - name: maven
+    image: maven:3.6-jdk-11-slim
+    command:
+    - cat
+    tty: true
+    resources:
+      requests:
+        ephemeral-storage: 1Gi
+      limits:
+        ephemeral-storage: 5Gi
   - name: jhipster
     image: jhipster/jhipster:v7.6.0
     securityContext:
@@ -59,7 +69,7 @@ spec:
         stages {
             stage('Build') {
                 steps {
-                    container('jhipster') {
+                    container('maven') {
                         script {
                              BUILD_PROFILE=pipelineParams.buildProfile
                              //sh "chmod +x mvnw"
@@ -71,7 +81,7 @@ spec:
 
             stage('JUnit') {
                 steps {
-                    container('jhipster') {
+                    container('maven') {
                         sh "mvn -B -e -T 1C test"
                         junit 'target/surefire-reports/**/*.xml'
                     }
@@ -82,7 +92,7 @@ spec:
                 parallel {
                     stage('Checkstyle code') {
                         steps {
-                            container('jhipster') {
+                            container('maven') {
                                 sh "mvn -B -e -T 1C org.apache.maven.plugins:maven-checkstyle-plugin:3.1.2:checkstyle -Dcheckstyle.config.location=google_checks.xml"
                             }
                         }
@@ -123,7 +133,7 @@ spec:
 
                     stage('PMD') {
                         steps {
-                            container('jhipster') {
+                            container('maven') {
                                 sh "mvn -B -e org.apache.maven.plugins:maven-jxr-plugin:3.1.1:jxr org.apache.maven.plugins:maven-pmd-plugin:3.14.0:pmd"
                             }
                         }
@@ -136,7 +146,7 @@ spec:
                   
                     stage('Vulnerabilities') {
                         steps {
-                            container('jhipster') {
+                            container('maven') {
                                 sh "mvn -B -e -T 1C org.owasp:dependency-check-maven:6.5.3:aggregate -Dformat=xml" // -DfailBuildOnCVSS=10"
                             }
                         }
