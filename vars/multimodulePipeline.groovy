@@ -225,9 +225,9 @@ spec:
                                 sed -i \"s|APP_BRANCH|jh-demo-gateway|g\" deployment.yaml
                                 sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
                                 sed -i \"s|VERSION|$POM_VERSION-$BUILD_NUM|g\" deployment.yaml
-                                sed -i \"s|DB_NAME|carapp|g\" deployment.yaml
-                                sed -i \"s|DB_USER|carapp|g\" deployment.yaml
-                                sed -i \"s|DB_PWD|carapp|g\" deployment.yaml
+                                sed -i \"s|DB_NAME|jh-demo-gateway|g\" deployment.yaml
+                                sed -i \"s|DB_USER|jh-demo-gateway|g\" deployment.yaml
+                                sed -i \"s|DB_PWD|jh-demo-gateway|g\" deployment.yaml
                                 sed -i \"s|APP_BRANCH|jh-demo-gateway|g\" service.yaml
                                 sed -i \"s|APP_BRANCH|jh-demo-gateway|g\" serviceaccount.yaml
                                 sed -i \"s|APP_BRANCH|jh-demo-gateway|g\" namespace.yaml
@@ -274,7 +274,7 @@ spec:
 
                                cd ../..
                                cp templates/template-application.yaml apps/customerapp-application.yaml
-                               sed -i \"s|APP_BRANCH|carapp|g\" apps/customerapp-application.yaml
+                               sed -i \"s|APP_BRANCH|customerapp|g\" apps/customerapp-application.yaml
                                cat apps/customerapp-application.yaml
                             
                                cd apps
