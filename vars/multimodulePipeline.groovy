@@ -67,7 +67,7 @@ spec:
                         }
                     }
                 }
-            }  // build
+            }  // end build
 
             stage('JUnit') {
                 steps {
@@ -76,7 +76,7 @@ spec:
                         //junit 'target/surefire-reports/**/*.xml'
                     }
                 }
-            }  // junit
+            }  // end junit
 
             stage('SecurityChecks') {
                 parallel {
@@ -106,7 +106,7 @@ spec:
                     //                   minimumClassCoverage : '30', maximumClassCoverage : '31')
                     //        }
                     //    }
-                    //}
+                    //}  // end codecoverage
 
                     //stage('SpotBugs') {
                     //    steps {
@@ -119,7 +119,7 @@ spec:
                     //            recordIssues(enabledForFailure: true, tool: spotBugs())
                     //        }
                     //    }
-                    //}
+                    //} // end spotbugs
 
                     stage('PMD') {
                         steps {
@@ -132,7 +132,7 @@ spec:
                                 recordIssues(enabledForFailure: true, tool: pmdParser(pattern: 'target/pmd.xml'))
                             }
                         }
-                    }
+                    } // end pmd
                   
                     stage('Vulnerabilities') {
                         steps {
@@ -145,11 +145,45 @@ spec:
                                 dependencyCheckPublisher(failedTotalCritical : 100, unstableTotalCritical : 100)
                             }
                         }
-                    }
-                } // parallel
-            } // security checks
+                    } // end vulnerabilities
+                } // end parallel
+            } // end security checks
+			
+			stage('Push Docker') {
+				steps {
+					container('maven') {
+						script {
+							APP_NAME=pipelineParams.app_name
+							BRANCH_NAME="-"+BRANCH
+   
+							if (BRANCH_NAME == '-main' || BRANCH_NAME == '-master') {
+								APP_BRANCH = APP_NAME
+							}  else {
+								APP_BRANCH = APP_NAME+BRANCH_NAME
+							}
+							
+							sh "ls"
+							
+							// jh-demo-gateway
+							sh "cd gateway"
+							sh "mvn -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/jh-demo-gateway-dev:${POM_VERSION}-${BUILD_NUM} -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.container.ports=8080 -Djib.allowInsecureRegistries=true"
+							sh "mvn -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/jh-demo-gateway-dev:latest -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.container.ports=8080 -Djib.allowInsecureRegistries=true"
+							
+							// jh-demo-carapp
+							sh "cd ../carapp"
+							sh "mvn -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/jh-demo-carapp-dev:${POM_VERSION}-${BUILD_NUM} -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.container.ports=8080 -Djib.allowInsecureRegistries=true"
+							sh "mvn -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/jh-demo-carapp-dev:latest -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.container.ports=8080 -Djib.allowInsecureRegistries=true"
+							
+							// jh-demo-customerapp
+							sh "cd ../customerapp"
+							sh "mvn -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/jh-demo-customerapp-dev:${POM_VERSION}-${BUILD_NUM} -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.container.ports=8080 -Djib.allowInsecureRegistries=true"
+							sh "mvn -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/jh-demo-customerapp-dev:latest -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.container.ports=8080 -Djib.allowInsecureRegistries=true"
+						}
+					}
+				}
+			} // push docker
 
-        } // stages
+        } // end stages
 
         post {
             always {
