@@ -241,7 +241,7 @@ spec:
 
                                cd ../..
                                cp templates/template-application.yaml apps/jh-demo-carapp-application.yaml
-                               sed -i \"s|APP_BRANCH|carapp|g\" apps/jh-demo-carapp-application.yaml
+                               sed -i \"s|APP_BRANCH|jh-demo-carapp|g\" apps/jh-demo-carapp-application.yaml
                                cat apps/jh-demo-carapp-application.yaml
                             
                                cd apps
@@ -274,7 +274,7 @@ spec:
 
                                cd ../..
                                cp templates/template-application.yaml apps/jh-demo-customerapp-application.yaml
-                               sed -i \"s|APP_BRANCH|customerapp|g\" apps/jh-demo-customerapp-application.yaml
+                               sed -i \"s|APP_BRANCH|jh-demo-customerapp|g\" apps/jh-demo-customerapp-application.yaml
                                cat apps/jh-demo-customerapp-application.yaml
                             
                                cd apps
