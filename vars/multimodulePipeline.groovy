@@ -240,31 +240,31 @@ spec:
                                 cat virtualservice.yaml
 
                                cd ../..
-                               cp templates/template-application.yaml apps/carapp-application.yaml
-                               sed -i \"s|APP_BRANCH|carapp|g\" apps/carapp-application.yaml
-                               cat apps/carapp-application.yaml
+                               cp templates/template-application.yaml apps/jh-demo-carapp-application.yaml
+                               sed -i \"s|APP_BRANCH|carapp|g\" apps/jh-demo-carapp-application.yaml
+                               cat apps/jh-demo-carapp-application.yaml
                             
                                cd apps
-                               mkdir -p carapp
-                               cd carapp
+                               mkdir -p jh-demo-carapp
+                               cd jh-demo-carapp
                                cp ../../templates/app/jhipster-ms-postgres-deployment.yaml deployment.yaml
                                cp ../../templates/app/jhipster-ms-service.yaml service.yaml
                                cp ../../templates/app/serviceaccount.yaml .
                                cp ../../templates/app/namespace.yaml .
                                cp ../../templates/app/virtualservice-ms.yaml virtualservice.yaml
 
-                               sed -i \"s|APP_BRANCH|carapp|g\" deployment.yaml
+                               sed -i \"s|APP_BRANCH|jh-demo-carapp|g\" deployment.yaml
                                sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
                                sed -i \"s|VERSION|$POM_VERSION-$BUILD_NUM|g\" deployment.yaml
                                sed -i \"s|SERVICE_PORT|8081|g\" deployment.yaml
                                sed -i \"s|DB_NAME|carapp|g\" deployment.yaml
                                sed -i \"s|DB_USER|carapp|g\" deployment.yaml
                                sed -i \"s|DB_PWD|carapp|g\" deployment.yaml
-                               sed -i \"s|APP_BRANCH|carapp|g\" service.yaml
+                               sed -i \"s|APP_BRANCH|jh-demo-carapp|g\" service.yaml
                                sed -i \"s|SERVICE_PORT|8081|g\" service.yaml
-                               sed -i \"s|APP_BRANCH|carapp|g\" serviceaccount.yaml
-                               sed -i \"s|APP_BRANCH|carapp|g\" namespace.yaml
-                               sed -i \"s|APP_BRANCH|carapp|g\" virtualservice.yaml
+                               sed -i \"s|APP_BRANCH|jh-demo-carapp|g\" serviceaccount.yaml
+                               sed -i \"s|APP_BRANCH|jh-demo-carapp|g\" namespace.yaml
+                               sed -i \"s|APP_BRANCH|jh-demo-carapp|g\" virtualservice.yaml
 
                                cat namespace.yaml
                                cat deployment.yaml
@@ -273,31 +273,31 @@ spec:
                                cat virtualservice.yaml
 
                                cd ../..
-                               cp templates/template-application.yaml apps/customerapp-application.yaml
-                               sed -i \"s|APP_BRANCH|customerapp|g\" apps/customerapp-application.yaml
-                               cat apps/customerapp-application.yaml
+                               cp templates/template-application.yaml apps/jh-demo-customerapp-application.yaml
+                               sed -i \"s|APP_BRANCH|customerapp|g\" apps/jh-demo-customerapp-application.yaml
+                               cat apps/jh-demo-customerapp-application.yaml
                             
                                cd apps
-                               mkdir -p customerapp
-                               cd customerapp
+                               mkdir -p jh-demo-customerapp
+                               cd jh-demo-customerapp
                                cp ../../templates/app/jhipster-ms-postgres-deployment.yaml deployment.yaml
                                cp ../../templates/app/jhipster-ms-service.yaml service.yaml
                                cp ../../templates/app/serviceaccount.yaml .
                                cp ../../templates/app/namespace.yaml .
                                cp ../../templates/app/virtualservice-ms.yaml virtualservice.yaml
 
-                               sed -i \"s|APP_BRANCH|customerapp|g\" deployment.yaml
+                               sed -i \"s|APP_BRANCH|jh-demo-customerapp|g\" deployment.yaml
                                sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
                                sed -i \"s|VERSION|$POM_VERSION-$BUILD_NUM|g\" deployment.yaml
                                sed -i \"s|SERVICE_PORT|8082|g\" deployment.yaml
                                sed -i \"s|DB_NAME|customerapp|g\" deployment.yaml
                                sed -i \"s|DB_USER|customerapp|g\" deployment.yaml
                                sed -i \"s|DB_PWD|customerapp|g\" deployment.yaml
-                               sed -i \"s|APP_BRANCH|customerapp|g\" service.yaml
+                               sed -i \"s|APP_BRANCH|jh-demo-customerapp|g\" service.yaml
                                sed -i \"s|SERVICE_PORT|8082|g\" service.yaml
-                               sed -i \"s|APP_BRANCH|customerapp|g\" serviceaccount.yaml
-                               sed -i \"s|APP_BRANCH|customerapp|g\" namespace.yaml
-                               sed -i \"s|APP_BRANCH|customerapp|g\" virtualservice.yaml
+                               sed -i \"s|APP_BRANCH|jh-demo-customerapp|g\" serviceaccount.yaml
+                               sed -i \"s|APP_BRANCH|jh-demo-customerapp|g\" namespace.yaml
+                               sed -i \"s|APP_BRANCH|jh-demo-customerapp|g\" virtualservice.yaml
 
                                cat namespace.yaml
                                cat deployment.yaml
