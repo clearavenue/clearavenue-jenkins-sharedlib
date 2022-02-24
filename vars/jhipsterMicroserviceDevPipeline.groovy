@@ -205,6 +205,7 @@ spec:
                           sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
                           sed -i \"s|VERSION|$POM_VERSION-$BUILD_NUM|g\" deployment.yaml
                           sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" service.yaml
+                          sed -i \"s|SERVICE_PORT|8089|g\" service.yaml
                           sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" serviceaccount.yaml
                           sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" namespace.yaml
                           sed -i \"s|APP_BRANCH|$APP_BRANCH|g\" virtualservice.yaml
