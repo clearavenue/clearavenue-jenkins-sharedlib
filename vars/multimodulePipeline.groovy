@@ -225,9 +225,9 @@ spec:
                                 sed -i \"s|APP_BRANCH|jh-demo-gateway|g\" deployment.yaml
                                 sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
                                 sed -i \"s|VERSION|$POM_VERSION-$BUILD_NUM|g\" deployment.yaml
-                                sed -i \"s|DB_NAME|jh_demo_gateway|g\" deployment.yaml
-                                sed -i \"s|DB_USER|jh_demo_gateway|g\" deployment.yaml
-                                sed -i \"s|DB_PWD|jh_demo_gateway|g\" deployment.yaml
+                                sed -i \"s|DB_NAME|gateway|g\" deployment.yaml
+                                sed -i \"s|DB_USER|gateway|g\" deployment.yaml
+                                sed -i \"s|DB_PWD|gateway|g\" deployment.yaml
                                 sed -i \"s|APP_BRANCH|jh-demo-gateway|g\" service.yaml
                                 sed -i \"s|APP_BRANCH|jh-demo-gateway|g\" serviceaccount.yaml
                                 sed -i \"s|APP_BRANCH|jh-demo-gateway|g\" namespace.yaml
