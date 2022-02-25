@@ -165,26 +165,33 @@ spec:
 				steps {
 					container('maven') {
 						script {
-							APP_NAME=pipelineParams.app_name
+							GATEWAY_NAME="jh-demo-gateway"
+                            CARAPP_NAME="jh-demo-carapp"
+                            CUSTOMERAPP_NAME="jh-demo-customerapp"
+                            
 							BRANCH_NAME="-"+BRANCH
    
 							if (BRANCH_NAME == '-main' || BRANCH_NAME == '-master') {
-								APP_BRANCH = APP_NAME
+								GATEWAY_BRANCH = GATEWAY_NAME
+                                CARAPP_BRANCH = CARAPP_NAME
+                                CUSTOMERAPP_BRANCH = CUSTOMERAPP_NAME
 							}  else {
-								APP_BRANCH = APP_NAME+BRANCH_NAME
+                                GATEWAY_BRANCH = GATEWAY_NAME+BRANCH_NAME
+                                CARAPP_BRANCH = CARAPP_NAME+BRANCH_NAME
+                                CUSTOMERAPP_BRANCH = CUSTOMERAPP_NAME+BRANCH_NAME
 							}
 							
 							// jh-demo-gateway   -Djib.container.ports=8080
-							sh "mvn -pl gateway -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/jh-demo-gateway-dev:${POM_VERSION}-${BUILD_NUM} -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
-							sh "mvn -pl gateway -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/jh-demo-gateway-dev:latest -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
+							sh "mvn -pl gateway -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${GATEWAY_BRANCH}-dev:${POM_VERSION}-${BUILD_NUM} -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
+							sh "mvn -pl gateway -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${GATEWAY_BRANCH}-dev:latest -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
 							
 							// jh-demo-carapp    -Djib.container.ports=8081
-							sh "mvn -pl carapp -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/jh-demo-carapp-dev:${POM_VERSION}-${BUILD_NUM} -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
-							sh "mvn -pl carapp -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/jh-demo-carapp-dev:latest -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
+							sh "mvn -pl carapp -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${CARAPP_BRANCH}-dev:${POM_VERSION}-${BUILD_NUM} -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
+							sh "mvn -pl carapp -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${CARAPP_BRANCH}-dev:latest -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
 							
 							// jh-demo-customerapp  -Djib.container.ports=8082
-							sh "mvn -pl customerapp -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/jh-demo-customerapp-dev:${POM_VERSION}-${BUILD_NUM} -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
-							sh "mvn -pl customerapp -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/jh-demo-customerapp-dev:latest -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
+							sh "mvn -pl customerapp -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${CUSTOMERAPP_BRANCH}-dev:${POM_VERSION}-${BUILD_NUM} -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
+							sh "mvn -pl customerapp -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${CUSTOMERAPP_BRANCH}-dev:latest -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
 						}
 					}
 				}
@@ -197,41 +204,48 @@ spec:
 						script {
 							argoRepoUrl = "https://clearavenue:${GIT_CREDS_PSW}@github.com/clearavenue/argocd-dev-apps.git"
 
-							APP_NAME=pipelineParams.app_name
+							GATEWAY_NAME="jh-demo-gateway"
+                            CARAPP_NAME="jh-demo-carapp"
+                            CUSTOMERAPP_NAME="jh-demo-customerapp"
+                            
 							BRANCH_NAME="-"+BRANCH
-
+   
 							if (BRANCH_NAME == '-main' || BRANCH_NAME == '-master') {
-								APP_BRANCH = APP_NAME
+								GATEWAY_BRANCH = GATEWAY_NAME
+                                CARAPP_BRANCH = CARAPP_NAME
+                                CUSTOMERAPP_BRANCH = CUSTOMERAPP_NAME
 							}  else {
-								APP_BRANCH = APP_NAME+BRANCH_NAME
+                                GATEWAY_BRANCH = GATEWAY_NAME+BRANCH_NAME
+                                CARAPP_BRANCH = CARAPP_NAME+BRANCH_NAME
+                                CUSTOMERAPP_BRANCH = CUSTOMERAPP_NAME+BRANCH_NAME
 							}
 
 							sh """
                                 git clone $argoRepoUrl argocd
                                 cd argocd
-                                cp templates/template-application.yaml apps/jh-demo-gateway-application.yaml
-                                sed -i \"s|APP_BRANCH|jh-demo-gateway|g\" apps/jh-demo-gateway-application.yaml
-                                cat apps/jh-demo-gateway-application.yaml
+                                cp templates/template-application.yaml apps/${GATEWAY_BRANCH}-application.yaml
+                                sed -i \"s|APP_BRANCH|${GATEWAY_BRANCH}|g\" apps/${GATEWAY_BRANCH}-application.yaml
+                                cat apps/${GATEWAY_BRANCH}-application.yaml
                             
                                 cd apps
-                                mkdir -p jh-demo-gateway
-                                cd jh-demo-gateway
+                                mkdir -p ${GATEWAY_BRANCH}
+                                cd ${GATEWAY_BRANCH}
                                 cp ../../templates/app/jhipster-webapp-deployment.yaml deployment.yaml
                                 cp ../../templates/app/service.yaml .
                                 cp ../../templates/app/serviceaccount.yaml .
                                 cp ../../templates/app/namespace.yaml .
                                 cp ../../templates/app/virtualservice.yaml .
 
-                                sed -i \"s|APP_BRANCH|jh-demo-gateway|g\" deployment.yaml
+                                sed -i \"s|APP_BRANCH|${GATEWAY_BRANCH}|g\" deployment.yaml
                                 sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
                                 sed -i \"s|VERSION|$POM_VERSION-$BUILD_NUM|g\" deployment.yaml
                                 sed -i \"s|DB_NAME|gateway|g\" deployment.yaml
                                 sed -i \"s|DB_USER|gateway|g\" deployment.yaml
                                 sed -i \"s|DB_PWD|gateway|g\" deployment.yaml
-                                sed -i \"s|APP_BRANCH|jh-demo-gateway|g\" service.yaml
-                                sed -i \"s|APP_BRANCH|jh-demo-gateway|g\" serviceaccount.yaml
-                                sed -i \"s|APP_BRANCH|jh-demo-gateway|g\" namespace.yaml
-                                sed -i \"s|APP_BRANCH|jh-demo-gateway|g\" virtualservice.yaml
+                                sed -i \"s|APP_BRANCH|${GATEWAY_BRANCH}|g\" service.yaml
+                                sed -i \"s|APP_BRANCH|${GATEWAY_BRANCH}|g\" serviceaccount.yaml
+                                sed -i \"s|APP_BRANCH|${GATEWAY_BRANCH}|g\" namespace.yaml
+                                sed -i \"s|APP_BRANCH|${GATEWAY_BRANCH}|g\" virtualservice.yaml
 
                                 cat namespace.yaml
                                 cat deployment.yaml
@@ -240,31 +254,31 @@ spec:
                                 cat virtualservice.yaml
 
                                cd ../..
-                               cp templates/template-application.yaml apps/jh-demo-carapp-application.yaml
-                               sed -i \"s|APP_BRANCH|jh-demo-carapp|g\" apps/jh-demo-carapp-application.yaml
-                               cat apps/jh-demo-carapp-application.yaml
+                               cp templates/template-application.yaml apps/${CARAPP_BRANCH}-application.yaml
+                               sed -i \"s|APP_BRANCH|${CARAPP_BRANCH}|g\" apps/${CARAPP_BRANCH}-application.yaml
+                               cat apps/${CARAPP_BRANCH}-application.yaml
                             
                                cd apps
-                               mkdir -p jh-demo-carapp
-                               cd jh-demo-carapp
+                               mkdir -p ${CARAPP_BRANCH}
+                               cd ${CARAPP_BRANCH}
                                cp ../../templates/app/jhipster-ms-postgres-deployment.yaml deployment.yaml
                                cp ../../templates/app/jhipster-ms-service.yaml service.yaml
                                cp ../../templates/app/serviceaccount.yaml .
                                cp ../../templates/app/namespace.yaml .
                                cp ../../templates/app/virtualservice-ms.yaml virtualservice.yaml
 
-                               sed -i \"s|APP_BRANCH|jh-demo-carapp|g\" deployment.yaml
+                               sed -i \"s|APP_BRANCH|${CARAPP_BRANCH}|g\" deployment.yaml
                                sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
                                sed -i \"s|VERSION|$POM_VERSION-$BUILD_NUM|g\" deployment.yaml
                                sed -i \"s|SERVICE_PORT|8081|g\" deployment.yaml
                                sed -i \"s|DB_NAME|carapp|g\" deployment.yaml
                                sed -i \"s|DB_USER|carapp|g\" deployment.yaml
                                sed -i \"s|DB_PWD|carapp|g\" deployment.yaml
-                               sed -i \"s|APP_BRANCH|jh-demo-carapp|g\" service.yaml
+                               sed -i \"s|APP_BRANCH|${CARAPP_BRANCH}|g\" service.yaml
                                sed -i \"s|SERVICE_PORT|8081|g\" service.yaml
-                               sed -i \"s|APP_BRANCH|jh-demo-carapp|g\" serviceaccount.yaml
-                               sed -i \"s|APP_BRANCH|jh-demo-carapp|g\" namespace.yaml
-                               sed -i \"s|APP_BRANCH|jh-demo-carapp|g\" virtualservice.yaml
+                               sed -i \"s|APP_BRANCH|${CARAPP_BRANCH}|g\" serviceaccount.yaml
+                               sed -i \"s|APP_BRANCH|${CARAPP_BRANCH}|g\" namespace.yaml
+                               sed -i \"s|APP_BRANCH|${CARAPP_BRANCH}|g\" virtualservice.yaml
 
                                cat namespace.yaml
                                cat deployment.yaml
@@ -273,31 +287,31 @@ spec:
                                cat virtualservice.yaml
 
                                cd ../..
-                               cp templates/template-application.yaml apps/jh-demo-customerapp-application.yaml
-                               sed -i \"s|APP_BRANCH|jh-demo-customerapp|g\" apps/jh-demo-customerapp-application.yaml
-                               cat apps/jh-demo-customerapp-application.yaml
+                               cp templates/template-application.yaml apps/${CUSTOMERAPP_BRANCH}-application.yaml
+                               sed -i \"s|APP_BRANCH|${CUSTOMERAPP_BRANCH}|g\" apps/${CUSTOMERAPP_BRANCH}-application.yaml
+                               cat apps/${CUSTOMERAPP_BRANCH}-application.yaml
                             
                                cd apps
-                               mkdir -p jh-demo-customerapp
-                               cd jh-demo-customerapp
+                               mkdir -p ${CUSTOMERAPP_BRANCH}
+                               cd ${CUSTOMERAPP_BRANCH}
                                cp ../../templates/app/jhipster-ms-postgres-deployment.yaml deployment.yaml
                                cp ../../templates/app/jhipster-ms-service.yaml service.yaml
                                cp ../../templates/app/serviceaccount.yaml .
                                cp ../../templates/app/namespace.yaml .
                                cp ../../templates/app/virtualservice-ms.yaml virtualservice.yaml
 
-                               sed -i \"s|APP_BRANCH|jh-demo-customerapp|g\" deployment.yaml
+                               sed -i \"s|APP_BRANCH|${CUSTOMERAPP_BRANCH}|g\" deployment.yaml
                                sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
                                sed -i \"s|VERSION|$POM_VERSION-$BUILD_NUM|g\" deployment.yaml
                                sed -i \"s|SERVICE_PORT|8082|g\" deployment.yaml
                                sed -i \"s|DB_NAME|customerapp|g\" deployment.yaml
                                sed -i \"s|DB_USER|customerapp|g\" deployment.yaml
                                sed -i \"s|DB_PWD|customerapp|g\" deployment.yaml
-                               sed -i \"s|APP_BRANCH|jh-demo-customerapp|g\" service.yaml
+                               sed -i \"s|APP_BRANCH|${CUSTOMERAPP_BRANCH}|g\" service.yaml
                                sed -i \"s|SERVICE_PORT|8082|g\" service.yaml
-                               sed -i \"s|APP_BRANCH|jh-demo-customerapp|g\" serviceaccount.yaml
-                               sed -i \"s|APP_BRANCH|jh-demo-customerapp|g\" namespace.yaml
-                               sed -i \"s|APP_BRANCH|jh-demo-customerapp|g\" virtualservice.yaml
+                               sed -i \"s|APP_BRANCH|${CUSTOMERAPP_BRANCH}|g\" serviceaccount.yaml
+                               sed -i \"s|APP_BRANCH|${CUSTOMERAPP_BRANCH}|g\" namespace.yaml
+                               sed -i \"s|APP_BRANCH|${CUSTOMERAPP_BRANCH}|g\" virtualservice.yaml
 
                                cat namespace.yaml
                                cat deployment.yaml
@@ -310,7 +324,7 @@ spec:
                                git config --global user.email bill.hunt@clearavenue.com
                                git config --global user.name clearavenue
                                git add .
-                               git commit -am \"added $APP_BRANCH:$POM_VERSION-$BUILD_NUM to argoCD for deployment"
+                               git commit -am \"added ${GATEWAY_BRANCH} ${CARAPP_BRANCH} ${CUSTOMERAPP_BRANCH} :$POM_VERSION-$BUILD_NUM to argoCD for deployment"
                                git push
                             """
 						}
