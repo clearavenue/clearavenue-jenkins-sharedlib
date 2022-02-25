@@ -239,9 +239,9 @@ spec:
                                 sed -i \"s|APP_BRANCH|${GATEWAY_BRANCH}|g\" deployment.yaml
                                 sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
                                 sed -i \"s|VERSION|$POM_VERSION-$BUILD_NUM|g\" deployment.yaml
-                                sed -i \"s|DB_NAME|gateway|g\" deployment.yaml
-                                sed -i \"s|DB_USER|gateway|g\" deployment.yaml
-                                sed -i \"s|DB_PWD|gateway|g\" deployment.yaml
+                                sed -i \"s|DB_NAME|${GATEWAY_BRANCH}|g\" deployment.yaml
+                                sed -i \"s|DB_USER|${GATEWAY_BRANCH}|g\" deployment.yaml
+                                sed -i \"s|DB_PWD|${GATEWAY_BRANCH}|g\" deployment.yaml
                                 sed -i \"s|APP_BRANCH|${GATEWAY_BRANCH}|g\" service.yaml
                                 sed -i \"s|APP_BRANCH|${GATEWAY_BRANCH}|g\" serviceaccount.yaml
                                 sed -i \"s|APP_BRANCH|${GATEWAY_BRANCH}|g\" namespace.yaml
@@ -271,9 +271,9 @@ spec:
                                sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
                                sed -i \"s|VERSION|$POM_VERSION-$BUILD_NUM|g\" deployment.yaml
                                sed -i \"s|SERVICE_PORT|8080|g\" deployment.yaml
-                               sed -i \"s|DB_NAME|MS_1|g\" deployment.yaml
-                               sed -i \"s|DB_USER|MS_1|g\" deployment.yaml
-                               sed -i \"s|DB_PWD|MS_1|g\" deployment.yaml
+                               sed -i \"s|DB_NAME|${MS_1_BRANCH}|g\" deployment.yaml
+                               sed -i \"s|DB_USER|${MS_1_BRANCH}|g\" deployment.yaml
+                               sed -i \"s|DB_PWD|${MS_1_BRANCH}|g\" deployment.yaml
                                sed -i \"s|APP_BRANCH|${MS_1_BRANCH}|g\" service.yaml
                                sed -i \"s|SERVICE_PORT|8080|g\" service.yaml
                                sed -i \"s|APP_BRANCH|${MS_1_BRANCH}|g\" serviceaccount.yaml
@@ -304,9 +304,9 @@ spec:
                                sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
                                sed -i \"s|VERSION|$POM_VERSION-$BUILD_NUM|g\" deployment.yaml
                                sed -i \"s|SERVICE_PORT|8080|g\" deployment.yaml
-                               sed -i \"s|DB_NAME|MS_2|g\" deployment.yaml
-                               sed -i \"s|DB_USER|MS_2|g\" deployment.yaml
-                               sed -i \"s|DB_PWD|MS_2|g\" deployment.yaml
+                               sed -i \"s|DB_NAME|${MS_2_BRANCH}|g\" deployment.yaml
+                               sed -i \"s|DB_USER|${MS_2_BRANCH}|g\" deployment.yaml
+                               sed -i \"s|DB_PWD|${MS_2_BRANCH}|g\" deployment.yaml
                                sed -i \"s|APP_BRANCH|${MS_2_BRANCH}|g\" service.yaml
                                sed -i \"s|SERVICE_PORT|8080|g\" service.yaml
                                sed -i \"s|APP_BRANCH|${MS_2_BRANCH}|g\" serviceaccount.yaml
