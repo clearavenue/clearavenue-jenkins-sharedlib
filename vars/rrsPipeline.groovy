@@ -221,37 +221,43 @@ spec:
 							}
 
 							sh """
-                                git clone $argoRepoUrl argocd
-                                cd argocd
-                                cp templates/template-application.yaml apps/${GATEWAY_BRANCH}-application.yaml
-                                sed -i \"s|APP_BRANCH|${GATEWAY_BRANCH}|g\" apps/${GATEWAY_BRANCH}-application.yaml
-                                cat apps/${GATEWAY_BRANCH}-application.yaml
+                               git clone $argoRepoUrl argocd
+                               cd argocd
+                               cp templates/template-application.yaml apps/${GATEWAY_BRANCH}-application.yaml
+                               sed -i \"s|APP_BRANCH|${GATEWAY_BRANCH}|g\" apps/${GATEWAY_BRANCH}-application.yaml
+                               cat apps/${GATEWAY_BRANCH}-application.yaml
                             
-                                cd apps
-                                mkdir -p ${GATEWAY_BRANCH}
-                                cd ${GATEWAY_BRANCH}
-                                cp ../../templates/app/jhipster-webapp-deployment.yaml deployment.yaml
-                                cp ../../templates/app/service.yaml .
-                                cp ../../templates/app/serviceaccount.yaml .
-                                cp ../../templates/app/namespace.yaml .
-                                cp ../../templates/app/virtualservice.yaml .
+                               cd apps
+                               mkdir -p ${GATEWAY_BRANCH}
+                               cd ${GATEWAY_BRANCH}
+                               cp ../../templates/app/jhipster-webapp-deployment.yaml deployment.yaml
+                               cp ../../templates/app/service.yaml .
+                               cp ../../templates/app/serviceaccount.yaml .
+                               cp ../../templates/app/namespace.yaml .
+                               cp ../../templates/app/postgresql.yaml .
+                               cp ../../templates/app/elasticsearch.yaml .
+                               cp ../../templates/app/virtualservice.yaml .
 
-                                sed -i \"s|APP_BRANCH|${GATEWAY_BRANCH}|g\" deployment.yaml
-                                sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
-                                sed -i \"s|VERSION|$POM_VERSION-$BUILD_NUM|g\" deployment.yaml
-                                sed -i \"s|DB_NAME|${GATEWAY_BRANCH}|g\" deployment.yaml
-                                sed -i \"s|DB_USER|${GATEWAY_BRANCH}|g\" deployment.yaml
-                                sed -i \"s|DB_PWD|${GATEWAY_BRANCH}|g\" deployment.yaml
-                                sed -i \"s|APP_BRANCH|${GATEWAY_BRANCH}|g\" service.yaml
-                                sed -i \"s|APP_BRANCH|${GATEWAY_BRANCH}|g\" serviceaccount.yaml
-                                sed -i \"s|APP_BRANCH|${GATEWAY_BRANCH}|g\" namespace.yaml
-                                sed -i \"s|APP_BRANCH|${GATEWAY_BRANCH}|g\" virtualservice.yaml
+                               sed -i \"s|APP_BRANCH|${GATEWAY_BRANCH}|g\" deployment.yaml
+                               sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
+                               sed -i \"s|VERSION|$POM_VERSION-$BUILD_NUM|g\" deployment.yaml
+                               sed -i \"s|DB_NAME|${GATEWAY_BRANCH}|g\" deployment.yaml
+                               sed -i \"s|DB_USER|${GATEWAY_BRANCH}|g\" deployment.yaml
+                               sed -i \"s|DB_PWD|${GATEWAY_BRANCH}|g\" deployment.yaml
+                               sed -i \"s|APP_BRANCH|${GATEWAY_BRANCH}|g\" service.yaml
+                               sed -i \"s|APP_BRANCH|${GATEWAY_BRANCH}|g\" serviceaccount.yaml
+                               sed -i \"s|APP_BRANCH|${GATEWAY_BRANCH}|g\" namespace.yaml
+                               sed -i \"s|APP_BRANCH|${GATEWAY_BRANCH}|g\" virtualservice.yaml
+                               sed -i \"s|APP_BRANCH|${GATEWAY_BRANCH}|g\" postgresql.yaml
+                               sed -i \"s|APP_BRANCH|${GATEWAY_BRANCH}|g\" elasticsearch.yaml
 
-                                cat namespace.yaml
-                                cat deployment.yaml
-                                cat service.yaml
-                                cat serviceaccount.yaml
-                                cat virtualservice.yaml
+                               cat namespace.yaml
+                               cat deployment.yaml
+                               cat service.yaml
+                               cat serviceaccount.yaml
+                               cat virtualservice.yaml
+                               cat postgresql.yaml
+                               cat elasticsearch.yaml
 
                                cd ../..
                                cp templates/template-application.yaml apps/${MS_1_BRANCH}-application.yaml
@@ -266,6 +272,8 @@ spec:
                                cp ../../templates/app/serviceaccount.yaml .
                                cp ../../templates/app/namespace.yaml .
                                cp ../../templates/app/virtualservice-ms.yaml virtualservice.yaml
+                               cp ../../templates/app/elasticsearch.yaml .
+                               cp ../../templates/app/virtualservice.yaml .
 
                                sed -i \"s|APP_BRANCH|${MS_1_BRANCH}|g\" deployment.yaml
                                sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
@@ -279,12 +287,16 @@ spec:
                                sed -i \"s|APP_BRANCH|${MS_1_BRANCH}|g\" serviceaccount.yaml
                                sed -i \"s|APP_BRANCH|${MS_1_BRANCH}|g\" namespace.yaml
                                sed -i \"s|APP_BRANCH|${MS_1_BRANCH}|g\" virtualservice.yaml
+                               sed -i \"s|APP_BRANCH|${MS_1_BRANCH}|g\" postgresql.yaml
+                               sed -i \"s|APP_BRANCH|${MS_1_BRANCH}|g\" elasticsearch.yaml
 
                                cat namespace.yaml
                                cat deployment.yaml
                                cat service.yaml
                                cat serviceaccount.yaml
                                cat virtualservice.yaml
+                               cat postgresql.yaml
+                               cat elasticsearch.yaml
 
                                cd ../..
                                cp templates/template-application.yaml apps/${MS_2_BRANCH}-application.yaml
@@ -299,6 +311,8 @@ spec:
                                cp ../../templates/app/serviceaccount.yaml .
                                cp ../../templates/app/namespace.yaml .
                                cp ../../templates/app/virtualservice-ms.yaml virtualservice.yaml
+                               cp ../../templates/app/elasticsearch.yaml .
+                               cp ../../templates/app/virtualservice.yaml .
 
                                sed -i \"s|APP_BRANCH|${MS_2_BRANCH}|g\" deployment.yaml
                                sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
@@ -312,12 +326,16 @@ spec:
                                sed -i \"s|APP_BRANCH|${MS_2_BRANCH}|g\" serviceaccount.yaml
                                sed -i \"s|APP_BRANCH|${MS_2_BRANCH}|g\" namespace.yaml
                                sed -i \"s|APP_BRANCH|${MS_2_BRANCH}|g\" virtualservice.yaml
+                               sed -i \"s|APP_BRANCH|${MS_2_BRANCH}|g\" postgresql.yaml
+                               sed -i \"s|APP_BRANCH|${MS_2_BRANCH}|g\" elasticsearch.yaml
 
                                cat namespace.yaml
                                cat deployment.yaml
                                cat service.yaml
                                cat serviceaccount.yaml
                                cat virtualservice.yaml
+                               cat postgresql.yaml
+                               cat elasticsearch.yaml
 
                                cd ../..
                         
