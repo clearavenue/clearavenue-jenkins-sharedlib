@@ -273,7 +273,7 @@ spec:
                                cp ../../templates/app/namespace.yaml .
                                cp ../../templates/app/virtualservice-ms.yaml virtualservice.yaml
                                cp ../../templates/app/elasticsearch.yaml .
-                               cp ../../templates/app/virtualservice.yaml .
+                               cp ../../templates/app/postgresql.yaml .
 
                                sed -i \"s|APP_BRANCH|${MS_1_BRANCH}|g\" deployment.yaml
                                sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
@@ -312,7 +312,7 @@ spec:
                                cp ../../templates/app/namespace.yaml .
                                cp ../../templates/app/virtualservice-ms.yaml virtualservice.yaml
                                cp ../../templates/app/elasticsearch.yaml .
-                               cp ../../templates/app/virtualservice.yaml .
+                               cp ../../templates/app/postgresql.yaml .
 
                                sed -i \"s|APP_BRANCH|${MS_2_BRANCH}|g\" deployment.yaml
                                sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
