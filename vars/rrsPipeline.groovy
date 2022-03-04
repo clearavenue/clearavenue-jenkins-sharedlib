@@ -149,7 +149,7 @@ spec:
                     stage('Vulnerabilities') {
                         steps {
                             container('jhipster') {
-                                sh "./mvnw -B -e -T 1C org.owasp:dependency-check-maven:7.0.0:aggregate -Dformat=xml" -DfailOnError=false // -DfailBuildOnCVSS=10"
+                                sh "./mvnw -B -e -T 1C org.owasp:dependency-check-maven:7.0.0:aggregate -Dformat=xml -DfailOnError=false" // -DfailBuildOnCVSS=10"
                             }
                         }
                         post {
