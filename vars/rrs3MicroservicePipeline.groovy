@@ -166,23 +166,32 @@ spec:
 					container('maven') {
 						script {
 							GATEWAY_NAME="reservationapp"
-                            MS_1_NAME="reservationservice"
+                            MS_1_NAME="reservationevents"
+                            MS_2_NAME="reservationresources"
                             
 							BRANCH_NAME="-"+BRANCH
    
 							if (BRANCH_NAME == '-main' || BRANCH_NAME == '-master') {
 								GATEWAY_BRANCH = GATEWAY_NAME
                                 MS_1_BRANCH = MS_1_NAME
+                                MS_2_BRANCH = MS_2_NAME
 							}  else {
                                 GATEWAY_BRANCH = GATEWAY_NAME+BRANCH_NAME
                                 MS_1_BRANCH = MS_1_NAME+BRANCH_NAME
+                                MS_2_BRANCH = MS_2_NAME+BRANCH_NAME
 							}
 							
+							// jh-demo-gateway   -Djib.container.ports=8080
 							sh "mvn -pl ${GATEWAY_NAME} -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${GATEWAY_BRANCH}-dev:${POM_VERSION}-${BUILD_NUM} -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
 							sh "mvn -pl ${GATEWAY_NAME} -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${GATEWAY_BRANCH}-dev:latest -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
 							
+							// jh-demo-MS_1    -Djib.container.ports=8081
 							sh "mvn -pl ${MS_1_NAME} -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${MS_1_BRANCH}-dev:${POM_VERSION}-${BUILD_NUM} -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
 							sh "mvn -pl ${MS_1_NAME} -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${MS_1_BRANCH}-dev:latest -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
+							
+							// jh-demo-MS_2  -Djib.container.ports=8082
+							sh "mvn -pl ${MS_2_NAME} -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${MS_2_BRANCH}-dev:${POM_VERSION}-${BUILD_NUM} -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
+							sh "mvn -pl ${MS_2_NAME} -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${MS_2_BRANCH}-dev:latest -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
 						}
 					}
 				}
@@ -196,16 +205,19 @@ spec:
 							argoRepoUrl = "https://clearavenue:${GIT_CREDS_PSW}@github.com/clearavenue/argocd-dev-apps.git"
 
 							GATEWAY_NAME="reservationapp"
-                            MS_1_NAME="reservationservice"
+                            MS_1_NAME="reservationevents"
+                            MS_2_NAME="reservationresources"
                             
 							BRANCH_NAME="-"+BRANCH
    
 							if (BRANCH_NAME == '-main' || BRANCH_NAME == '-master') {
 								GATEWAY_BRANCH = GATEWAY_NAME
                                 MS_1_BRANCH = MS_1_NAME
+                                MS_2_BRANCH = MS_2_NAME
 							}  else {
                                 GATEWAY_BRANCH = GATEWAY_NAME+BRANCH_NAME
                                 MS_1_BRANCH = MS_1_NAME+BRANCH_NAME
+                                MS_2_BRANCH = MS_2_NAME+BRANCH_NAME
 							}
 
 							sh """
@@ -287,11 +299,50 @@ spec:
                                cat elasticsearch.yaml
 
                                cd ../..
+                               cp templates/template-application.yaml apps/${MS_2_BRANCH}-application.yaml
+                               sed -i \"s|APP_BRANCH|${MS_2_BRANCH}|g\" apps/${MS_2_BRANCH}-application.yaml
+                               cat apps/${MS_2_BRANCH}-application.yaml
+                            
+                               cd apps
+                               mkdir -p ${MS_2_BRANCH}
+                               cd ${MS_2_BRANCH}
+                               cp ../../templates/app/jhipster-ms-postgres-deployment.yaml deployment.yaml
+                               cp ../../templates/app/jhipster-ms-service.yaml service.yaml
+                               cp ../../templates/app/serviceaccount.yaml .
+                               cp ../../templates/app/namespace.yaml .
+                               cp ../../templates/app/virtualservice-ms.yaml virtualservice.yaml
+                               cp ../../templates/app/elasticsearch.yaml .
+                               cp ../../templates/app/postgresql.yaml .
+
+                               sed -i \"s|APP_BRANCH|${MS_2_BRANCH}|g\" deployment.yaml
+                               sed -i \"s|DOCKERUSER|$DOCKER_CREDS_USR|g\" deployment.yaml
+                               sed -i \"s|VERSION|$POM_VERSION-$BUILD_NUM|g\" deployment.yaml
+                               sed -i \"s|SERVICE_PORT|8080|g\" deployment.yaml
+                               sed -i \"s|DB_NAME|${MS_2_BRANCH}|g\" deployment.yaml
+                               sed -i \"s|DB_USER|${MS_2_BRANCH}|g\" deployment.yaml
+                               sed -i \"s|DB_PWD|${MS_2_BRANCH}|g\" deployment.yaml
+                               sed -i \"s|APP_BRANCH|${MS_2_BRANCH}|g\" service.yaml
+                               sed -i \"s|SERVICE_PORT|8080|g\" service.yaml
+                               sed -i \"s|APP_BRANCH|${MS_2_BRANCH}|g\" serviceaccount.yaml
+                               sed -i \"s|APP_BRANCH|${MS_2_BRANCH}|g\" namespace.yaml
+                               sed -i \"s|APP_BRANCH|${MS_2_BRANCH}|g\" virtualservice.yaml
+                               sed -i \"s|APP_BRANCH|${MS_2_BRANCH}|g\" postgresql.yaml
+                               sed -i \"s|APP_BRANCH|${MS_2_BRANCH}|g\" elasticsearch.yaml
+
+                               cat namespace.yaml
+                               cat deployment.yaml
+                               cat service.yaml
+                               cat serviceaccount.yaml
+                               cat virtualservice.yaml
+                               cat postgresql.yaml
+                               cat elasticsearch.yaml
+
+                               cd ../..
                         
                                git config --global user.email bill.hunt@clearavenue.com
                                git config --global user.name clearavenue
                                git add .
-                               git commit -am \"added ${GATEWAY_BRANCH} ${MS_1_BRANCH} :$POM_VERSION-$BUILD_NUM to argoCD for deployment"
+                               git commit -am \"added ${GATEWAY_BRANCH} ${MS_1_BRANCH} ${MS_2_BRANCH} :$POM_VERSION-$BUILD_NUM to argoCD for deployment"
                                git push
                             """
 						}
