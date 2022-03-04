@@ -84,7 +84,7 @@ spec:
             stage('JUnit') {
                 steps {
                     container('jhipster') {
-                        sh "./mvnw -B -e -T 1C test"
+                        sh "./mvnw -B -e -T 1C ${BUILD_PROFILE} test"
                         //junit 'target/surefire-reports/**/*.xml'
                     }
                 }
@@ -95,7 +95,7 @@ spec:
                     stage('Checkstyle code') {
                         steps {
                             container('jhipster') {
-                                sh "./mvnw -B -e -T 1C org.apache.maven.plugins:maven-checkstyle-plugin:3.1.2:checkstyle -Dcheckstyle.config.location=google_checks.xml"
+                                sh "./mvnw -B -e -T 1C ${BUILD_PROFILE} org.apache.maven.plugins:maven-checkstyle-plugin:3.1.2:checkstyle -Dcheckstyle.config.location=google_checks.xml"
                             }
                         }
                         post {
@@ -108,7 +108,7 @@ spec:
                     //stage('CodeCoverage') {
                     //    steps {
                     //        container('jhipster') {
-                    //            sh "./mvnw -B -e -T 1C org.jacoco:jacoco-maven-plugin:0.8.7:prepare-agent verify org.jacoco:jacoco-maven-plugin:0.8.7:report"
+                    //            sh "./mvnw -B -e -T 1C ${BUILD_PROFILE} org.jacoco:jacoco-maven-plugin:0.8.7:prepare-agent verify org.jacoco:jacoco-maven-plugin:0.8.7:report"
                     //            jacoco(execPattern: 'target/jacoco.exec', classPattern: 'target/classes', sourcePattern: 'src/main/java', exclusionPattern: 'src/test*', changeBuildStatus: false,
                     //                   minimumInstructionCoverage : '30', maximumInstructionCoverage : '31',
                     //                   minimumBranchCoverage : '30', maximumBranchCoverage : '31',
@@ -123,7 +123,7 @@ spec:
                     //stage('SpotBugs') {
                     //    steps {
                     //       container('jhipster') {
-                    //            sh "./mvnw -B -e -T 1C com.github.spotbugs:spotbugs-maven-plugin:4.5.3.0:check -Dspotbugs.effort=Max -Dspotbugs.threshold=Low -Dspotbugs.failOnError=false"
+                    //            sh "./mvnw -B -e -T 1C ${BUILD_PROFILE} com.github.spotbugs:spotbugs-maven-plugin:4.5.3.0:check -Dspotbugs.effort=Max -Dspotbugs.threshold=Low -Dspotbugs.failOnError=false"
                     //        }
                     //    }
                     //    post {
@@ -136,7 +136,7 @@ spec:
                     stage('PMD') {
                         steps {
                             container('jhipster') {
-                                sh "./mvnw -B -e org.apache.maven.plugins:maven-jxr-plugin:3.1.1:jxr org.apache.maven.plugins:maven-pmd-plugin:3.14.0:pmd"
+                                sh "./mvnw -B -e ${BUILD_PROFILE} org.apache.maven.plugins:maven-jxr-plugin:3.1.1:jxr org.apache.maven.plugins:maven-pmd-plugin:3.14.0:pmd"
                             }
                         }
                         post {
@@ -149,7 +149,7 @@ spec:
                     stage('Vulnerabilities') {
                         steps {
                             container('jhipster') {
-                                sh "./mvnw -B -e -T 1C org.owasp:dependency-check-maven:7.0.0:aggregate -Dformat=xml -DfailOnError=false" // -DfailBuildOnCVSS=10"
+                                sh "./mvnw -B -e -T 1C ${BUILD_PROFILE} org.owasp:dependency-check-maven:7.0.0:aggregate -Dformat=xml -DfailOnError=false" // -DfailBuildOnCVSS=10"
                             }
                         }
                         post {
@@ -178,11 +178,11 @@ spec:
                                 MS_1_BRANCH = MS_1_NAME+BRANCH_NAME
 							}
 							
-							sh "mvn -pl ${GATEWAY_NAME} -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${GATEWAY_BRANCH}-dev:${POM_VERSION}-${BUILD_NUM} -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
-							sh "mvn -pl ${GATEWAY_NAME} -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${GATEWAY_BRANCH}-dev:latest -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
+							sh "mvn -pl ${GATEWAY_NAME} -B -e -T 1C ${BUILD_PROFILE} package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${GATEWAY_BRANCH}-dev:${POM_VERSION}-${BUILD_NUM} -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
+							sh "mvn -pl ${GATEWAY_NAME} -B -e -T 1C ${BUILD_PROFILE} package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${GATEWAY_BRANCH}-dev:latest -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
 							
-							sh "mvn -pl ${MS_1_NAME} -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${MS_1_BRANCH}-dev:${POM_VERSION}-${BUILD_NUM} -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
-							sh "mvn -pl ${MS_1_NAME} -B -e -T 1C package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${MS_1_BRANCH}-dev:latest -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
+							sh "mvn -pl ${MS_1_NAME} -B -e -T 1C ${BUILD_PROFILE} package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${MS_1_BRANCH}-dev:${POM_VERSION}-${BUILD_NUM} -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
+							sh "mvn -pl ${MS_1_NAME} -B -e -T 1C ${BUILD_PROFILE} package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${MS_1_BRANCH}-dev:latest -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
 						}
 					}
 				}
