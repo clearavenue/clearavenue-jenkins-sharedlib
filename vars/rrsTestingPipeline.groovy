@@ -16,7 +16,7 @@ metadata:
 spec:
   containers:
   - name: node
-    image 'node:lts-buster-slim'
+    image: node:lts-buster-slim
     securityContext:
        privileged: true
     command:
