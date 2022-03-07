@@ -110,7 +110,8 @@ spec:
 					container('nodejs'){
 						sh '''
                                cd reservationapp
-                                npm test
+                               npm install
+                               npm test
                         '''
 					}
 				}
