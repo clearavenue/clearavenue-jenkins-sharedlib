@@ -100,6 +100,7 @@ spec:
 			APP_BRANCH="dummy"
 
 			WEB_APP="https://reservationapp.dev-devsecops.clearavenue.com"
+			NPM_CONFIG_CACHE = "${WORKSPACE}/.npm"
 		}
 
 		stages {
