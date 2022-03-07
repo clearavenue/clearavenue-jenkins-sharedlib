@@ -98,7 +98,6 @@ spec:
                                cd reservationapp
                                 npm test
                         '''
-						]
 					}
 				}
 			} // end selenium tests
