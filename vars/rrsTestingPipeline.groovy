@@ -18,6 +18,7 @@ spec:
   - name: jhipster
     image: jhipster/jhipster:v7.6.0
     securityContext:
+      runAsUser: 0
       privileged: true
     command:
     - cat
