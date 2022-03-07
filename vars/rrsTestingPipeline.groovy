@@ -40,6 +40,19 @@ spec:
       limits:
         ephemeral-storage: 5Gi
 
+  - name: nodejs
+    image: node:latest
+    securityContext:
+      privileged: true
+    command:
+    - cat
+    tty: true
+    resources:
+      requests:
+        ephemeral-storage: 1Gi
+      limits:
+        ephemeral-storage: 5Gi
+
   - name: jnlp
     resources:
       requests:
@@ -93,7 +106,7 @@ spec:
 
 			stage('E2E Test') {
 				steps {
-					container('maven'){
+					container('nodejs'){
 						sh '''
                                cd reservationapp
                                 npm test
