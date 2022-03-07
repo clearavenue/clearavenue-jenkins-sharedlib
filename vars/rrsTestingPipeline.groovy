@@ -93,7 +93,7 @@ spec:
 
 			stage('E2E Test') {
 				steps {
-					container('maven'){
+					container('nodejs'){
 						sh '''
                                cd reservationapp
                                 npm test
