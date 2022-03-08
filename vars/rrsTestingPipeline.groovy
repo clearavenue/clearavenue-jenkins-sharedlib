@@ -98,7 +98,7 @@ spec:
 						sh '''
                                cd reservationapp
                                npm install
-                               npx cypress run
+                               npx cypress run --headless
                         '''
 					}
 				}
