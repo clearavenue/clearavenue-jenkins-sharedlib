@@ -94,9 +94,10 @@ spec:
 			
 			stage('Cypress Test') {
 				steps {
-					container('cypress'){
+					container('nodejs'){
 						sh '''
                                cd reservationapp
+                               npm install
                                npx cypress run
                         '''
 					}
