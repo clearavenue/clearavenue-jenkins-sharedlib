@@ -57,7 +57,7 @@ spec:
 		environment {
 			GIT_CREDS=credentials('bill.hunt-github')
 
-			WEB_APP=pipelineParams.webUrl
+			WEB_APP="${pipelineParams.webUrl}"
 			
 			NPM_CONFIG_CACHE="${WORKSPACE}/.npm"
 			CYPRESS_CACHE_FOLDER="${WORKSPACE}/.cache/Cypress"
