@@ -27,19 +27,6 @@ spec:
       mountPath: /zap/wrk/
       readOnly: false
 
-  - name: jhipster
-    image: jhipster/jhipster:v7.6.0
-    securityContext:
-      privileged: true
-    command:
-    - cat
-    tty: true
-    resources:
-      requests:
-        ephemeral-storage: 1Gi
-      limits:
-        ephemeral-storage: 5Gi
-
   - name: nodejs
     image: node:latest
     securityContext:
@@ -60,30 +47,6 @@ spec:
       limits:
         ephemeral-storage: 5Gi
 
-  - name: maven
-    image: maven:3.6-jdk-11-slim
-    securityContext:
-      privileged: true
-    command:
-    - cat
-    tty: true
-    resources:
-      requests:
-        ephemeral-storage: 1Gi
-      limits:
-        ephemeral-storage: 5Gi
-
-  - name: git
-    image: bitnami/git:latest
-    command:
-    - cat
-    tty: true
-    resources:
-      requests:
-        ephemeral-storage: 1Gi
-      limits:
-        ephemeral-storage: 5Gi
-
   volumes:
   - name: zap-report-volume
     emptyDir: {}
@@ -92,21 +55,18 @@ spec:
 		}
 
 		environment {
-			POM_VERSION=readMavenPom().getVersion()
-			BUILD_NUM=currentBuild.getNumber()
-			DOCKER_CREDS=credentials('docker')
 			GIT_CREDS=credentials('bill.hunt-github')
-			BRANCH = env.GIT_BRANCH.toLowerCase()
-			APP_BRANCH="dummy"
 
-			WEB_APP="https://reservationapp.dev-devsecops.clearavenue.com"
+			WEB_APP=pipelineParams.webUrl
+			
 			NPM_CONFIG_CACHE="${WORKSPACE}/.npm"
 			CYPRESS_CACHE_FOLDER="${WORKSPACE}/.cache/Cypress"
+			CYPRESS_BASE_URL="${WEB_APP}"
 		}
 
 		stages {
 
-			stage('E2E Test') {
+			stage('Jest Test') {
 				steps {
 					container('nodejs'){
 						sh '''
@@ -116,7 +76,21 @@ spec:
                         '''
 					}
 				}
-			} // end selenium tests
+			} // end jest tests
+			
+			
+			stage('Cypress Test') {
+				steps {
+					container('nodejs'){
+						sh '''
+                               cd reservationapp
+                               npx cypress run
+                        '''
+					}
+				}
+			} // end cypress tests
+			
+			
 		} // end stages
 
 		post {
