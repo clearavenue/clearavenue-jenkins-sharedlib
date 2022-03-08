@@ -41,7 +41,7 @@ spec:
         ephemeral-storage: 5Gi
 
   - name: cypress
-    image: cypress/included:9.5.1
+    image: cypress/base:latest
     securityContext:
       privileged: true
     command:
@@ -94,11 +94,11 @@ spec:
 			
 			stage('Cypress Test') {
 				steps {
-					container('nodejs'){
+					container('cypress'){
 						sh '''
                                cd reservationapp
                                npm install
-                               npx cypress run --headless
+                               npx cypress run
                         '''
 					}
 				}
