@@ -97,6 +97,7 @@ spec:
 					container('cypress'){
 						sh '''
                                cd reservationapp
+                               rm package-lock.json
                                npm install
                                npx cypress run
                         '''
