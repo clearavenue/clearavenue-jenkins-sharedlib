@@ -75,6 +75,7 @@ spec:
 			NPM_CONFIG_CACHE="${WORKSPACE}/.npm"
 			CYPRESS_CACHE_FOLDER="${WORKSPACE}/.cache/Cypress"
 			CYPRESS_BASE_URL="${WEB_APP}"
+			ELECTRON_ENABLE_LOGGING="false"
 		}
 
 		stages {
