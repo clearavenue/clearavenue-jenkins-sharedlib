@@ -178,11 +178,11 @@ spec:
                                 MS_1_BRANCH = MS_1_NAME+BRANCH_NAME
 							}
 							
-							sh "mvn -pl ${GATEWAY_NAME} -B -e -T 1C ${BUILD_PROFILE} package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${GATEWAY_BRANCH}:${POM_VERSION}-${BUILD_NUM} -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
-							sh "mvn -pl ${GATEWAY_NAME} -B -e -T 1C ${BUILD_PROFILE} package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${GATEWAY_BRANCH}:latest -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
+							sh "mvn -pl ${GATEWAY_NAME} -B -e -T 1C ${BUILD_PROFILE} package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${GATEWAY_BRANCH}-dev:${POM_VERSION}-${BUILD_NUM} -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
+							sh "mvn -pl ${GATEWAY_NAME} -B -e -T 1C ${BUILD_PROFILE} package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${GATEWAY_BRANCH}-dev:latest -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
 							
-							sh "mvn -pl ${MS_1_NAME} -B -e -T 1C ${BUILD_PROFILE} package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${MS_1_BRANCH}:${POM_VERSION}-${BUILD_NUM} -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
-							sh "mvn -pl ${MS_1_NAME} -B -e -T 1C ${BUILD_PROFILE} package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${MS_1_BRANCH}:latest -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
+							sh "mvn -pl ${MS_1_NAME} -B -e -T 1C ${BUILD_PROFILE} package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${MS_1_BRANCH}-dev:${POM_VERSION}-${BUILD_NUM} -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
+							sh "mvn -pl ${MS_1_NAME} -B -e -T 1C ${BUILD_PROFILE} package com.google.cloud.tools:jib-maven-plugin:3.2.0:build -Dimage=${DOCKER_CREDS_USR}/${MS_1_BRANCH}-dev:latest -DskipTests -Djib.to.auth.username=${DOCKER_CREDS_USR} -Djib.to.auth.password=${DOCKER_CREDS_PSW} -Djib.allowInsecureRegistries=true"
 						}
 					}
 				}
@@ -193,7 +193,7 @@ spec:
 					container('git') {
 
 						script {
-							argoRepoUrl = "https://clearavenue:${GIT_CREDS_PSW}@github.com/clearavenue/argocd-apps.git"
+							argoRepoUrl = "https://clearavenue:${GIT_CREDS_PSW}@github.com/clearavenue/argocd-dev-apps.git"
 
 							GATEWAY_NAME="reservationapp"
                             MS_1_NAME="reservationservice"
