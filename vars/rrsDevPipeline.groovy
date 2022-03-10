@@ -99,7 +99,9 @@ spec:
 		stages {
 			stage('Build') {
 				when {
-					environment name: 'INTEGRATION_TESTING', value: 'false'
+					expression {
+						return params.INTEGRATION_TESTING != 'true'
+					}
 				}
 				steps {
 					container('jhipster') {
@@ -114,7 +116,9 @@ spec:
 
 			stage('JUnit') {
 				when {
-					environment name: 'INTEGRATION_TESTING', value: 'false'
+					expression {
+						return params.INTEGRATION_TESTING != 'true'
+					}
 				}
 				steps {
 					container('jhipster') {
@@ -126,7 +130,9 @@ spec:
 
 			stage('SecurityChecks') {
 				when {
-					environment name: 'INTEGRATION_TESTING', value: 'false'
+					expression {
+						return params.INTEGRATION_TESTING != 'true'
+					}
 				}
 				parallel {
 					stage('Checkstyle code') {
@@ -200,7 +206,9 @@ spec:
 
 			stage('Push Docker') {
 				when {
-					environment name: 'INTEGRATION_TESTING', value: 'false'
+					expression {
+						return params.INTEGRATION_TESTING != 'true'
+					}
 				}
 				steps {
 					container('maven') {
@@ -230,7 +238,9 @@ spec:
 
 			stage('argoCD') {
 				when {
-					environment name: 'INTEGRATION_TESTING', value: 'false'
+					expression {
+						return params.INTEGRATION_TESTING != 'true'
+					}
 				}
 				steps {
 					container('git') {
@@ -344,7 +354,9 @@ spec:
 
 			stage('Jest Test') {
 				when {
-					environment name: 'INTEGRATION_TESTING', value: 'true'
+					expression {
+						return params.INTEGRATION_TESTING == 'true'
+					}
 				}
 				steps {
 					container('nodejs'){
@@ -360,7 +372,9 @@ spec:
 
 			stage('Cypress Test') {
 				when {
-					environment name: 'INTEGRATION_TESTING', value: 'true'
+					expression {
+						return params.INTEGRATION_TESTING == 'true'
+					}
 				}
 				steps {
 					container('cypress'){
