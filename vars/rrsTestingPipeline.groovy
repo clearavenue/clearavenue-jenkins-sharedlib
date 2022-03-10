@@ -100,7 +100,7 @@ spec:
                                cd reservationapp
                                rm package-lock.json
                                npm install
-                               npx cypress run
+                               npx cypress run -e E2E_ADMIN_PASSWORD=adminK3y#007,E2E_USER_PASSWORD=userK3y#007
                         '''
 					}
 				}
