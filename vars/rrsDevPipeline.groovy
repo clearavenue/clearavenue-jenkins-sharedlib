@@ -94,7 +94,6 @@ spec:
 			DOCKER_CREDS=credentials('docker')
 			GIT_CREDS=credentials('bill.hunt-github')
 			BRANCH = env.GIT_BRANCH.toLowerCase()
-			INTEGRATION_TESTING = env.INTEGRATION_TESTING
 		}
 
 		stages {
