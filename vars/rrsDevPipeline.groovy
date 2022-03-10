@@ -94,6 +94,11 @@ spec:
 			DOCKER_CREDS=credentials('docker')
 			GIT_CREDS=credentials('bill.hunt-github')
 			BRANCH = env.GIT_BRANCH.toLowerCase()
+
+                        NPM_CONFIG_CACHE="${WORKSPACE}/.npm"
+                        CYPRESS_CACHE_FOLDER="${WORKSPACE}/.cache/Cypress"
+                        CYPRESS_BASE_URL="https://reservationapp.dev-devsecops.clearavenue.com"
+                        ELECTRON_ENABLE_LOGGING="false"
 		}
 
 		stages {
