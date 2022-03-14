@@ -1,5 +1,10 @@
 def call(body) {
 	def pipelineParams = [:]
+    
+    def fixBranchName(b){
+       return text.replace("origin/", "")
+    }
+    
 	body.resolveStrategy = Closure.DELEGATE_FIRST
 	body.delegate = pipelineParams
 	body()
@@ -223,7 +228,7 @@ spec:
 							GATEWAY_NAME="reservationapp"
 							MS_1_NAME="reservationservice"
 
-							BRANCH_NAME="-"+BRANCH
+							BRANCH_NAME= "-" + fixBranchName(BRANCH)
 
 							if (BRANCH_NAME == '-main' || BRANCH_NAME == '-master') {
 								GATEWAY_BRANCH = GATEWAY_NAME
@@ -258,7 +263,7 @@ spec:
 							GATEWAY_NAME="reservationapp"
 							MS_1_NAME="reservationservice"
 
-							BRANCH_NAME="-"+BRANCH
+							BRANCH_NAME="-" + fixBranchName(BRANCH)
 
 							if (BRANCH_NAME == '-main' || BRANCH_NAME == '-master') {
 								GATEWAY_BRANCH = GATEWAY_NAME
