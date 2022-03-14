@@ -1,7 +1,3 @@
-def fixBranchName(b) {
-       return b.replace("origin/", "")
-}
-
 def call(body) {
 	def pipelineParams = [:]
     
@@ -228,7 +224,7 @@ spec:
 							GATEWAY_NAME="reservationapp"
 							MS_1_NAME="reservationservice"
 
-							BRANCH_NAME= "-" + fixBranchName(BRANCH)
+							BRANCH_NAME= "-" + BRANCH.replace("origin/", "")
 
 							if (BRANCH_NAME == '-main' || BRANCH_NAME == '-master') {
 								GATEWAY_BRANCH = GATEWAY_NAME
@@ -263,7 +259,7 @@ spec:
 							GATEWAY_NAME="reservationapp"
 							MS_1_NAME="reservationservice"
 
-							BRANCH_NAME="-" + fixBranchName(BRANCH)
+							BRANCH_NAME="-" + BRANCH.replace("origin/", "")
 
 							if (BRANCH_NAME == '-main' || BRANCH_NAME == '-master') {
 								GATEWAY_BRANCH = GATEWAY_NAME
