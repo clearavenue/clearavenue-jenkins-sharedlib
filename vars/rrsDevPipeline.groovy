@@ -95,17 +95,19 @@ spec:
 			GIT_CREDS=credentials('bill.hunt-github')
 			BRANCH = env.GIT_BRANCH.toLowerCase()
 
-                        NPM_CONFIG_CACHE="${WORKSPACE}/.npm"
-                        CYPRESS_CACHE_FOLDER="${WORKSPACE}/.cache/Cypress"
-                        CYPRESS_BASE_URL="https://reservationapp.dev-devsecops.clearavenue.com"
-                        ELECTRON_ENABLE_LOGGING="false"
+            NPM_CONFIG_CACHE="${WORKSPACE}/.npm"
+            CYPRESS_CACHE_FOLDER="${WORKSPACE}/.cache/Cypress"
+            CYPRESS_BASE_URL="https://reservationapp.dev-devsecops.clearavenue.com"
+            ELECTRON_ENABLE_LOGGING="false"
+            
+            INTEGRATION_TESTING = "${params.INTEGRATION_TESTING}"
 		}
 
 		stages {
 			stage('Build') {
 				when {
 					expression {
-						return params.INTEGRATION_TESTING != 'true'
+						return INTEGRATION_TESTING != 'true'
 					}
 				}
 				steps {
@@ -122,7 +124,7 @@ spec:
 			stage('JUnit') {
 				when {
 					expression {
-						return params.INTEGRATION_TESTING != 'true'
+						return INTEGRATION_TESTING != 'true'
 					}
 				}
 				steps {
@@ -136,7 +138,7 @@ spec:
 			stage('SecurityChecks') {
 				when {
 					expression {
-						return params.INTEGRATION_TESTING != 'true'
+						return INTEGRATION_TESTING != 'true'
 					}
 				}
 				parallel {
@@ -212,7 +214,7 @@ spec:
 			stage('Push Docker') {
 				when {
 					expression {
-						return params.INTEGRATION_TESTING != 'true'
+						return INTEGRATION_TESTING != 'true'
 					}
 				}
 				steps {
@@ -244,7 +246,7 @@ spec:
 			stage('argoCD') {
 				when {
 					expression {
-						return params.INTEGRATION_TESTING != 'true'
+						return INTEGRATION_TESTING != 'true'
 					}
 				}
 				steps {
@@ -360,7 +362,7 @@ spec:
 			stage('Jest Test') {
 				when {
 					expression {
-						return params.INTEGRATION_TESTING == 'true'
+						return INTEGRATION_TESTING == 'true'
 					}
 				}
 				steps {
@@ -378,7 +380,7 @@ spec:
 			stage('Cypress Test') {
 				when {
 					expression {
-						return params.INTEGRATION_TESTING == 'true'
+						return INTEGRATION_TESTING == 'true'
 					}
 				}
 				steps {
