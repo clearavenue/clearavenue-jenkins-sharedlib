@@ -1,9 +1,9 @@
+def fixBranchName(b) {
+       return b.replace("origin/", "")
+}
+
 def call(body) {
 	def pipelineParams = [:]
-    
-    def fixBranchName(b){
-       return text.replace("origin/", "")
-    }
     
 	body.resolveStrategy = Closure.DELEGATE_FIRST
 	body.delegate = pipelineParams
