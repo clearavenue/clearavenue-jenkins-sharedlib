@@ -394,23 +394,6 @@ spec:
 				}
 			} // end jest tests
 
-                        stage('508 Test') {
-                           when {
-                                  expression {
-                                      return INTEGRATION_TESTING == 'true'
-                                  }
-                           }
-                           steps {
-                                container('nodejs') {
-                                    sh '''
-                                       npm install -g pa11y-ci pa11y-ci-reporter-html --unsafe-perm=true
-                                       pa11y-ci -c pa11y.json --json ${CYPRESS_BASE_URL} | tee pa11y-ci-results.json
-                                       pa11y-ci-reporter-html -d pa11y-html
-                                   '''
-                                 }
-                           }
-                        }  // end 508
-
 			stage('Cypress Test') {
 				when {
 					expression {
