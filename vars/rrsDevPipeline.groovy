@@ -394,6 +394,24 @@ spec:
 				}
 			} // end jest tests
 
+                        stage('Pen Test') {
+                            when {
+                                 expression {
+                                        return INTEGRATION_TESTING == 'true'
+                                 }
+                            }
+                            steps {
+                               container('owasp'){
+                                  sh '''
+                                     zap-baseline.py -r zap-report.html -t ${CYPRESS_BASE_URL} || return_code=$?
+                                     echo "exit value was  - " $return_code
+                                     mkdir owasp
+                                     cp "/zap/wrk/zap-report.html" ${WORKSPACE}/owasp
+                                  '''
+                               }
+                            }
+                        }
+
 			stage('Cypress Test') {
 				when {
 					expression {
