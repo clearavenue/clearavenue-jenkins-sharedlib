@@ -389,7 +389,7 @@ spec:
                                                    cd reservationapp
                                                    npm install
                                                    npm test                               
-                                                   ls ${WORKSPACE}/reservationapp/target
+                                                   ls ${WORKSPACE}/reservationapp/target/test-results
                                                 '''
                                                 junit '${WORKSPACE}/reservationapp/target/test-results/TESTS-results-jest.xml'
                                                 cobertura coberturaReportFile: '${WORKSPACE}/reservationapp/target/test-results/clover.xml', enableNewApi: true, lineCoverageTargets: '80, 60, 70'
