@@ -386,10 +386,11 @@ spec:
 				steps {
 					container('nodejs'){
 						sh '''
-                               cd reservationapp
-                               npm install
-                               npm test
-                        '''
+                                                   cd reservationapp
+                                                   npm install
+                                                   npm test                               
+                                                '''
+                                                junit 'target/test-results/TESTS-results-jest.xml'
 					}
 				}
 			} // end jest tests
