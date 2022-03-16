@@ -408,6 +408,12 @@ spec:
                                      mkdir owasp
                                      cp "/zap/wrk/zap-report.html" ${WORKSPACE}/owasp
                                   '''
+                                  publishHTML target: [
+                                          allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true,
+                                          reportDir: "owasp",
+                                          reportFiles: 'zap-report.html',
+                                          reportName: 'Penetration Test'
+                                  ]
                                }
                             }
                         }
