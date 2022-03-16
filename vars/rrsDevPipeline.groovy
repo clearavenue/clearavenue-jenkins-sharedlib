@@ -85,6 +85,23 @@ spec:
         ephemeral-storage: 1Gi
       limits:
         ephemeral-storage: 5Gi
+
+  - name: owasp
+    image: owasp/zap2docker-stable:latest
+    securityContext:
+      privileged: true
+    command:
+    - cat
+    tty: true
+    volumeMounts:
+    - name: zap-report-volume
+      mountPath: /zap/wrk/
+      readOnly: false
+
+  volumes:
+  - name: zap-report-volume
+    emptyDir: {}
+
 """
 			}
 		}
