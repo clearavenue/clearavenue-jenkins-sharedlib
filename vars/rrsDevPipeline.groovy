@@ -391,6 +391,7 @@ spec:
                                                    npm test                               
                                                 '''
                                                 junit 'target/test-results/TESTS-results-jest.xml'
+                                                cobertura coberturaReportFile: 'target/test-results/clover.xml', enableNewApi: true, lineCoverageTargets: '80, 60, 70'
 					}
 				}
 			} // end jest tests
