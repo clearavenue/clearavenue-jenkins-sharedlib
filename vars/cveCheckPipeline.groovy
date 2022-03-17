@@ -40,14 +40,6 @@ spec:
 			}   // end kubernetes
 		}  // end agent
 
-		environment {
-			POM_VERSION=readMavenPom().getVersion()
-			BUILD_NUM=currentBuild.getNumber()
-			DOCKER_CREDS=credentials('docker')
-			GIT_CREDS=credentials('bill.hunt-github')
-			BRANCH = env.GIT_BRANCH.toLowerCase()
-		}  // end environment
-
 		stages {
 			stage('Vulnerabilities') {
 				steps {
@@ -58,7 +50,7 @@ spec:
                                         cd ../reservationservice
                                         npm install
                                         cd ..
-                                        ./mvnw -B -e -T 1C ${BUILD_PROFILE} org.owasp:dependency-check-maven:7.0.0:aggregate -Dformat=xml -DfailOnError=false -DassemblyAnalyzerEnabled=false" 
+                                        ./mvnw -B -e -T 1C ${pipelineParams.buildProfile} org.owasp:dependency-check-maven:7.0.0:aggregate -Dformat=xml -DfailOnError=false -DassemblyAnalyzerEnabled=false" 
                                     """
 					} // end container
 				} // end steps
