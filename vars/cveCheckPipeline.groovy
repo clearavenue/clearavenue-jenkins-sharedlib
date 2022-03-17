@@ -52,7 +52,14 @@ spec:
 			stage('Vulnerabilities') {
 				steps {
 					container('jhipster') {
-      					sh "./mvnw -B -e -T 1C ${BUILD_PROFILE} org.owasp:dependency-check-maven:7.0.0:aggregate -Dformat=xml -DfailOnError=false" // -DfailBuildOnCVSS=10"
+      					sh """
+                                        cd reservationapp
+                                        npm install
+                                        cd ../reservationservice
+                                        npm install
+                                        cd ..
+                                        ./mvnw -B -e -T 1C ${BUILD_PROFILE} org.owasp:dependency-check-maven:7.0.0:aggregate -Dformat=xml -DfailOnError=false -DassemblyAnalyzerEnabled=false" 
+                                    ""
 					}
 				}
 				post {
