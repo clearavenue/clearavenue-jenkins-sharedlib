@@ -59,7 +59,7 @@ spec:
                                         npm install
                                         cd ..
                                         ./mvnw -B -e -T 1C ${BUILD_PROFILE} org.owasp:dependency-check-maven:7.0.0:aggregate -Dformat=xml -DfailOnError=false -DassemblyAnalyzerEnabled=false" 
-                                    ""
+                                    """
 					} // end container
 				} // end steps
 				post {
