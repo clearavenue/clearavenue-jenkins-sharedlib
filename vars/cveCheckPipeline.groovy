@@ -50,7 +50,7 @@ spec:
                                         cd ../reservationservice
                                         npm install
                                         cd ..
-                                        ./mvnw -B -e -T 1C ${pipelineParams.buildProfile} org.owasp:dependency-check-maven:7.0.0:aggregate -Dformat=xml -DfailOnError=false -DassemblyAnalyzerEnabled=false" 
+                                        ./mvnw -B -e -T 1C ${pipelineParams.buildProfile} org.owasp:dependency-check-maven:7.0.0:aggregate -Dformat=xml -DfailOnError=false -DassemblyAnalyzerEnabled=false 
                                     """
 					} // end container
 				} // end steps
