@@ -37,8 +37,8 @@ spec:
         ephemeral-storage: 5Gi
 
 """
-			}
-		}
+			}   // end kubernetes
+		}  // end agent
 
 		environment {
 			POM_VERSION=readMavenPom().getVersion()
@@ -46,7 +46,7 @@ spec:
 			DOCKER_CREDS=credentials('docker')
 			GIT_CREDS=credentials('bill.hunt-github')
 			BRANCH = env.GIT_BRANCH.toLowerCase()
-		}
+		}  // end environment
 
 		stages {
 			stage('Vulnerabilities') {
@@ -60,14 +60,14 @@ spec:
                                         cd ..
                                         ./mvnw -B -e -T 1C ${BUILD_PROFILE} org.owasp:dependency-check-maven:7.0.0:aggregate -Dformat=xml -DfailOnError=false -DassemblyAnalyzerEnabled=false" 
                                     ""
-					}
-				}
+					} // end container
+				} // end steps
 				post {
 					always {
 						dependencyCheckPublisher(failedTotalCritical : 100, unstableTotalCritical : 100)
-					}
-				}
+					} // end always
+				} // end post
 			} // end vulnerabilities
-	      }
-     }
-}
+	      }  // end stages
+     } // end pipeline
+} // end call
