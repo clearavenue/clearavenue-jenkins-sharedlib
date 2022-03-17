@@ -45,6 +45,7 @@ spec:
 				steps {
 					container('jhipster') {
       					sh """
+                                        chmod +x mvnw
                                         cd reservationapp
                                         npm install
                                         cd ../reservationservice
